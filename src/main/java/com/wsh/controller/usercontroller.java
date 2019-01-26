@@ -5,7 +5,9 @@ import net.sf.json.JSONObject;
 import com.wsh.servlet.MessageLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,14 +30,26 @@ public class Usercontroller {
         Thread message =new Thread(ft);
         message.start();
     }
-
+   // @CrossOrigin(methods = RequestMethod.POST)
     @RequestMapping("/loginUser")
     @ResponseBody
-    public String loginuser(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public JSONObject loginuser(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
         HttpSession session = request.getSession();
+        System.out.println(request);
         String jsonData = request.getParameter("data");
+        System.out.println(jsonData);
         JSONObject returnjson = userService.loginUser(JSONObject.fromObject(jsonData));
         session.setAttribute("person",returnjson.getJSONObject(returnjson.getString("type")));
-        return returnjson.toString();
+        return returnjson;
+    }
+
+   // @CrossOrigin(methods = RequestMethod.POST)
+    @RequestMapping("/test")
+    @ResponseBody
+    public String test(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        String s = request.getParameter("test");
+        return s;
     }
 }

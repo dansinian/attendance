@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.attendance.dao.CourseMapper" >
-  <resultMap id="BaseResultMap" type="com.attendance.model.Course" >
+<mapper namespace="com.wsh.dao.CourseMapper" >
+  <resultMap id="BaseResultMap" type="com.wsh.entity.Course" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="course_ID" property="courseId" jdbcType="VARCHAR" />
     <result column="course_name" property="courseName" jdbcType="VARCHAR" />
@@ -71,7 +71,7 @@
   <sql id="Base_Column_List" >
     id, course_ID, course_name, tea_name, course_class, course_major, course_department
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.attendance.model.CourseExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.CourseExample" >
     select
     <if test="distinct" >
       distinct
@@ -91,21 +91,17 @@
     from course
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectAllCourse" resultMap="BaseResultMap" parameterType="com.attendance.model.CourseExample">
-    select *
-    from course
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from course
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.attendance.model.CourseExample" >
+  <delete id="deleteByExample" parameterType="com.wsh.entity.CourseExample" >
     delete from course
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.attendance.model.Course" >
+  <insert id="insert" parameterType="com.wsh.entity.Course" >
     insert into course (id, course_ID, course_name, 
       tea_name, course_class, course_major, 
       course_department)
@@ -113,7 +109,7 @@
       #{teaName,jdbcType=VARCHAR}, #{courseClass,jdbcType=VARCHAR}, #{courseMajor,jdbcType=VARCHAR}, 
       #{courseDepartment,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.attendance.model.Course" >
+  <insert id="insertSelective" parameterType="com.wsh.entity.Course" >
     insert into course
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -162,7 +158,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.attendance.model.CourseExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.wsh.entity.CourseExample" resultType="java.lang.Integer" >
     select count(*) from course
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -210,7 +206,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.attendance.model.Course" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.wsh.entity.Course" >
     update course
     <set >
       <if test="courseId != null" >
@@ -234,7 +230,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.attendance.model.Course" >
+  <update id="updateByPrimaryKey" parameterType="com.wsh.entity.Course" >
     update course
     set course_ID = #{courseId,jdbcType=VARCHAR},
       course_name = #{courseName,jdbcType=VARCHAR},

@@ -2,9 +2,8 @@ package com.wsh.dao;
 
 import com.wsh.entity.CourseArrangement;
 import com.wsh.entity.CourseArrangementExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface CourseArrangementMapper {
     int countByExample(CourseArrangementExample example);

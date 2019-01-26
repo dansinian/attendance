@@ -97,6 +97,7 @@ public class UserServiceImpl implements UserService {
             StudentExample.Criteria criteria = studentExample.createCriteria();
             criteria.andStuIdEqualTo(account);
             List<Student> students=studentMapper.selectByExample(studentExample);
+            System.out.println(students);
             if (students.size()==1){
                 Student student = students.get(0);
                 String jdbcpassword = student.getStuPassword();

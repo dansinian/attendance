@@ -85,7 +85,7 @@
 		<!-- mapper注册 -->
 		<property name="mapperLocations">
 			<list>
-				<value>classpath:mybatis/*-mapper.xml</value>
+				<value>classpath:mybatis/*Mapper.xml</value>
 			</list>
 		</property>
 		<!-- 可选：别名 

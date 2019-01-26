@@ -2,9 +2,8 @@ package com.wsh.dao;
 
 import com.wsh.entity.Course;
 import com.wsh.entity.CourseExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface CourseMapper {
     int countByExample(CourseExample example);
@@ -20,7 +19,7 @@ public interface CourseMapper {
     List<Course> selectByExample(CourseExample example);
 
     Course selectByPrimaryKey(Integer id);
-    List<Course> selectAllCourse();
+
     int updateByExampleSelective(@Param("record") Course record, @Param("example") CourseExample example);
 
     int updateByExample(@Param("record") Course record, @Param("example") CourseExample example);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.attendance.dao.TeacherMapper" >
-  <resultMap id="BaseResultMap" type="com.attendance.model.Teacher" >
+<mapper namespace="com.wsh.dao.TeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.wsh.entity.Teacher" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="tea_ID" property="teaId" jdbcType="VARCHAR" />
     <result column="tea_name" property="teaName" jdbcType="VARCHAR" />
@@ -74,7 +74,7 @@
     id, tea_ID, tea_name, tea_gender, tea_department, tea_phone, tea_flag, tea_password, 
     tea_class
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.attendance.model.TeacherExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.TeacherExample" >
     select
     <if test="distinct" >
       distinct
@@ -98,13 +98,13 @@
     delete from teacher
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.attendance.model.TeacherExample" >
+  <delete id="deleteByExample" parameterType="com.wsh.entity.TeacherExample" >
     delete from teacher
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.attendance.model.Teacher" >
+  <insert id="insert" parameterType="com.wsh.entity.Teacher" >
     insert into teacher (id, tea_ID, tea_name, 
       tea_gender, tea_department, tea_phone, 
       tea_flag, tea_password, tea_class
@@ -114,7 +114,7 @@
       #{teaFlag,jdbcType=VARCHAR}, #{teaPassword,jdbcType=VARCHAR}, #{teaClass,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.attendance.model.Teacher" >
+  <insert id="insertSelective" parameterType="com.wsh.entity.Teacher" >
     insert into teacher
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -175,7 +175,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.attendance.model.TeacherExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.wsh.entity.TeacherExample" resultType="java.lang.Integer" >
     select count(*) from teacher
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -231,7 +231,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.attendance.model.Teacher" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.wsh.entity.Teacher" >
     update teacher
     <set >
       <if test="teaId != null" >
@@ -261,7 +261,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.attendance.model.Teacher" >
+  <update id="updateByPrimaryKey" parameterType="com.wsh.entity.Teacher" >
     update teacher
     set tea_ID = #{teaId,jdbcType=VARCHAR},
       tea_name = #{teaName,jdbcType=VARCHAR},
