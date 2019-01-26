@@ -4,7 +4,7 @@ package com.wsh.service.impl;
 import com.wsh.dao.CourseArrangementMapper;
 import com.wsh.dao.CourseMapper;
 import com.wsh.entity.*;
-import com.wsh.service.courseService;
+import com.wsh.service.CourseService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class courseServiceimpl implements courseService {
+public class CourseServiceimpl implements CourseService {
     @Autowired
     private CourseMapper courseMapper;
     private CourseArrangementMapper courseArrangementMapper;

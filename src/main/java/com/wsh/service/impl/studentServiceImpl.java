@@ -3,7 +3,7 @@ package com.wsh.service.impl;
 import com.wsh.dao.StudentMapper;
 import com.wsh.entity.Student;
 import com.wsh.entity.StudentExample;
-import com.wsh.service.studentService;
+import com.wsh.service.StudentService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class studentServiceImpl implements studentService {
+public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
 

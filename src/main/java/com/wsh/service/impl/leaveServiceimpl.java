@@ -4,12 +4,11 @@ package com.wsh.service.impl;
 import com.wsh.dao.TeacherMapper;
 import com.wsh.entity.Teacher;
 import com.wsh.entity.TeacherExample;
-import com.wsh.servlet.IsChOrEnOrNum;
 import com.wsh.dao.LeaveMapper;
 import com.wsh.entity.Leave;
 import com.wsh.entity.LeaveExample;
-import com.wsh.service.leaveService;
-import com.wsh.servlet.messageLog;
+import com.wsh.service.LeaveService;
+import com.wsh.servlet.MessageLog;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 @Service
-public class leaveServiceimpl implements leaveService {
+public class LeaveServiceimpl implements LeaveService {
     private LeaveMapper leaveMapper;
     private TeacherMapper teacherMapper;
 
@@ -80,7 +79,7 @@ public class leaveServiceimpl implements leaveService {
                                 //创建一个线程池对象
                                 ExecutorService pool = Executors.newCachedThreadPool();
                                 //创建一个有返回值的任务
-                                messageLog messageLog = new messageLog();
+                                MessageLog messageLog = new MessageLog();
                                 messageLog.parameter(teaName,jsonObject.getString("StuId"),phone);
                                 //执行任务并获取Future对象
                                 Future<String> future  = pool.submit(messageLog);

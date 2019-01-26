@@ -2,7 +2,7 @@ package com.wsh.controller;
 
 
 import com.wsh.entity.Leave;
-import com.wsh.service.leaveService;
+import com.wsh.service.LeaveService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,9 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/leave")
-public class leavecontroller {
+public class Leavecontroller {
     @Autowired
-    private leaveService leaveService;
+    private LeaveService leaveService;
 
 
     @RequestMapping("/deleteLeave")

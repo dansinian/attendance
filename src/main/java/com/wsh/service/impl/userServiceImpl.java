@@ -1,22 +1,20 @@
 package com.wsh.service.impl;
 
 
-import com.wsh.servlet.convertBeanTomap;
+import com.wsh.servlet.ConvertBeanTomap;
 import com.wsh.dao.StudentMapper;
 import com.wsh.dao.TeacherMapper;
 import com.wsh.dao.UserMapper;
 import com.wsh.entity.*;
-import com.wsh.service.userService;
+import com.wsh.service.UserService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
-public class userServiceImpl implements userService {
+public class UserServiceImpl implements UserService {
     @Autowired
     private StudentMapper studentMapper;
     private TeacherMapper teacherMapper;
@@ -106,7 +104,7 @@ public class userServiceImpl implements userService {
                     returnmap.put("msg","");
                     returnmap.put("status","200");
                     returnmap.put("type","student");
-                    returnmap.put("student",convertBeanTomap.convertBeanToMap(student)) ;
+                    returnmap.put("student", ConvertBeanTomap.convertBeanToMap(student)) ;
                 } else {
                     returnmap.put("msg","密码错误");
                     returnmap.put("status","500");
@@ -127,7 +125,7 @@ public class userServiceImpl implements userService {
                     returnmap.put("msg","");
                     returnmap.put("status","200");
                     returnmap.put("type","teacher");
-                    returnmap.put("teacher",convertBeanTomap.convertBeanToMap(teacher));
+                    returnmap.put("teacher", ConvertBeanTomap.convertBeanToMap(teacher));
                 } else {
                     returnmap.put("msg","密码错误");
                     returnmap.put("status","500");
@@ -149,7 +147,7 @@ public class userServiceImpl implements userService {
                     returnmap.put("msg","");
                     returnmap.put("status","200");
                     returnmap.put("type","admin");
-                    returnmap.put("admin",convertBeanTomap.convertBeanToMap(admin));
+                    returnmap.put("admin", ConvertBeanTomap.convertBeanToMap(admin));
                 } else {
                     returnmap.put("msg","密码错误");
                     returnmap.put("type","admin");

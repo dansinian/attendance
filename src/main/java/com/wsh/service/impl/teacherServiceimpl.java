@@ -4,7 +4,7 @@ import com.wsh.servlet.IsChOrEnOrNum;
 import com.wsh.dao.TeacherMapper;
 import com.wsh.entity.Teacher;
 import com.wsh.entity.TeacherExample;
-import com.wsh.service.teacherService;
+import com.wsh.service.TeacherService;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class teacherServiceimpl implements teacherService {
+public class TeacherServiceimpl implements TeacherService {
     private TeacherMapper teacherMapper;
 
     @Override

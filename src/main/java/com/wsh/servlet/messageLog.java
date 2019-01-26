@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 
 /*
 * 短信接口*/
-public class messageLog implements Callable<String> {
+public class MessageLog implements Callable<String> {
 
         private static final String addr = "http://api.sms.cn/sms/";
         private static final String userId = "sprite00";

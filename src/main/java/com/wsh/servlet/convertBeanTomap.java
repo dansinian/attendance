@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /*实体类转MAP*/
-public class convertBeanTomap {
+public class ConvertBeanTomap {
     public static Map<String,Object> convertBeanToMap(Object bean) throws IntrospectionException,IllegalAccessException, InvocationTargetException {
         Class type = bean.getClass();
         Map<String,Object> returnMap = new HashMap<String, Object>();

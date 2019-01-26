@@ -5,7 +5,7 @@ import net.sf.json.JSONObject;
 
 import java.util.List;
 
-public interface leaveService {
+public interface LeaveService {
     String deleteLeave(JSONObject jsonObject);
     JSONObject createLeave(JSONObject jsonObject);
     JSONObject updateLeave(JSONObject jsonObject);

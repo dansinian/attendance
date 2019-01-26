@@ -6,7 +6,7 @@ import net.sf.json.JSONObject;
 
 import java.util.List;
 
-public interface course_arragementService {
+public interface Course_arragementService {
     String deleteArrangement(JSONObject jsonObject);
     JSONObject createArrangement(JSONObject jsonObject);
     JSONObject updateArrangement(JSONObject jsonObject);

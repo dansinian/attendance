@@ -5,7 +5,7 @@ import net.sf.json.JSONObject;
 
 import java.util.List;
 
-public interface teacherService {
+public interface TeacherService {
     String deleteTeacher(JSONObject jsonObject);
     JSONObject createTeacher(JSONObject jsonObject);
     JSONObject updateTeacher(JSONObject jsonObject);

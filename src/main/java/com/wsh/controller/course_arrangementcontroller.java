@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import com.wsh.service.course_arragementService;
+import com.wsh.service.Course_arragementService;
 
 @Controller
 @RequestMapping("/arrangement")
 /*
 * 课程安排函数*/
-public class course_arrangementcontroller {
+public class Course_arrangementcontroller {
     @Autowired
-    private course_arragementService course_arragementService;
+    private Course_arragementService course_arragementService;
 
     @RequestMapping("/deleteArrangement")
     @ResponseBody
