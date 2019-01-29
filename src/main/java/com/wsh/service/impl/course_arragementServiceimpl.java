@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class Course_arragementServiceimpl implements Course_arragementService {
+public class course_arragementServiceimpl implements Course_arragementService {
     private CourseArrangementMapper arragementMapper;
     private CourseMapper courseMapper;
 

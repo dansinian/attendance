@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class StudentServiceImpl implements StudentService {
+public class studentServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
 

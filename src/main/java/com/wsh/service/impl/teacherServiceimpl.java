@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TeacherServiceimpl implements TeacherService {
+public class teacherServiceimpl implements TeacherService {
     private TeacherMapper teacherMapper;
 
     @Override

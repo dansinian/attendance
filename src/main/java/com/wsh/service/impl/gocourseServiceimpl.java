@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class GocourseServiceimpl implements GocourseService {
+public class gocourseServiceimpl implements GocourseService {
     private IsgocourseMapper gocourseMapper;
 
     @Override

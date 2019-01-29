@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CourseServiceimpl implements CourseService {
+public class courseServiceimpl implements CourseService {
     @Autowired
     private CourseMapper courseMapper;
     private CourseArrangementMapper courseArrangementMapper;

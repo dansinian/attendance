@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 @Service
-public class LeaveServiceimpl implements LeaveService {
+public class leaveServiceimpl implements LeaveService {
     private LeaveMapper leaveMapper;
     private TeacherMapper teacherMapper;
 
