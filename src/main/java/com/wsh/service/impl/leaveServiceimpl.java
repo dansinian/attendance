@@ -66,7 +66,7 @@ public class leaveServiceimpl implements LeaveService {
                 leave.setEndTime(jsonObject.getString("endTime"));
                 leave.setLeaveDay(jsonObject.getString("leaveDay"));
                 leave.setApprovalTea(jsonObject.getString("approvalTea"));
-                leave.setStatus(jsonObject.getString("status"));
+                leave.setStatus("0");
                 leave.setLeavecourseTea(jsonObject.getString("leaveCourseTea"));
                 leaveMapper.insert(leave);
                 List<Leave> returnLeaves = leaveMapper.selectByExample(leaveExample);

@@ -1,14 +1,18 @@
 package com.wsh.service.impl;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.wsh.dao.CourseArrangementMapper;
 import com.wsh.dao.CourseMapper;
+import com.wsh.dao.StudentMapper;
+import com.wsh.dao.TeacherMapper;
 import com.wsh.entity.*;
 import com.wsh.service.CourseService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +22,10 @@ public class courseServiceimpl implements CourseService {
     private CourseMapper courseMapper;
     @Autowired
     private CourseArrangementMapper courseArrangementMapper;
+    @Autowired
+    private TeacherMapper teacherMapper;
+    @Autowired
+    private StudentMapper studentMapper;
 
     @Override
     public String deleteCourse(JSONObject jsonObject) {
@@ -135,6 +143,59 @@ public class courseServiceimpl implements CourseService {
         criteria.andCourseNameLike(content);
         courses = courseMapper.selectByExample(courseExample);
         return courses;
+    }
+
+    @Override
+    public JSONObject selectCourseByTeacher(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        JSONObject stuLevel2 = new JSONObject();
+        String searchKey = jsonObject.getString("teacherId");
+        CourseExample courseExample =new CourseExample();
+        CourseExample.Criteria criteria= courseExample.createCriteria();
+        criteria.andTeaNameEqualTo(searchKey);
+        List<Course> courses = courseMapper.selectByExample(courseExample);
+        ArrayList<String>  courseName = new ArrayList<String> ();
+        if (courses.size()>0){
+            for (int i = 0; i < courses.size(); i++) { // 课程名字放入数组中
+                courseName.set(i, courses.get(0).getCourseName());
+            }
+            returnJson.put("course",courseName);
+        }else {
+            returnJson.put("course",null);
+        }
+
+        TeacherExample teacherExample = new TeacherExample();
+        TeacherExample.Criteria criteriateacher = teacherExample.createCriteria();
+        criteriateacher.andTeaIdEqualTo(searchKey);
+        List<Teacher> teachers = teacherMapper.selectByExample(teacherExample);
+        String Class = teachers.get(0).getTeaClass();
+        returnJson.put("teacherID",teachers.get(0).getTeaId());
+        String teaClass[] = Class.split(",");
+        JSONArray arraylevel3 = new JSONArray();
+        if (teaClass.length>0){
+            for (int i = 0; i < teaClass.length; i++) {
+                stuLevel2.put("class",teaClass[i]);
+                StudentExample studentExample = new StudentExample();
+                StudentExample.Criteria stucriteria = studentExample.createCriteria();
+                stucriteria.andStuClassEqualTo(teaClass[i]);
+                List<Student> students = studentMapper.selectByExample(studentExample);
+                if (students.size()>0){
+                    for (int j = 0; j < students.size(); j++) {
+                        JSONObject stulevel3 = new JSONObject();
+                        stulevel3.put("name",students.get(i).getStuName());
+                        stulevel3.put("studentID",students.get(i).getStuId());
+                        arraylevel3.add(stulevel3);
+                    }
+                    stuLevel2.put("Student",arraylevel3);
+                }else {
+                    stuLevel2.put("Student",null);
+                }
+            }
+            returnJson.put("class",stuLevel2);
+        } else {
+            returnJson.put("class",null);
+        }
+        return returnJson;
     }
 
 }

@@ -10,4 +10,5 @@ public interface CourseService {
     JSONObject createCourse(JSONObject jsonObject);
     JSONObject updateCourse(JSONObject jsonObject);
     List<Course> selectCourse(JSONObject jsonObject);
+    JSONObject selectCourseByTeacher(JSONObject jsonObject);
 }

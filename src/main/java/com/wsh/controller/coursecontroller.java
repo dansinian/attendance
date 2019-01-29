@@ -77,4 +77,13 @@ public class Coursecontroller {
         }
         return returnJson.toString();
     }
+
+    @RequestMapping("/selectCourseByTeacher")
+    @ResponseBody
+    public JSONObject selectCourseByTeacher(HttpServletRequest request, HttpServletResponse response){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        JSONObject returnJson = courseService.selectCourseByTeacher(jsonObject);
+        return returnJson;
+    }
 }
