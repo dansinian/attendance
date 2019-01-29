@@ -10,6 +10,7 @@ import com.wsh.entity.LeaveExample;
 import com.wsh.service.LeaveService;
 import com.wsh.servlet.MessageLog;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +21,9 @@ import java.util.concurrent.Future;
 
 @Service
 public class leaveServiceimpl implements LeaveService {
+    @Autowired
     private LeaveMapper leaveMapper;
+    @Autowired
     private TeacherMapper teacherMapper;
 
     @Override

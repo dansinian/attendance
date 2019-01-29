@@ -6,6 +6,7 @@ import com.wsh.entity.Teacher;
 import com.wsh.entity.TeacherExample;
 import com.wsh.service.TeacherService;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Service
 public class teacherServiceimpl implements TeacherService {
+    @Autowired
     private TeacherMapper teacherMapper;
 
     @Override

@@ -9,6 +9,7 @@ import com.wsh.entity.CourseArrangementExample;
 import com.wsh.entity.CourseExample;
 import com.wsh.service.Course_arragementService;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,7 +17,9 @@ import java.util.List;
 
 @Service
 public class course_arragementServiceimpl implements Course_arragementService {
+    @Autowired
     private CourseArrangementMapper arragementMapper;
+    @Autowired
     private CourseMapper courseMapper;
 
     @Override

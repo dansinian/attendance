@@ -36,11 +36,11 @@ public class Usercontroller {
     public JSONObject loginuser(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
         HttpSession session = request.getSession();
-        System.out.println(request);
         String jsonData = request.getParameter("data");
-        System.out.println(jsonData);
         JSONObject returnjson = userService.loginUser(JSONObject.fromObject(jsonData));
-        session.setAttribute("person",returnjson.getJSONObject(returnjson.getString("type")));
+        if ("200".equals(returnjson.getString("status"))){
+            session.setAttribute("person",returnjson.getJSONObject(returnjson.getString("type")));
+        }
         return returnjson;
     }
 

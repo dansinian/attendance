@@ -16,6 +16,7 @@ import java.util.List;
 public class courseServiceimpl implements CourseService {
     @Autowired
     private CourseMapper courseMapper;
+    @Autowired
     private CourseArrangementMapper courseArrangementMapper;
 
     @Override
