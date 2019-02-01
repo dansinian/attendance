@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class gocourseServiceimpl implements GocourseService {
+public class GocourseServiceimpl implements GocourseService {
     @Autowired
     private IsgocourseMapper gocourseMapper;
 

@@ -30,9 +30,7 @@ public class Leavecontroller {
     @RequestMapping("/createLeave")
     @ResponseBody
     public JSONObject createLeave(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        String jsonData = /*request.getParameter("data")*/ "{\"StuId\":\"2511150406\",\"StuName\":\"窦超\",\"applicationTime\":\"20190131\",\"startTime\":\"20190210\",\"endTime\":\"20190220\",\"leaveDay\":\"9\",\"leaveCourseTea\":\"小臭臭\",\"leaveReason\":\"生病了\",\"approvalTea\":\"小臭臭\"}";
+        String jsonData = request.getParameter("data") ;
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
         return leaveService.createLeave(jsonObject);
     }

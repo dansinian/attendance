@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class studentServiceImpl implements StudentService {
+public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
 

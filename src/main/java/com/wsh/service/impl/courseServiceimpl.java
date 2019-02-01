@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class courseServiceimpl implements CourseService {
+public class CourseServiceimpl implements CourseService {
     @Autowired
     private CourseMapper courseMapper;
     @Autowired

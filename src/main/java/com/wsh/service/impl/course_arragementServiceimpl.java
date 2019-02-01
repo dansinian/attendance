@@ -16,14 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class course_arragementServiceimpl implements Course_arragementService {
+public class Course_arragementServiceimpl implements Course_arragementService {
     @Autowired
     private CourseArrangementMapper arragementMapper;
     @Autowired
     private CourseMapper courseMapper;
 
     @Override
-    public String deleteArrangement(JSONObject jsonObject) {
+    public JSONObject deleteArrangement(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
         String arragementID = jsonObject.getString("arragementId");
         String returnString ="";
         CourseArrangementExample arragementExample =new CourseArrangementExample();
@@ -35,7 +36,13 @@ public class course_arragementServiceimpl implements Course_arragementService {
         }catch (Exception e){
             returnString = "删除失败";
         }
-        return returnString;
+        if ("删除成功".equals(returnString)){
+            returnJson.put("status","200");
+        }else {
+            returnJson.put("status","500");
+        }
+        returnJson.put("msg",returnString);
+        return returnJson;
     }
 
     @Override
@@ -51,7 +58,7 @@ public class course_arragementServiceimpl implements Course_arragementService {
             if (selectArrangements.size() > 0) {
                 returnJson.put("msg", "已存在该课程安排信息");
                 returnJson.put("status", "500");
-                returnJson.put("arragement", selectArrangements.get(0));
+                returnJson.put("arrangement", selectArrangements.get(0));
             } else {
                 arragement.setCarmId(arragementID);
                 arragement.setCarmTime(jsonObject.getString("carmTime"));

@@ -21,13 +21,7 @@ public class Usercontroller {
     @RequestMapping("/saveUser")
     @ResponseBody
     public void saveuser(HttpServletRequest request, HttpServletResponse response) throws Exception{
-        MessageLog messageLog = new MessageLog();
-        messageLog.parameter("窦超","苏丹丹","15129489109");
-        FutureTask<String> ft = new FutureTask<String>(messageLog);
-        Thread message =new Thread(ft);
-        message.start();
     }
-   // @CrossOrigin(methods = RequestMethod.POST)
     @RequestMapping("/loginUser")
     @ResponseBody
     public JSONObject loginuser(HttpServletRequest request, HttpServletResponse response) throws Exception{

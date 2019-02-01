@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 @Service
-public class leaveServiceimpl implements LeaveService {
+public class LeaveServiceimpl implements LeaveService {
     @Autowired
     private VacationMapper leaveMapper;
     @Autowired
@@ -60,8 +60,9 @@ public class leaveServiceimpl implements LeaveService {
         String stuName = jsonObject.getString("StuName" );
         String startTime = jsonObject.getString("startTime");
         String endTime = jsonObject.getString("endTime");
+        String StuId = jsonObject.getString("StuId");
         VacationExample.Criteria criteria = leaveExample.createCriteria();
-        criteria.andStartTimeEqualTo(startTime).andEndTimeEqualTo(endTime);
+        criteria.andStartTimeEqualTo(startTime).andEndTimeEqualTo(endTime).andStuIdEqualTo(StuId);
         List<Vacation> selectLeaves = leaveMapper.selectByExample(leaveExample);
         try {
             if (selectLeaves.size() > 0) {
@@ -70,7 +71,7 @@ public class leaveServiceimpl implements LeaveService {
                 returnJson.put("leave", selectLeaves.get(0));
             } else {
                 leave.setLeaveId(leaveID);
-                leave.setStuId(jsonObject.getString("StuId"));
+                leave.setStuId(StuId);
                 leave.setStuName(stuName);
                 leave.setStartTime(startTime);
                 leave.setEndTime(endTime);
@@ -90,49 +91,33 @@ public class leaveServiceimpl implements LeaveService {
                     if (teachers.size()>0){
                         String phone = teachers.get(0).getTeaPhone();
                         String teaName = teachers.get(0).getTeaName();
-                            if (teaName!=null){
-                                //创建一个线程池对象
-                                ExecutorService pool = Executors.newCachedThreadPool();
-                                //创建一个有返回值的任务
-                                MessageLog messageLog = new MessageLog();
-                                messageLog.parameter(teaName,stuName,phone);
-                                messageLog.call();
-                                //执行任务并获取Future对象
-                                Future<String> future  = pool.submit(messageLog);
-                                //从 Future 对象 获取任务返回值
-                                while(true){
-                                    if(future.isDone()){
-                                        try{
-                                            String returnValue = future.get().toString();
-                                            if (" 100".equals(returnValue)){
-                                                returnJson.put("leave", "");
-                                                returnJson.put("msg", "添加请假信息成功,请等待老师审批,如5分钟内没有答复,则拒绝批准");
-                                                returnJson.put("status", "500");
-                                            }else{
-                                                criteria.andLeaveIdEqualTo(leaveID);
-                                                leaveMapper.deleteByExample(leaveExample);
-                                                returnJson.put("leave", "");
-                                                returnJson.put("msg", "添加请假信息失败,短信发送给审批老师失败.请联系管理员");
-                                                returnJson.put("status", "500");
-                                            }
-                                        }catch (Exception e){
-                                            e.printStackTrace();
-                                        }
-                                        pool.shutdown();
-                                        break;
-                                    }
-                                }
-                            }
+                        MessageLog messageLog = new MessageLog();
+                        String returnmsg =  messageLog.call(teaName,stuName,phone);
+                        if ("100".equals(returnmsg)){
+                            returnJson.put("leave", "");
+                            returnJson.put("msg", "添加请假信息成功,请等待老师审批,如5分钟内没有答复,则拒绝批准");
+                            returnJson.put("status", "500");
+                        }else{
+                            criteria.andLeaveIdEqualTo(leaveID);
+                            leaveMapper.deleteByExample(leaveExample);
+                            returnJson.put("leave", "");
+                            returnJson.put("msg", "添加请假信息失败,短信发送给审批老师失败.请联系管理员");
+                            returnJson.put("status", "500");
                         }
-                    } else {
+                    }
+                } else {
+                    criteria.andLeaveIdEqualTo(leaveID);
+                    leaveMapper.deleteByExample(leaveExample);
                     returnJson.put("leave", "");
-                    returnJson.put("msg", "添加请假信息失败");
+                    returnJson.put("msg", "添加请假信息失败,请稍后重试");
                     returnJson.put("status", "500");
                 }
             }
         } catch (Exception e) {
+            criteria.andLeaveIdEqualTo(leaveID);
+            leaveMapper.deleteByExample(leaveExample);
             returnJson.put("leave", "");
-            returnJson.put("msg", "添加请假信息失败");
+            returnJson.put("msg", "添加请假信息异常,请联系管理员");
             returnJson.put("status", "500");
         }
         return returnJson;

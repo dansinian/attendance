@@ -24,41 +24,31 @@ public class Course_arrangementcontroller {
 
     @RequestMapping("/deleteArrangement")
     @ResponseBody
-    public String deleteArrangement(HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public JSONObject deleteArrangement(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String jsonData = request.getParameter("data");
-        JSONObject retrunJson = new JSONObject();
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        String returnString = course_arragementService.deleteArrangement(jsonObject);
-        if ("删除成功".equals(returnString)){
-            retrunJson.put("status","200");
-        }else {
-            retrunJson.put("status","500");
-        }
-        retrunJson.put("msg",returnString);
-        return retrunJson.toString();
+        return course_arragementService.deleteArrangement(jsonObject);
     }
 
     @RequestMapping("/createArrangement")
     @ResponseBody
-    public String createArrangement(HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public JSONObject createArrangement(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        JSONObject retrunJson = course_arragementService.createArrangement(jsonObject);
-        return retrunJson.toString();
+        return course_arragementService.createArrangement(jsonObject);
     }
 
     @RequestMapping("/updateArrangement")
     @ResponseBody
-    public void updateArrangement(HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public JSONObject updateArrangement(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        JSONObject retrunJson = course_arragementService.updateArrangement(jsonObject);
-        response.getWriter().print(retrunJson);
+        return course_arragementService.updateArrangement(jsonObject);
     }
 
     @RequestMapping("/selectArrangement")
     @ResponseBody
-    public String selectArrangement(HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public JSONObject selectArrangement(HttpServletRequest request, HttpServletResponse response)throws Exception{
         JSONObject returnJson = new JSONObject();
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
@@ -79,6 +69,6 @@ public class Course_arrangementcontroller {
             returnJson.put("status","500");
             returnJson.put("msg","查询失败，请稍后重试");
         }
-        return returnJson.toString();
+        return returnJson;
     }
 }
