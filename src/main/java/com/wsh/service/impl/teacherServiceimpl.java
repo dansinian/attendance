@@ -5,6 +5,7 @@ import com.wsh.dao.TeacherMapper;
 import com.wsh.entity.Teacher;
 import com.wsh.entity.TeacherExample;
 import com.wsh.service.TeacherService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,21 +19,26 @@ public class teacherServiceimpl implements TeacherService {
     private TeacherMapper teacherMapper;
 
     @Override
-    public String deleteTeacher(JSONObject jsonObject) {
+    public JSONObject deleteTeacher(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
         String teacherID = jsonObject.getString("teacherId");
-        String returnString ="";
         TeacherExample teacherExample =new TeacherExample();
         TeacherExample.Criteria criteria= teacherExample.createCriteria();
         criteria.andTeaIdEqualTo(teacherID);
         try {
-            int returnteacher= teacherMapper.deleteByExample(teacherExample);
-            if (returnteacher>0){
-                returnString = "删除成功";
+            int returncourse= teacherMapper.deleteByExample(teacherExample);
+            if (returncourse>0){
+                returnJson.put("msg","删除成功");
+                returnJson.put("status","200");
+            } else {
+                returnJson.put("msg","删除失败");
+                returnJson.put("status","500");
             }
         }catch (Exception e){
-            returnString = "删除失败";
+            returnJson.put("msg","删除失败");
+            returnJson.put("status","500");
         }
-        return returnString;
+        return returnJson;
     }
 
     @Override
@@ -119,32 +125,48 @@ public class teacherServiceimpl implements TeacherService {
     }
 
     @Override
-    public List<Teacher> selectTeacher(JSONObject jsonObject) {
+    public JSONObject selectTeacher(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
         String keyWord = jsonObject.getString("content");
-        String type = jsonObject.getString("type");
-        String content = "%"+keyWord+"%";
+        JSONArray teacherJson = new JSONArray();
         List<Teacher> teachers =new ArrayList<Teacher>();
         TeacherExample teacherExample =new TeacherExample();
         TeacherExample.Criteria criteria= teacherExample.createCriteria();
-        String keyType = IsChOrEnOrNum.IsChOrNum(keyWord);
-        if ("chinese".equals(keyType)||"english".equals(keyType)){
-            try {
-                if (!"".equals(type) || type != null){
-                    if ("class".equals(type)){
-                        criteria.andTeaClassLike(content);
-                    }else if ("department".equals(type)) {
-                        criteria.andTeaDepartmentLike(content);
-                    }
-                }else {
-                    criteria.andTeaNameLike(content);
-                }
-            }catch (Exception e){
-                return null;
+        if ("".equals(keyWord) || keyWord == null){
+            criteria.andTeaIdIsNotNull();
+            teachers = teacherMapper.selectByExample(teacherExample);
+            if (teachers.size() !=0){
+                teacherJson=JSONArray.fromObject(teachers);
+                returnJson.put("msg","");
+                returnJson.put("status","200");
+                returnJson.put("teacher",teacherJson);
+            }else {
+                returnJson.put("msg","没有查到数据");
+                returnJson.put("status","500");
             }
-        }else if("number".equals(keyType)){
-            criteria.andTeaIdLike(content);
+        } else {
+            String content = "%"+keyWord+"%";
+            criteria.andTeaNameLike(content);
+            teachers = teacherMapper.selectByExample(teacherExample);
+            if (teachers.size() !=0){
+                teacherJson=JSONArray.fromObject(teachers);
+                returnJson.put("msg","");
+                returnJson.put("status","200");
+                returnJson.put("teacher",teacherJson);
+            } else {
+                criteria.andTeaDepartmentLike(content);
+                teachers = teacherMapper.selectByExample(teacherExample);
+                if (teachers.size() !=0){
+                    teacherJson=JSONArray.fromObject(teachers);
+                    returnJson.put("msg","");
+                    returnJson.put("status","200");
+                    returnJson.put("teacher",teacherJson);
+                }else {
+                    returnJson.put("msg","没有查到数据");
+                    returnJson.put("status","500");
+                }
+            }
         }
-        teachers = teacherMapper.selectByExample(teacherExample);
-        return teachers;
+        return returnJson;
     }
 }

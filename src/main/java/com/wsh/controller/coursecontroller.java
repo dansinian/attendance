@@ -55,35 +55,33 @@ public class Coursecontroller {
 
     @RequestMapping("/selectCourse")
     @ResponseBody
-    public String selectCourse(HttpServletRequest request, HttpServletResponse response)throws Exception{
-        JSONObject returnJson = new JSONObject();
-        String jsonData = request.getParameter("data");
-        JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        List<Course> courses = courseService.selectCourse(jsonObject);
-        JSONArray courseJson=JSONArray.fromObject(courses);
-        if (courses!=null){
-            if (courses.size()>0){
-                returnJson.put("courses",courseJson);
-                returnJson.put("status","200");
-                returnJson.put("msg","");
-            }
-        }else if (courses==null || courses.size()==0){
-            returnJson.put("courses",courseJson);
-            returnJson.put("status","500");
-            returnJson.put("msg","没有查到课程数据");
+    public JSONObject selectCourse(HttpServletRequest request, HttpServletResponse response)throws Exception{ //具体查询或者全部查询 参数data为null或"" 是全部查询
+        String jsonData =request.getParameter("data");
+        if (!"".equals(jsonData) && jsonData!=null){
+            JSONObject jsonObject = JSONObject.fromObject(jsonData);
+            return courseService.selectCourse(jsonObject);
         }else {
-            returnJson.put("status","500");
-            returnJson.put("msg","查询失败，请稍后重试");
+            return courseService.selectAllCourse();
         }
-        return returnJson.toString();
     }
 
     @RequestMapping("/selectCourseByTeacher")
     @ResponseBody
     public JSONObject selectCourseByTeacher(HttpServletRequest request, HttpServletResponse response){
-        String jsonData = request.getParameter("data");
-        JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        JSONObject returnJson = courseService.selectCourseByTeacher(jsonObject);
-        return returnJson;
+        JSONObject jsonData = new JSONObject();
+        String stringData = /*request.getParameter("data");*/ " {\"teacherId\":\"2511150329\",\"password\":\"123456\",\"type\":\"teacher\"}";
+        JSONObject jsonObject = JSONObject.fromObject(stringData);
+        String teacherId =  jsonObject.getString("teacherId");
+        if (teacherId !=null && !"".equals(teacherId)){
+            JSONObject returnJson = courseService.selectCourseByTeacher(jsonObject);
+            jsonData.put("data",returnJson);
+            jsonData.put("status","200");
+            jsonData.put("msg","");
+        } else {
+            jsonData.put("data",null);
+            jsonData.put("msg","teacherId为空,无法查询");
+            jsonData.put("status","500");
+        }
+        return jsonData;
     }
 }

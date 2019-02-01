@@ -10,7 +10,7 @@
                 <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
                 <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/attendance" userId="root"
-                        password="pass">
+                        password="123456">
                 </jdbcConnection>
 
 
@@ -42,7 +42,7 @@
                 </javaClientGenerator>
                 <!-- 指定数据库表 -->
                 <!-- enableCountByExample....false去掉Example文件  -->
-                <table tableName="isgocourse"></table>
+                <table tableName="vacation"></table>
 
         </context>
 </generatorConfiguration>

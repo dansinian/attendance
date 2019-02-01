@@ -22,54 +22,34 @@ public class Teachercontroller {
 
     @RequestMapping("/deleteTeacher")
     @ResponseBody
-    public String deleteTeacher(HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public JSONObject deleteTeacher(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        String returnString = teacherService.deleteTeacher(jsonObject);
-        return returnString;
+        return teacherService.deleteTeacher(jsonObject);
     }
 
     @RequestMapping("/createTeacher")
     @ResponseBody
-    public String createTeacher(HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public JSONObject createTeacher(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        JSONObject returnJson = teacherService.createTeacher(jsonObject);
-        return returnJson.toString();
+        return teacherService.createTeacher(jsonObject);
     }
 
     @RequestMapping("/updateTeacher")
     @ResponseBody
-    public String updateTeacher(HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public JSONObject updateTeacher(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        JSONObject returnJson = teacherService.updateTeacher(jsonObject);
-        return returnJson.toString();
+        return teacherService.updateTeacher(jsonObject);
     }
 
     @RequestMapping("/selectTeacher")
     @ResponseBody
-    public String selectTeacher(HttpServletRequest request, HttpServletResponse response){
-        JSONObject returnJson = new JSONObject();
+    public JSONObject selectTeacher(HttpServletRequest request, HttpServletResponse response){
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        List<Teacher> teachers = teacherService.selectTeacher(jsonObject);
-        JSONArray teacherJson=JSONArray.fromObject(teachers);
-        if (teachers!=null){
-            if (teachers.size()>0){
-                returnJson.put("teachers",teacherJson);
-                returnJson.put("status","200");
-                returnJson.put("msg","");
-            }
-        }else if (teachers==null||teachers.size()==0){
-            returnJson.put("teachers",teacherJson);
-            returnJson.put("status","500");
-            returnJson.put("msg","没有查到教师信息");
-        }else {
-            returnJson.put("status","500");
-            returnJson.put("msg","查询失败，请稍后重试");
-        }
-        return returnJson.toString();
+        return teacherService.selectTeacher(jsonObject);
     }
 
 

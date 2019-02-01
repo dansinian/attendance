@@ -19,7 +19,7 @@ public class MessageLog implements Callable<String> {
         private static final String addr = "http://api.sms.cn/sms/";
         private static final String userId = "sprite00";
         private static final String pwd = "78e5e4babf3b5dcfdeb0db9677a3ed59";
-        private static final String encode = "utf8";
+        private static final String encode = "UTF-8";
         private String teacher;
         private String student;
         private String phone;
@@ -54,7 +54,7 @@ public class MessageLog implements Callable<String> {
             //返回结果
             inputline = in.readLine();
             JSONObject returndata = JSONObject.fromObject(inputline);
-            returnString = returndata.getString("message");
+            returnString = returndata.getString("status");
             System.out.println(inputline + "a");
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
@@ -68,11 +68,4 @@ public class MessageLog implements Callable<String> {
         return returnString;
     }
 
-/*    public static void main(String[] args) {
-        try {
-            send("窦超","苏丹丹","15129489109");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 }

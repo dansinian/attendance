@@ -22,35 +22,33 @@ public class Studentcontroller {
 
     @RequestMapping("/deleteStudent")
         @ResponseBody
-        public String deleteStudent(HttpServletRequest request, HttpServletResponse response)throws Exception{
+        public JSONObject deleteStudent(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        String returnString = studentService.deleteStudent(jsonObject);
-        return returnString;
+        return studentService.deleteStudent(jsonObject);
         }
 
         @RequestMapping("/createStudent")
         @ResponseBody
-        public String createStudent(HttpServletRequest request, HttpServletResponse response)throws Exception{
+        public JSONObject createStudent(HttpServletRequest request, HttpServletResponse response)throws Exception{
             String jsonData = request.getParameter("data");
             JSONObject jsonObject = JSONObject.fromObject(jsonData);
             JSONObject returnJson = studentService.createStudent(jsonObject);
-            return returnJson.toString();
+            return returnJson;
         }
 
         @RequestMapping("/updateStudent")
         @ResponseBody
-        public String updateStudent(HttpServletRequest request, HttpServletResponse response)throws Exception{
+        public JSONObject updateStudent(HttpServletRequest request, HttpServletResponse response)throws Exception{
             String jsonData = request.getParameter("data");
             JSONObject jsonObject = JSONObject.fromObject(jsonData);
             JSONObject returnJson = studentService.updateStudent(jsonObject);
-            return returnJson.toString();
-
+            return returnJson;
         }
 
         @RequestMapping("/selectStudent")
         @ResponseBody
-        public String selectStudent(HttpServletRequest request, HttpServletResponse response)throws Exception{
+        public JSONObject selectStudent(HttpServletRequest request, HttpServletResponse response)throws Exception{
             JSONObject returnJson = new JSONObject();
             String jsonData = request.getParameter("data");
             JSONObject jsonObject = JSONObject.fromObject(jsonData);
@@ -70,7 +68,7 @@ public class Studentcontroller {
                 returnJson.put("status","500");
                 returnJson.put("msg","查询失败，请稍后重试");
             }
-            return returnJson.toString();
+            return returnJson;
 
         }
 

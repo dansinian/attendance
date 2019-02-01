@@ -47,7 +47,7 @@
 		<property name="prefix" value="/"></property>
 		<property name="suffix" value=".jsp"></property>
 	</bean>
-	<!-- 
+	<!--
 		有此配置，会额外追加一个映射=(/**):(DefaultServletHttpRequestHandler)
 		/**= /a  /b  /a/b/c   /a/b/c.html   /a/b/c.jpg  /a/b/c.xxx
 		此handler在最后匹配请求=请求到达此handler时，会被转向对应的静态资源

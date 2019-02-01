@@ -4,6 +4,8 @@ import com.wsh.dao.StudentMapper;
 import com.wsh.entity.Student;
 import com.wsh.entity.StudentExample;
 import com.wsh.service.StudentService;
+import com.wsh.servlet.IsChOrEnOrNum;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,21 +19,26 @@ public class studentServiceImpl implements StudentService {
     private StudentMapper studentMapper;
 
     @Override
-    public String deleteStudent(JSONObject jsonObject) {
-        String courseID = jsonObject.getString("studentId");
-        String returnString ="";
+    public JSONObject deleteStudent(JSONObject jsonObject) {
+        String courseID = jsonObject.getString("courseID");
+        JSONObject returnJSon = new JSONObject();
         StudentExample courseExample =new StudentExample();
         StudentExample.Criteria criteria= courseExample.createCriteria();
         criteria.andStuIdEqualTo(courseID);
         try {
             int returncourse= studentMapper.deleteByExample(courseExample);
             if (returncourse>0){
-                returnString = "删除成功";
+                returnJSon.put("msg","删除成功");
+                returnJSon.put("status","200");
+            } else {
+                returnJSon.put("msg","删除失败");
+                returnJSon.put("status","500");
             }
         }catch (Exception e){
-            returnString = "删除失败";
+            returnJSon.put("msg","删除失败");
+            returnJSon.put("status","500");
         }
-        return returnString;
+        return returnJSon;
     }
 
     @Override
@@ -129,21 +136,27 @@ public class studentServiceImpl implements StudentService {
     @Override
     public List<Student> selectStudent (JSONObject jsonObject) {
         String keyWord = jsonObject.getString("content");
-        String type = jsonObject.getString("type");
+        String Keytype = IsChOrEnOrNum.IsChOrNum(keyWord);
         String content = "%"+keyWord+"%";
         List<Student> students =new ArrayList<Student>();
         StudentExample courseExample =new StudentExample();
         StudentExample.Criteria criteria= courseExample.createCriteria();
         try {
-            if ("class".equals(type)){
-                criteria.andStuClassLike(content);
-            }else if ("department".equals(type)) {
-                criteria.andStuDepartmentLike(content);
+            if ("chinese".equals(Keytype)){
+                criteria.andStuNameLike(content);
+                students = studentMapper.selectByExample(courseExample);
+                if (students.size()==0){
+                    criteria.andStuClassLike(content);
+                    students = studentMapper.selectByExample(courseExample);
+                }
+            } else {
+                criteria.andStuIdLike(content);
+                students = studentMapper.selectByExample(courseExample);
             }
         }catch (Exception e){
             return null;
         }
-        students = studentMapper.selectByExample(courseExample);
+
         return students;
     }
 
