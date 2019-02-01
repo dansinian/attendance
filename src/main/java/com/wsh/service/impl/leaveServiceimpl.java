@@ -1,12 +1,14 @@
 package com.wsh.service.impl;
 
 
+import com.wsh.dao.CourseArrangementMapper;
 import com.wsh.dao.TeacherMapper;
 import com.wsh.dao.VacationMapper;
 import com.wsh.entity.Teacher;
 import com.wsh.entity.TeacherExample;
 import com.wsh.entity.Vacation;
 import com.wsh.entity.VacationExample;
+import com.wsh.service.Course_arragementService;
 import com.wsh.service.LeaveService;
 import com.wsh.servlet.MessageLog;
 import com.wsh.servlet.OutData;
@@ -27,6 +29,10 @@ public class LeaveServiceimpl implements LeaveService {
     private VacationMapper leaveMapper;
     @Autowired
     private TeacherMapper teacherMapper;
+    @Autowired
+    private CourseArrangementMapper arrangMapper;
+    @Autowired
+    private Course_arragementService arrangService;
 
     @Override
     public JSONObject deleteLeave(JSONObject jsonObject) {
@@ -133,9 +139,10 @@ public class LeaveServiceimpl implements LeaveService {
         VacationExample courseExample =new VacationExample();
         VacationExample.Criteria criteria= courseExample.createCriteria();
         criteria.andLeaveIdEqualTo(leaveID);
+        List<Vacation> vacations=  leaveMapper.selectByExample(courseExample);
         if ("guide".equals(type) || "student".equals(type)){
             try {
-                if (leaveMapper.selectByExample(courseExample).size()>0){
+                if (vacations.size()==1){
                     leave.setLeaveId(leaveID);
                     leave.setStuId(jsonObject.getString("stuId"));
                     leave.setStuName(jsonObject.getString("stuName"));
@@ -146,15 +153,31 @@ public class LeaveServiceimpl implements LeaveService {
                     leave.setApprovalTea(jsonObject.getString("approvalTea"));
                     leave.setStatus(jsonObject.getString("status"));
                     leave.setLeaveReason(jsonObject.getString("reason"));
-                    int returnint =leaveMapper.updateByExampleSelective(leave,courseExample);
-                    if(returnint>0){
-                        returnJson.put("leave",leave);
-                        returnJson.put("msg","修改成功");
-                        returnJson.put("status","200");
-                    }else {
-                        returnJson.put("leave","");
-                        returnJson.put("msg","修改失败");
-                        returnJson.put("status","500");
+                    Vacation vacation = vacations.get(0);
+                    int ID = vacation.getId();
+                    if("0".equals(vacation.getStatus())){
+                        int returnint =leaveMapper.updateByExampleSelective(leave,courseExample);
+                        if(returnint>0){
+                            Vacation vacation1 = leaveMapper.selectByPrimaryKey(ID);
+                            String status = vacation1.getStatus();
+                            if ("1".equals(status)){
+                                String startTime = vacation1.getStartTime();
+                                String endTime = vacation1.getEndTime();
+                                JSONArray array = arrangService.selectVacationCourse(startTime,endTime);
+                                if (array.size()>0){
+                                    for (int i = 0; i < array.size(); i++) {
+                                        array.get(i);
+                                    }
+                                }
+                            }
+                            returnJson.put("leave",leave);
+                            returnJson.put("msg","修改成功");
+                            returnJson.put("status","200");
+                        }else {
+                            returnJson.put("leave","");
+                            returnJson.put("msg","修改失败");
+                            returnJson.put("status","500");
+                        }
                     }
                 }
             }catch (Exception e){

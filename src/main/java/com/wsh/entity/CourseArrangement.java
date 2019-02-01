@@ -9,6 +9,8 @@ public class CourseArrangement {
 
     private String courseId;
 
+    private String courseName;
+
     public Integer getId() {
         return id;
     }
@@ -39,5 +41,13 @@ public class CourseArrangement {
 
     public void setCourseId(String courseId) {
         this.courseId = courseId == null ? null : courseId.trim();
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName == null ? null : courseName.trim();
     }
 }

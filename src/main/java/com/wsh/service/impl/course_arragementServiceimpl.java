@@ -8,6 +8,7 @@ import com.wsh.entity.CourseArrangement;
 import com.wsh.entity.CourseArrangementExample;
 import com.wsh.entity.CourseExample;
 import com.wsh.service.Course_arragementService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -141,5 +142,22 @@ public class Course_arragementServiceimpl implements Course_arragementService {
             }
         }
         return arrangements;
+    }
+
+    @Override
+    public JSONArray selectVacationCourse(String startTime, String endTime) {
+        JSONArray array = new JSONArray();
+        CourseArrangementExample arrangementExample =new CourseArrangementExample();
+        CourseArrangementExample.Criteria criteria = arrangementExample.createCriteria();
+        criteria.andCarmTimeBetween(startTime,endTime);
+        List<CourseArrangement> arrangements = arragementMapper.selectByExample(arrangementExample);
+        if (arrangements.size()>0){
+            for (CourseArrangement arrangement : arrangements) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put(arrangement.getCourseId(),arrangement.getCarmTime());
+                array.add(jsonObject);
+            }
+        }
+        return array;
     }
 }
