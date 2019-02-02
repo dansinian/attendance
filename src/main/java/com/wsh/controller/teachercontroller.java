@@ -1,7 +1,7 @@
 package com.wsh.controller;
 
 import com.wsh.entity.Teacher;
-import com.wsh.service.TeacherService;
+import com.wsh.service.teacherService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,9 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/teacher")
-public class Teachercontroller {
+public class teachercontroller {
     @Autowired
-    private TeacherService teacherService;
+    private teacherService teacherService;
 
 
     @RequestMapping("/deleteTeacher")
@@ -48,8 +48,12 @@ public class Teachercontroller {
     @ResponseBody
     public JSONObject selectTeacher(HttpServletRequest request, HttpServletResponse response){
         String jsonData = request.getParameter("data");
-        JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        return teacherService.selectTeacher(jsonObject);
+        if ("".equals(jsonData)){
+            return teacherService.selectAllTercher();
+        } else {
+            JSONObject jsonObject = JSONObject.fromObject(jsonData);
+            return teacherService.selectTeacher(jsonObject);
+        }
     }
 
 

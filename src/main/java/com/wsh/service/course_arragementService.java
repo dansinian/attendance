@@ -7,10 +7,12 @@ import net.sf.json.JSONObject;
 
 import java.util.List;
 
-public interface Course_arragementService {
+public interface course_arragementService {
     JSONObject deleteArrangement(JSONObject jsonObject);
     JSONObject createArrangement(JSONObject jsonObject);
     JSONObject updateArrangement(JSONObject jsonObject);
-    List<CourseArrangement> selectArrangement(JSONObject jsonObject);
+    JSONObject selectArrangement(JSONObject jsonObject);
     JSONArray selectVacationCourse(String startTime, String endTime);
+
+    JSONObject selectAllArragement();
 }

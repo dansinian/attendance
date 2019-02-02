@@ -4,7 +4,7 @@ package com.wsh.service.impl;
 import com.wsh.dao.IsgocourseMapper;
 import com.wsh.entity.Isgocourse;
 import com.wsh.entity.IsgocourseExample;
-import com.wsh.service.GocourseService;
+import com.wsh.service.gocourseService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class GocourseServiceimpl implements GocourseService {
+public class gocourseServiceimpl implements gocourseService {
     @Autowired
     private IsgocourseMapper gocourseMapper;
 

@@ -6,7 +6,7 @@ import net.sf.json.JSONObject;
 
 import java.util.List;
 
-public interface GocourseService {
+public interface gocourseService {
     String deleteGocourse(JSONObject jsonObject);
     JSONObject createGocourse(JSONObject jsonObject);
     JSONObject updateGocourse(JSONObject jsonObject);

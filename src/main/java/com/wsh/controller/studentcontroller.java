@@ -1,7 +1,7 @@
 package com.wsh.controller;
 
 import com.wsh.entity.Student;
-import com.wsh.service.StudentService;
+import com.wsh.service.studentService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,9 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/student")
-public class Studentcontroller {
+public class studentcontroller {
     @Autowired
-    private StudentService studentService;
+    private studentService studentService;
 
     @RequestMapping("/deleteStudent")
         @ResponseBody
@@ -49,27 +49,13 @@ public class Studentcontroller {
         @RequestMapping("/selectStudent")
         @ResponseBody
         public JSONObject selectStudent(HttpServletRequest request, HttpServletResponse response)throws Exception{
-            JSONObject returnJson = new JSONObject();
             String jsonData = request.getParameter("data");
-            JSONObject jsonObject = JSONObject.fromObject(jsonData);
-            List<Student> teachers = studentService.selectStudent(jsonObject);
-            JSONArray courseJson=JSONArray.fromObject(teachers);
-            if (teachers!=null){
-                if (teachers.size()>0){
-                    returnJson.put("courses",courseJson);
-                    returnJson.put("status","200");
-                    returnJson.put("msg","");
-                }
-            }else if (teachers==null||teachers.size()==0){
-                returnJson.put("courses",courseJson);
-                returnJson.put("status","500");
-                returnJson.put("msg","没有查到学生信息");
-            }else {
-                returnJson.put("status","500");
-                returnJson.put("msg","查询失败，请稍后重试");
+            if (!"".equals(jsonData)){
+                JSONObject jsonObject = JSONObject.fromObject(jsonData);
+                return studentService.selectStudent(jsonObject);
+            } else {
+                return studentService.selectAllStudent();
             }
-            return returnJson;
-
         }
 
 }

@@ -4,7 +4,7 @@ import com.wsh.servlet.IsChOrEnOrNum;
 import com.wsh.dao.TeacherMapper;
 import com.wsh.entity.Teacher;
 import com.wsh.entity.TeacherExample;
-import com.wsh.service.TeacherService;
+import com.wsh.service.teacherService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TeacherServiceimpl implements TeacherService {
+public class teacherServiceimpl implements teacherService {
     @Autowired
     private TeacherMapper teacherMapper;
 
@@ -166,6 +166,26 @@ public class TeacherServiceimpl implements TeacherService {
                     returnJson.put("status","500");
                 }
             }
+        }
+        return returnJson;
+    }
+
+    @Override
+    public JSONObject selectAllTercher() {
+        JSONObject returnJson = new JSONObject();
+        List<Teacher> teachers =new ArrayList<Teacher>();
+        TeacherExample teacherExample =new TeacherExample();
+        TeacherExample.Criteria criteria= teacherExample.createCriteria();
+        criteria.andIdIsNotNull();
+        teachers = teacherMapper.selectByExample(teacherExample);
+        if (teachers.size()>0){
+            returnJson.put("teachers",teachers);
+            returnJson.put("msg","");
+            returnJson.put("status","200");
+        } else {
+            returnJson.put("teachers","");
+            returnJson.put("msg","没有数据");
+            returnJson.put("status","500");
         }
         return returnJson;
     }

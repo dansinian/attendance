@@ -2,7 +2,7 @@ package com.wsh.controller;
 
 
 import com.wsh.entity.Isgocourse;
-import com.wsh.service.GocourseService;
+import com.wsh.service.gocourseService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,9 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/goCourse")
-public class Isgocoursecontroller {
+public class isgocoursecontroller {
     @Autowired
-    private GocourseService gocourseService;
+    private gocourseService gocourseService;
 
 
     @RequestMapping("/deletegocourse")

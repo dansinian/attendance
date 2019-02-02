@@ -1,23 +1,19 @@
 package com.wsh.controller;
 
-import com.wsh.entity.Course;
-import com.wsh.service.CourseService;
-import net.sf.json.JSONArray;
+import com.wsh.service.courseService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @Controller
 @RequestMapping("/course")
-public class Coursecontroller {
+public class coursecontroller {
     @Autowired
-    private CourseService courseService;
+    private courseService courseService;
 
     @RequestMapping("/deleteCourse")
     @ResponseBody
@@ -57,7 +53,7 @@ public class Coursecontroller {
     @ResponseBody
     public JSONObject selectCourse(HttpServletRequest request, HttpServletResponse response)throws Exception{ //具体查询或者全部查询 参数data为null或"" 是全部查询
         String jsonData =request.getParameter("data");
-        if (!"".equals(jsonData) && jsonData!=null){
+        if (!"".equals(jsonData)){
             JSONObject jsonObject = JSONObject.fromObject(jsonData);
             return courseService.selectCourse(jsonObject);
         }else {

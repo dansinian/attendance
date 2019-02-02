@@ -6,9 +6,11 @@ import net.sf.json.JsonConfig;
 
 import java.util.List;
 
-public interface TeacherService {
+public interface teacherService {
     JSONObject deleteTeacher(JSONObject jsonObject);
     JSONObject createTeacher(JSONObject jsonObject);
     JSONObject updateTeacher(JSONObject jsonObject);
     JSONObject selectTeacher(JSONObject jsonObject);
+
+    JSONObject selectAllTercher();
 }

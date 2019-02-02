@@ -7,7 +7,7 @@ import com.wsh.entity.Course;
 import com.wsh.entity.CourseArrangement;
 import com.wsh.entity.CourseArrangementExample;
 import com.wsh.entity.CourseExample;
-import com.wsh.service.Course_arragementService;
+import com.wsh.service.course_arragementService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class Course_arragementServiceimpl implements Course_arragementService {
+public class course_arragementServiceimpl implements course_arragementService {
     @Autowired
     private CourseArrangementMapper arragementMapper;
     @Autowired
@@ -121,7 +121,9 @@ public class Course_arragementServiceimpl implements Course_arragementService {
     }
 
     @Override
-    public List<CourseArrangement> selectArrangement(JSONObject jsonObject) {
+    public JSONObject selectArrangement(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        JSONArray returnJsarr = new JSONArray();
         String keyWord = jsonObject.getString("content"); // 课程的名字
         String content = "%"+keyWord+"%";
         List<CourseArrangement> arrangements =new ArrayList<CourseArrangement>();
@@ -131,17 +133,24 @@ public class Course_arragementServiceimpl implements Course_arragementService {
         CourseArrangementExample.Criteria criteria= arrangementExample.createCriteria();
         courseCriteria.andCourseNameLike(content);
         List<Course> courses = courseMapper.selectByExample(courseExample);
-        if (courses != null && courses.size() >0) {
+        if (courses.size() >0) {
             for (int i = 0; i < courses.size(); i++) {
-               String courseId =  courses.get(i).getCourseId();
+                String courseId =  courses.get(i).getCourseId();
                 criteria.andCourseIdEqualTo(courseId);
                 List<CourseArrangement> arrangementList =  arragementMapper.selectByExample(arrangementExample);
-                if (arrangementList.get(i) != null) {
-                    arrangements.set(i,arrangementList.get(i));
+                if (arrangementList.size()>0) {
+                    returnJsarr.add(arrangementList.get(i));
                 }
             }
+            returnJson.put("Arrangements",returnJsarr);
+            returnJson.put("status","200");
+            returnJson.put("msg","");
+        }else {
+            returnJson.put("Arrangements","");
+            returnJson.put("status","500");
+            returnJson.put("msg","查询失败，没有数据");
         }
-        return arrangements;
+        return returnJson;
     }
 
     @Override
@@ -159,5 +168,24 @@ public class Course_arragementServiceimpl implements Course_arragementService {
             }
         }
         return array;
+    }
+
+    @Override
+    public JSONObject selectAllArragement() {
+        JSONObject returnJson = new JSONObject();
+        CourseArrangementExample arrangementExample =new CourseArrangementExample();
+        CourseArrangementExample.Criteria criteria = arrangementExample.createCriteria();
+        criteria.andIdIsNotNull();
+        List<CourseArrangement> arrangements = arragementMapper.selectByExample(arrangementExample);
+        if (arrangements.size()>0){
+            returnJson.put("Arrangements",arrangements);
+            returnJson.put("msg","");
+            returnJson.put("status","200");
+        }else {
+            returnJson.put("Arrangements","");
+            returnJson.put("msg","没有查到数据");
+            returnJson.put("status","500");
+        }
+        return returnJson;
     }
 }

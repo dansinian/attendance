@@ -5,7 +5,7 @@ import net.sf.json.JSONObject;
 
 import java.util.List;
 
-public interface CourseService {
+public interface courseService {
     String deleteCourse(JSONObject jsonObject);
     JSONObject createCourse(JSONObject jsonObject);
     JSONObject updateCourse(JSONObject jsonObject);

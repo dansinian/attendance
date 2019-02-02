@@ -3,9 +3,8 @@ package com.wsh.service.impl;
 import com.wsh.dao.StudentMapper;
 import com.wsh.entity.Student;
 import com.wsh.entity.StudentExample;
-import com.wsh.service.StudentService;
+import com.wsh.service.studentService;
 import com.wsh.servlet.IsChOrEnOrNum;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class StudentServiceImpl implements StudentService {
+public class studentServiceImpl implements studentService {
     @Autowired
     private StudentMapper studentMapper;
 
@@ -134,14 +133,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> selectStudent (JSONObject jsonObject) {
+    public JSONObject selectStudent (JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
         String keyWord = jsonObject.getString("content");
         String Keytype = IsChOrEnOrNum.IsChOrNum(keyWord);
         String content = "%"+keyWord+"%";
         List<Student> students =new ArrayList<Student>();
         StudentExample courseExample =new StudentExample();
         StudentExample.Criteria criteria= courseExample.createCriteria();
-        try {
             if ("chinese".equals(Keytype)){
                 criteria.andStuNameLike(content);
                 students = studentMapper.selectByExample(courseExample);
@@ -153,11 +152,28 @@ public class StudentServiceImpl implements StudentService {
                 criteria.andStuIdLike(content);
                 students = studentMapper.selectByExample(courseExample);
             }
-        }catch (Exception e){
-            return null;
-        }
+            if (students.size()>0){
+                if (students.size()>0){
+                    returnJson.put("students",students);
+                    returnJson.put("status","200");
+                    returnJson.put("msg","");
+                }
+            }else{
+                returnJson.put("students","");
+                returnJson.put("status","500");
+                returnJson.put("msg","没有查到学生信息");
+            }
+        return returnJson;
+    }
 
-        return students;
+    @Override
+    public JSONObject selectAllStudent() {
+        List<Student> students =new ArrayList<Student>();
+        StudentExample studentExample =new StudentExample();
+        StudentExample.Criteria criteria= studentExample.createCriteria();
+        criteria.andIdIsNotNull();
+        students = studentMapper.selectByExample(studentExample);
+        return null;
     }
 
 }

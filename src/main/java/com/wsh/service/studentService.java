@@ -6,9 +6,11 @@ import net.sf.json.JSONObject;
 
 import java.util.List;
 
-public interface StudentService {
+public interface studentService {
     JSONObject deleteStudent(JSONObject jsonObject);
     JSONObject createStudent(JSONObject jsonObject);
     JSONObject updateStudent(JSONObject jsonObject);
-    List<Student> selectStudent(JSONObject jsonObject);
+    JSONObject selectStudent(JSONObject jsonObject);
+
+    JSONObject selectAllStudent();
 }
