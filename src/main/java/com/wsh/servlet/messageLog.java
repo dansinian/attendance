@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 
 /*
 * 短信接口*/
-public class messageLog{
+public class MessageLog{
         private static final String addr = "http://api.sms.cn/sms/";
         private static final String userId = "sprite00";
         private static final String pwd = "78e5e4babf3b5dcfdeb0db9677a3ed59";

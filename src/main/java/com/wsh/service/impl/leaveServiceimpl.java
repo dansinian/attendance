@@ -8,9 +8,9 @@ import com.wsh.entity.Teacher;
 import com.wsh.entity.TeacherExample;
 import com.wsh.entity.Vacation;
 import com.wsh.entity.VacationExample;
-import com.wsh.service.course_arragementService;
-import com.wsh.service.leaveService;
-import com.wsh.servlet.messageLog;
+import com.wsh.service.Course_arragementService;
+import com.wsh.service.LeaveService;
+import com.wsh.servlet.MessageLog;
 import com.wsh.servlet.OutData;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 @Service
-public class leaveServiceimpl implements leaveService {
+public class LeaveServiceimpl implements LeaveService {
     @Autowired
     private VacationMapper leaveMapper;
     @Autowired
@@ -32,7 +32,7 @@ public class leaveServiceimpl implements leaveService {
     @Autowired
     private CourseArrangementMapper arrangMapper;
     @Autowired
-    private course_arragementService arrangService;
+    private Course_arragementService arrangService;
 
     @Override
     public JSONObject deleteLeave(JSONObject jsonObject) {
@@ -97,7 +97,7 @@ public class leaveServiceimpl implements leaveService {
                     if (teachers.size()>0){
                         String phone = teachers.get(0).getTeaPhone();
                         String teaName = teachers.get(0).getTeaName();
-                        messageLog messageLog = new messageLog();
+                        MessageLog messageLog = new MessageLog();
                         String returnmsg =  messageLog.call(teaName,stuName,phone);
                         if ("100".equals(returnmsg)){
                             returnJson.put("leave", "");

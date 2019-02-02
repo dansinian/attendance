@@ -1,7 +1,7 @@
 package com.wsh.controller;
 
 
-import com.wsh.service.leaveService;
+import com.wsh.service.LeaveService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +14,9 @@ import java.io.UnsupportedEncodingException;
 
 @Controller
 @RequestMapping("/leave")
-public class leavecontroller {
+public class Leavecontroller {
     @Autowired
-    private leaveService leaveService;
+    private LeaveService leaveService;
 
 
     @RequestMapping("/deleteLeave")

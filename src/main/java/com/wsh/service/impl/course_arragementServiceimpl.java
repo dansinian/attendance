@@ -7,7 +7,7 @@ import com.wsh.entity.Course;
 import com.wsh.entity.CourseArrangement;
 import com.wsh.entity.CourseArrangementExample;
 import com.wsh.entity.CourseExample;
-import com.wsh.service.course_arragementService;
+import com.wsh.service.Course_arragementService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class course_arragementServiceimpl implements course_arragementService {
+public class Course_arragementServiceimpl implements Course_arragementService {
     @Autowired
     private CourseArrangementMapper arragementMapper;
     @Autowired

@@ -1,23 +1,26 @@
 package com.wsh.controller;
 
-import com.wsh.service.courseService;
+import com.wsh.entity.Course;
+import com.wsh.service.CourseService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/course")
-public class coursecontroller {
+public class Coursecontroller {
     @Autowired
-    private courseService courseService;
+    private CourseService courseService;
 
     @RequestMapping("/deleteCourse")
     @ResponseBody
-    public String deleteCourse(HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public JSONObject deleteCourse(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String jsonData = request.getParameter("data");
         JSONObject retrunJson = new JSONObject();
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
@@ -28,16 +31,16 @@ public class coursecontroller {
             retrunJson.put("status","500");
         }
         retrunJson.put("msg",returnString);
-        return retrunJson.toString();
+        return retrunJson;
     }
 
     @RequestMapping("/createCourse")
     @ResponseBody
-    public String createCourse(HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public JSONObject createCourse(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
         JSONObject retrunJson = courseService.createCourse(jsonObject);
-        return retrunJson.toString();
+        return retrunJson;
     }
 
     @RequestMapping("/updateCourse")

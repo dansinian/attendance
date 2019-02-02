@@ -2,7 +2,7 @@ package com.wsh.service;
 
 import net.sf.json.JSONObject;
 
-public interface leaveService {
+public interface LeaveService {
     JSONObject deleteLeave(JSONObject jsonObject);
     JSONObject createLeave(JSONObject jsonObject);
     JSONObject updateLeave(JSONObject jsonObject);

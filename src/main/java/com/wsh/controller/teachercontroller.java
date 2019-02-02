@@ -1,7 +1,7 @@
 package com.wsh.controller;
 
 import com.wsh.entity.Teacher;
-import com.wsh.service.teacherService;
+import com.wsh.service.TeacherService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,9 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/teacher")
-public class teachercontroller {
+public class Teachercontroller {
     @Autowired
-    private teacherService teacherService;
+    private TeacherService teacherService;
 
 
     @RequestMapping("/deleteTeacher")

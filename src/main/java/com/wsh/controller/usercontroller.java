@@ -1,6 +1,6 @@
 package com.wsh.controller;
 
-import com.wsh.service.userService;
+import com.wsh.service.UserService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,9 +12,9 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/user")
-public class usercontroller {
+public class Usercontroller {
     @Autowired
-    private userService userService;
+    private UserService userService;
 
     @RequestMapping("/saveUser")
     @ResponseBody

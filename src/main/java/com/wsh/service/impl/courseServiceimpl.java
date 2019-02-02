@@ -6,7 +6,7 @@ import com.wsh.dao.CourseMapper;
 import com.wsh.dao.StudentMapper;
 import com.wsh.dao.TeacherMapper;
 import com.wsh.entity.*;
-import com.wsh.service.courseService;
+import com.wsh.service.CourseService;
 import com.wsh.servlet.OutData;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class courseServiceimpl implements courseService {
+public class CourseServiceimpl implements CourseService {
     @Autowired
     private CourseMapper courseMapper;
     @Autowired
