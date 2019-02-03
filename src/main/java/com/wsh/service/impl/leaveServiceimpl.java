@@ -88,7 +88,6 @@ public class LeaveServiceimpl implements LeaveService {
                 leave.setLeavecourseTea(jsonObject.getString("leaveCourseTea"));
                 leave.setLeaveReason(jsonObject.getString("leaveReason"));
                 int success = leaveMapper.insert(leave);
-                List<Vacation> returnLeaves = leaveMapper.selectByExample(leaveExample);
                 if (success > 0) {
                     TeacherExample teacherExample = new TeacherExample();
                     TeacherExample.Criteria criteria1 = teacherExample.createCriteria();
@@ -102,7 +101,7 @@ public class LeaveServiceimpl implements LeaveService {
                         if ("100".equals(returnmsg)){
                             returnJson.put("leave", "");
                             returnJson.put("msg", "添加请假信息成功,请等待老师审批,如5分钟内没有答复,则拒绝批准");
-                            returnJson.put("status", "500");
+                            returnJson.put("status", "200");
                         }else{
                             criteria.andLeaveIdEqualTo(leaveID);
                             leaveMapper.deleteByExample(leaveExample);
@@ -192,26 +191,18 @@ public class LeaveServiceimpl implements LeaveService {
     @Override
     public JSONObject selectLeave(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String keyWord = "%"+jsonObject.getString("content")+"%";
+        String keyWord = jsonObject.getString("content");
         List<Vacation> leaves =new ArrayList<Vacation>();
-        VacationExample courseExample =new VacationExample();
-        VacationExample.Criteria criteria= courseExample.createCriteria();
-        criteria.andLeaveIdLike(keyWord);
-        leaves = leaveMapper.selectByExample(courseExample);
+        leaves = leaveMapper.selectByLeaveIdLike(keyWord);
         JSONArray leaveJson= JSONArray.fromObject(leaves);
-        if (leaves!=null){
-            if (leaves.size()>0){
-                returnJson.put("leaves",leaveJson);
-                returnJson.put("status","200");
-                returnJson.put("msg","");
-            }
-        }else if (leaves==null||leaves.size()==0){
+        if (leaves.size()>0){
+            returnJson.put("leaves",leaveJson);
+            returnJson.put("status","200");
+            returnJson.put("msg","");
+        }else{
             returnJson.put("leaves",leaveJson);
             returnJson.put("status","500");
             returnJson.put("msg","没有查到请假信息");
-        }else {
-            returnJson.put("status","500");
-            returnJson.put("msg","查询失败，请稍后重试");
         }
         return jsonObject;
     }
@@ -232,6 +223,24 @@ public class LeaveServiceimpl implements LeaveService {
             returnJson.put("leaves","");
             returnJson.put("msg","没有数据");
             returnJson.put("status","200");
+        }
+        return returnJson;
+    }
+
+    @Override
+    public JSONObject callTeacher(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        String stuName = jsonObject.getString("studentName");
+        String teaName = jsonObject.getString("teacherName");
+        String teaPhone = jsonObject.getString("teacherPhone");
+        MessageLog messageLog = new MessageLog();
+        String status = messageLog.call(teaName,stuName,teaPhone);
+        if ("100".equals(status)){
+            returnJson.put("msg", "添加请假信息成功,请等待老师审批,如两小时没有答复,则拒绝批准");
+            returnJson.put("status", "200");
+        }else{
+            returnJson.put("msg", "添加请假信息失败,短信发送给审批老师失败.请联系管理员");
+            returnJson.put("status", "500");
         }
         return returnJson;
     }

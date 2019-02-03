@@ -9,4 +9,6 @@ public interface LeaveService {
     JSONObject selectLeave(JSONObject jsonObject);
 
     JSONObject selectAllLeave();
+
+    JSONObject callTeacher(JSONObject jsonObject);
 }

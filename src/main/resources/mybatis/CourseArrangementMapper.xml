@@ -89,6 +89,12 @@
     from course_arrangement
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByCourNameLike" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from course_arrangement
+    where
+    course_name LIKE CONCAT(CONCAT('%', #{couName}), '%');
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from course_arrangement
     where id = #{id,jdbcType=INTEGER}

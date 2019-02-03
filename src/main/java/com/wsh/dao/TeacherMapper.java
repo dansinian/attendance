@@ -27,4 +27,8 @@ public interface TeacherMapper {
     int updateByPrimaryKeySelective(Teacher record);
 
     int updateByPrimaryKey(Teacher record);
+
+    List<Teacher> selectByDepLike(String teaDep);
+
+    List<Teacher> selectTeaNameLike(String teaName);
 }

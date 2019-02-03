@@ -91,6 +91,18 @@
     from course
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByMajorLike" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from course
+    where
+    course_major LIKE CONCAT(CONCAT('%', #{major}), '%');
+  </select>
+  <select id="selectByNameLike" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from course
+    where
+    course_name LIKE CONCAT(CONCAT('%', #{name}), '%');
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from course
     where id = #{id,jdbcType=INTEGER}

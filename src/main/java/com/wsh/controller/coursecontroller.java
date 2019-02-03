@@ -45,16 +45,15 @@ public class Coursecontroller {
 
     @RequestMapping("/updateCourse")
     @ResponseBody
-    public void updateCourse(HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public JSONObject updateCourse(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        JSONObject retrunJson = courseService.updateCourse(jsonObject);
-        response.getWriter().print(retrunJson);
+        return courseService.updateCourse(jsonObject);
     }
 
     @RequestMapping("/selectCourse")
     @ResponseBody
-    public JSONObject selectCourse(HttpServletRequest request, HttpServletResponse response)throws Exception{ //具体查询或者全部查询 参数data为null或"" 是全部查询
+    public JSONObject selectCourse(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String jsonData =request.getParameter("data");
         if (!"".equals(jsonData)){
             JSONObject jsonObject = JSONObject.fromObject(jsonData);
@@ -67,20 +66,21 @@ public class Coursecontroller {
     @RequestMapping("/selectCourseByTeacher")
     @ResponseBody
     public JSONObject selectCourseByTeacher(HttpServletRequest request, HttpServletResponse response){
-        JSONObject jsonData = new JSONObject();
-        String stringData = /*request.getParameter("data");*/ " {\"teacherId\":\"2511150329\",\"password\":\"123456\",\"type\":\"teacher\"}";
+        JSONObject returnJson = new JSONObject();
+        String stringData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(stringData);
-        String teacherId =  jsonObject.getString("teacherId");
-        if (teacherId !=null && !"".equals(teacherId)){
-            JSONObject returnJson = courseService.selectCourseByTeacher(jsonObject);
-            jsonData.put("data",returnJson);
-            jsonData.put("status","200");
-            jsonData.put("msg","");
-        } else {
-            jsonData.put("data",null);
-            jsonData.put("msg","teacherId为空,无法查询");
-            jsonData.put("status","500");
+        JSONObject jsonData = courseService.selectCourseByTeacher(jsonObject);
+        if (!"".equals(jsonData.getString("course"))&&!"".equals(jsonData.getString("Class"))){
+            returnJson.put("data",jsonData);
+            returnJson.put("status","200");
+            returnJson.put("msg","");
+        }else {
+            returnJson.put("data","");
+            returnJson.put("status","500");
+            returnJson.put("msg","没有查到数据");
         }
-        return jsonData;
+        return returnJson;
     }
+
+
 }

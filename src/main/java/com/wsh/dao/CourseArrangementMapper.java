@@ -27,4 +27,6 @@ public interface CourseArrangementMapper {
     int updateByPrimaryKeySelective(CourseArrangement record);
 
     int updateByPrimaryKey(CourseArrangement record);
+
+    List<CourseArrangement> selectByCourNameLike(String couName);
 }

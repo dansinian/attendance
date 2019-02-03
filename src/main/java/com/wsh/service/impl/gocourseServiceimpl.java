@@ -114,11 +114,7 @@ public class GocourseServiceimpl implements GocourseService {
     public List<Isgocourse> selectGocourse(JSONObject jsonObject) {
         String keyWord = jsonObject.getString("content");
         String type = jsonObject.getString("type");
-        String content = "%"+keyWord+"%";
         List<Isgocourse> gocourses =new ArrayList<Isgocourse>();
-        IsgocourseExample gocourseExample =new IsgocourseExample();
-        IsgocourseExample.Criteria criteria= gocourseExample.createCriteria();
-        gocourses = gocourseMapper.selectByExample(gocourseExample);
         return gocourses;
     }
 }

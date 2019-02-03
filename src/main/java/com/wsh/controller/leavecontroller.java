@@ -54,4 +54,13 @@ public class Leavecontroller {
             return leaveService.selectLeave(jsonObject);
         }
     }
+
+    @RequestMapping("/callTeacher")
+    @ResponseBody
+    public JSONObject callTeacher(HttpServletRequest request, HttpServletResponse response){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return leaveService.callTeacher(jsonObject);
+    }
+
 }

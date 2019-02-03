@@ -98,6 +98,24 @@
     from student
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByNameLike" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from student
+    where
+    stu_name LIKE CONCAT(CONCAT('%', #{Stuname}), '%');
+  </select>
+  <select id="selectByClassLike" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from student
+    where
+    stu_class LIKE CONCAT(CONCAT('%', #{Stuclass}), '%');
+  </select>
+  <select id="selectByStuIdLike" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from student
+    where
+    stu_ID LIKE CONCAT(CONCAT('%', #{StuId}), '%');
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from student
     where id = #{id,jdbcType=INTEGER}

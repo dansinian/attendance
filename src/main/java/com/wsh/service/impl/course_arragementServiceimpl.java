@@ -125,24 +125,10 @@ public class Course_arragementServiceimpl implements Course_arragementService {
         JSONObject returnJson = new JSONObject();
         JSONArray returnJsarr = new JSONArray();
         String keyWord = jsonObject.getString("content"); // 课程的名字
-        String content = "%"+keyWord+"%";
         List<CourseArrangement> arrangements =new ArrayList<CourseArrangement>();
-        CourseExample courseExample = new CourseExample();
-        CourseArrangementExample arrangementExample =new CourseArrangementExample();
-        CourseExample.Criteria courseCriteria = courseExample.createCriteria();
-        CourseArrangementExample.Criteria criteria= arrangementExample.createCriteria();
-        courseCriteria.andCourseNameLike(content);
-        List<Course> courses = courseMapper.selectByExample(courseExample);
-        if (courses.size() >0) {
-            for (int i = 0; i < courses.size(); i++) {
-                String courseId =  courses.get(i).getCourseId();
-                criteria.andCourseIdEqualTo(courseId);
-                List<CourseArrangement> arrangementList =  arragementMapper.selectByExample(arrangementExample);
-                if (arrangementList.size()>0) {
-                    returnJsarr.add(arrangementList.get(i));
-                }
-            }
-            returnJson.put("Arrangements",returnJsarr);
+        List<CourseArrangement> arrangementList =  arragementMapper.selectByCourNameLike(keyWord);
+        if (arrangementList.size() >0) {
+            returnJson.put("Arrangements",arrangementList);
             returnJson.put("status","200");
             returnJson.put("msg","");
         }else {

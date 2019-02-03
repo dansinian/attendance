@@ -12,4 +12,7 @@ public interface CourseService {
     JSONObject selectCourse(JSONObject jsonObject);
     JSONObject selectCourseByTeacher(JSONObject jsonObject);
     JSONObject selectAllCourse();
+/*
+    JSONObject selectByAdmin(JSONObject jsonObject);
+*/
 }

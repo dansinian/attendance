@@ -136,26 +136,22 @@ public class CourseServiceimpl implements CourseService {
     public JSONObject selectCourse(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String keyWord = jsonObject.getString("content");
-        CourseExample courseExample =new CourseExample();
-        CourseExample.Criteria criteria= courseExample.createCriteria();
-        String content = "%"+keyWord+"%";
-        criteria.andCourseNameLike(content);
-        try {
-            List<Course> courses = courseMapper.selectByExample(courseExample);
-            JSONArray courseJson= JSONArray.fromObject(courses);
-                if (courses.size()>0){
-                    returnJson.put("courses",courseJson);
+        List<Course> courses = courseMapper.selectByMajorLike(keyWord);
+            if (courses.size()>0){
+                returnJson.put("courses",courses);
+                returnJson.put("status","200");
+                returnJson.put("msg","");
+            } else{
+                List<Course> course = courseMapper.selectByNameLike(keyWord);
+                if (course.size()>0){
+                    returnJson.put("courses",course);
                     returnJson.put("status","200");
                     returnJson.put("msg","");
-                } else{
-                returnJson.put("courses","");
-                returnJson.put("status","500");
-                returnJson.put("msg","没有查到课程数据");
-            }
-        }catch (Exception e){
-            returnJson.put("courses","");
-            returnJson.put("status","500");
-            returnJson.put("msg","请求失败,请稍后重试");
+                } else {
+                    returnJson.put("courses","");
+                    returnJson.put("status","500");
+                    returnJson.put("msg","没有查到课程数据");
+                }
         }
         return returnJson;
     }
@@ -182,35 +178,39 @@ public class CourseServiceimpl implements CourseService {
         TeacherExample.Criteria criteriateacher = teacherExample.createCriteria();
         criteriateacher.andTeaIdEqualTo(searchKey);
         List<Teacher> teachers = teacherMapper.selectByExample(teacherExample);
-        String Class = teachers.get(0).getTeaClass();
-        Class.replaceAll("，",",");
-        returnJson.put("teacherID",teachers.get(0).getTeaId());
-        String teaClass[] = Class.split(",");
-        JSONArray arraylevel1 = new JSONArray();
-        if (teaClass.length>0){
-            for (int i = 0; i < teaClass.length; i++) {
-                JSONObject stuLevel2 = new JSONObject();
-                JSONArray arraylevel3 = new JSONArray();
-                StudentExample studentExample = new StudentExample();
-                StudentExample.Criteria stucriteria = studentExample.createCriteria();
-                stucriteria.andStuClassEqualTo(teaClass[i]);
-                List<Student> students = studentMapper.selectByExample(studentExample);
-                if (students.size()>0){
-                    for (int j = 0; j < students.size(); j++) {
-                        JSONObject stulevel3 = new JSONObject();
-                        stulevel3.put("name",students.get(j).getStuName());
-                        stulevel3.put("studentID",students.get(j).getStuId());
-                        arraylevel3.add(stulevel3);
+        if (teachers.size()==1){
+            String Class = teachers.get(0).getTeaClass();
+            Class.replaceAll("，",",");
+            returnJson.put("teacherID",teachers.get(0).getTeaId());
+            String teaClass[] = Class.split(",");
+            JSONArray arraylevel1 = new JSONArray();
+            if (teaClass.length>0){
+                for (int i = 0; i < teaClass.length; i++) {
+                    JSONObject stuLevel2 = new JSONObject();
+                    JSONArray arraylevel3 = new JSONArray();
+                    StudentExample studentExample = new StudentExample();
+                    StudentExample.Criteria stucriteria = studentExample.createCriteria();
+                    stucriteria.andStuClassEqualTo(teaClass[i]);
+                    List<Student> students = studentMapper.selectByExample(studentExample);
+                    if (students.size()>0){
+                        for (int j = 0; j < students.size(); j++) {
+                            JSONObject stulevel3 = new JSONObject();
+                            stulevel3.put("name",students.get(j).getStuName());
+                            stulevel3.put("studentID",students.get(j).getStuId());
+                            arraylevel3.add(stulevel3);
+                        }
+                    }else {
+                        stuLevel2.put("Student","");
                     }
-                }else {
-                    stuLevel2.put("Student","");
+                    stuLevel2.put("Student",arraylevel3);
+                    stuLevel2.put("teaClass",teaClass[i]);
+                    arraylevel1.add(stuLevel2);
                 }
-                stuLevel2.put("Student",arraylevel3);
-                stuLevel2.put("teaClass",teaClass[i]);
-                arraylevel1.add(stuLevel2);
+                returnJson.put("Class",arraylevel1);
+            } else {
+                returnJson.put("Class","");
             }
-            returnJson.put("Class",arraylevel1);
-        } else {
+        }else {
             returnJson.put("Class","");
         }
         return returnJson;
@@ -235,5 +235,4 @@ public class CourseServiceimpl implements CourseService {
         }
         return returnJson;
     }
-
 }

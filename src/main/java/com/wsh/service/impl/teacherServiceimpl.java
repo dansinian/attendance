@@ -128,43 +128,22 @@ public class TeacherServiceimpl implements TeacherService {
     public JSONObject selectTeacher(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String keyWord = jsonObject.getString("content");
-        JSONArray teacherJson = new JSONArray();
         List<Teacher> teachers =new ArrayList<Teacher>();
-        TeacherExample teacherExample =new TeacherExample();
-        TeacherExample.Criteria criteria= teacherExample.createCriteria();
-        if ("".equals(keyWord) || keyWord == null){
-            criteria.andTeaIdIsNotNull();
-            teachers = teacherMapper.selectByExample(teacherExample);
-            if (teachers.size() !=0){
-                teacherJson=JSONArray.fromObject(teachers);
+        teachers = teacherMapper.selectTeaNameLike(keyWord);
+        if (teachers.size() >0){
+            returnJson.put("msg","");
+            returnJson.put("status","200");
+            returnJson.put("teacher",teachers);
+        } else {
+            teachers = teacherMapper.selectByDepLike(keyWord);
+            if (teachers.size() >0){
                 returnJson.put("msg","");
                 returnJson.put("status","200");
-                returnJson.put("teacher",teacherJson);
+                returnJson.put("teacher",teachers);
             }else {
+                returnJson.put("teacher","");
                 returnJson.put("msg","没有查到数据");
                 returnJson.put("status","500");
-            }
-        } else {
-            String content = "%"+keyWord+"%";
-            criteria.andTeaNameLike(content);
-            teachers = teacherMapper.selectByExample(teacherExample);
-            if (teachers.size() !=0){
-                teacherJson=JSONArray.fromObject(teachers);
-                returnJson.put("msg","");
-                returnJson.put("status","200");
-                returnJson.put("teacher",teacherJson);
-            } else {
-                criteria.andTeaDepartmentLike(content);
-                teachers = teacherMapper.selectByExample(teacherExample);
-                if (teachers.size() !=0){
-                    teacherJson=JSONArray.fromObject(teachers);
-                    returnJson.put("msg","");
-                    returnJson.put("status","200");
-                    returnJson.put("teacher",teacherJson);
-                }else {
-                    returnJson.put("msg","没有查到数据");
-                    returnJson.put("status","500");
-                }
             }
         }
         return returnJson;

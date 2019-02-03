@@ -137,27 +137,19 @@ public class StudentServiceImpl implements StudentService {
         JSONObject returnJson = new JSONObject();
         String keyWord = jsonObject.getString("content");
         String Keytype = IsChOrEnOrNum.IsChOrNum(keyWord);
-        String content = "%"+keyWord+"%";
         List<Student> students =new ArrayList<Student>();
-        StudentExample courseExample =new StudentExample();
-        StudentExample.Criteria criteria= courseExample.createCriteria();
             if ("chinese".equals(Keytype)){
-                criteria.andStuNameLike(content);
-                students = studentMapper.selectByExample(courseExample);
+                students = studentMapper.selectByNameLike(keyWord);
                 if (students.size()==0){
-                    criteria.andStuClassLike(content);
-                    students = studentMapper.selectByExample(courseExample);
+                    students = studentMapper.selectByClassLike(keyWord);
                 }
             } else {
-                criteria.andStuIdLike(content);
-                students = studentMapper.selectByExample(courseExample);
+                students = studentMapper.selectByStuIdLike(keyWord);
             }
             if (students.size()>0){
-                if (students.size()>0){
-                    returnJson.put("students",students);
-                    returnJson.put("status","200");
-                    returnJson.put("msg","");
-                }
+                returnJson.put("students",students);
+                returnJson.put("status","200");
+                returnJson.put("msg","");
             }else{
                 returnJson.put("students","");
                 returnJson.put("status","500");
@@ -168,12 +160,22 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public JSONObject selectAllStudent() {
+        JSONObject jsonObject = new JSONObject();
         List<Student> students =new ArrayList<Student>();
         StudentExample studentExample =new StudentExample();
         StudentExample.Criteria criteria= studentExample.createCriteria();
         criteria.andIdIsNotNull();
         students = studentMapper.selectByExample(studentExample);
-        return null;
+        if (students.size()>0){
+            jsonObject.put("students",students);
+            jsonObject.put("status","200");
+            jsonObject.put("msg","");
+        }else{
+            jsonObject.put("students","");
+            jsonObject.put("status","500");
+            jsonObject.put("msg","没有查到学生信息");
+        }
+        return jsonObject;
     }
 
 }
