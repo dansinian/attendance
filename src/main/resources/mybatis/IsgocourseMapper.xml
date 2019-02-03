@@ -7,6 +7,7 @@
     <result column="stu_id" property="stuId" jdbcType="VARCHAR" />
     <result column="course_teacher" property="courseTeacher" jdbcType="VARCHAR" />
     <result column="is_truancy" property="isTruancy" jdbcType="VARCHAR" />
+    <result column="course_time" property="courseTime" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, course_id, stu_id, course_teacher, is_truancy
+    id, course_id, stu_id, course_teacher, is_truancy, course_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.IsgocourseExample" >
     select
@@ -91,9 +92,11 @@
   </delete>
   <insert id="insert" parameterType="com.wsh.entity.Isgocourse" >
     insert into isgocourse (id, course_id, stu_id, 
-      course_teacher, is_truancy)
+      course_teacher, is_truancy, course_time
+      )
     values (#{id,jdbcType=INTEGER}, #{courseId,jdbcType=VARCHAR}, #{stuId,jdbcType=VARCHAR}, 
-      #{courseTeacher,jdbcType=VARCHAR}, #{isTruancy,jdbcType=VARCHAR})
+      #{courseTeacher,jdbcType=VARCHAR}, #{isTruancy,jdbcType=VARCHAR}, #{courseTime,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wsh.entity.Isgocourse" >
     insert into isgocourse
@@ -113,6 +116,9 @@
       <if test="isTruancy != null" >
         is_truancy,
       </if>
+      <if test="courseTime != null" >
+        course_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -129,6 +135,9 @@
       </if>
       <if test="isTruancy != null" >
         #{isTruancy,jdbcType=VARCHAR},
+      </if>
+      <if test="courseTime != null" >
+        #{courseTime,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -156,6 +165,9 @@
       <if test="record.isTruancy != null" >
         is_truancy = #{record.isTruancy,jdbcType=VARCHAR},
       </if>
+      <if test="record.courseTime != null" >
+        course_time = #{record.courseTime,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -167,7 +179,8 @@
       course_id = #{record.courseId,jdbcType=VARCHAR},
       stu_id = #{record.stuId,jdbcType=VARCHAR},
       course_teacher = #{record.courseTeacher,jdbcType=VARCHAR},
-      is_truancy = #{record.isTruancy,jdbcType=VARCHAR}
+      is_truancy = #{record.isTruancy,jdbcType=VARCHAR},
+      course_time = #{record.courseTime,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>

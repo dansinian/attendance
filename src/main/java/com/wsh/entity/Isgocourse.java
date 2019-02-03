@@ -11,6 +11,8 @@ public class Isgocourse {
 
     private String isTruancy;
 
+    private String courseTime;
+
     public Integer getId() {
         return id;
     }
@@ -49,5 +51,13 @@ public class Isgocourse {
 
     public void setIsTruancy(String isTruancy) {
         this.isTruancy = isTruancy == null ? null : isTruancy.trim();
+    }
+
+    public String getCourseTime() {
+        return courseTime;
+    }
+
+    public void setCourseTime(String courseTime) {
+        this.courseTime = courseTime == null ? null : courseTime.trim();
     }
 }

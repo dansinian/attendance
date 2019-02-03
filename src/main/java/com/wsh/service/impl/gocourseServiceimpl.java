@@ -37,39 +37,36 @@ public class GocourseServiceimpl implements GocourseService {
 
     @Override
     public JSONObject createGocourse(JSONObject jsonObject) {
+        /*
+        *   IsGoCourse.put("courseID",vacation2.getCourseId());
+            IsGoCourse.put("stuId",jsonObject.getString("stuId"));
+            IsGoCourse.put("courseTeacher",TeaName);
+            IsGoCourse.put("isTruancy","0");
+            IsGoCourse.put("courseTime",vacation2.getCarmTime());*/
         JSONObject returnJson = new JSONObject();
-        String gocourseID = jsonObject.getString("gocourseId");
+        String gocourseID = jsonObject.getString("courseID");
         Isgocourse gocourse = new Isgocourse();
         IsgocourseExample gocourseExample = new IsgocourseExample();
         IsgocourseExample.Criteria criteria = gocourseExample.createCriteria();
         criteria.andCourseIdEqualTo(gocourseID);
         List<Isgocourse> selectIsgocourses = gocourseMapper.selectByExample(gocourseExample);
-        try {
-            if (selectIsgocourses.size() > 0) {
-                returnJson.put("msg", "已存在该旷课信息");
-                returnJson.put("status", "500");
-                returnJson.put("gocourse", selectIsgocourses.get(0));
-            } else {
-                gocourse.setCourseId(gocourseID);
-                gocourse.setStuId(jsonObject.getString("student_id"));
-                gocourse.setCourseTeacher(jsonObject.getString("courseTeacherId"));
-                gocourse.setIsTruancy(jsonObject.getString("isTruancy"));
-                gocourseMapper.insert(gocourse);
-                List<Isgocourse> returnIsgocourses = gocourseMapper.selectByExample(gocourseExample);
-                if (returnIsgocourses.size() > 0) {
-                    returnJson.put("gocourse", returnIsgocourses.get(0));
-                    returnJson.put("msg", "添加旷课信息成功");
-                    returnJson.put("status", "200");
-                } else {
-                    returnJson.put("gocourse", "");
-                    returnJson.put("msg", "添加旷课信息失败");
-                    returnJson.put("status", "500");
-                }
-            }
-        } catch (Exception e) {
-            returnJson.put("gocourse", "");
-            returnJson.put("msg", "添加旷课信息失败");
+        if (selectIsgocourses.size() > 0) {
+            returnJson.put("msg", "已存在该旷课信息");
             returnJson.put("status", "500");
+        } else {
+            gocourse.setCourseId(gocourseID);
+            gocourse.setStuId(jsonObject.getString("stuId"));
+            gocourse.setCourseTeacher(jsonObject.getString("courseTeacher"));
+            gocourse.setIsTruancy(jsonObject.getString("isTruancy"));
+            gocourse.setCourseTime(jsonObject.getString("courseTime"));
+            int success = gocourseMapper.insert(gocourse);
+            if (success > 0) {
+                returnJson.put("msg", "添加旷课信息成功");
+                returnJson.put("status", "200");
+            } else {
+                returnJson.put("msg", "添加旷课信息失败");
+                returnJson.put("status", "500");
+            }
         }
         return returnJson;
     }
