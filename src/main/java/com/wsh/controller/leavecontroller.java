@@ -46,7 +46,7 @@ public class Leavecontroller {
     @RequestMapping("/selectLeave")
     @ResponseBody
     public JSONObject selectLeave(HttpServletRequest request, HttpServletResponse response){
-        String jsonData = /*request.getParameter("data")*/ "\"content\":\"200\"";
+        String jsonData = request.getParameter("data");
         if ("".equals(jsonData) || jsonData == null){
             return leaveService.selectAllLeave();
         }else {

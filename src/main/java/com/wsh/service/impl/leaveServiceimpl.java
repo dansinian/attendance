@@ -107,7 +107,6 @@ public class LeaveServiceimpl implements LeaveService {
     public JSONObject updateLeave(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String leaveID = jsonObject.getString("leaveId");
-        String persionID = jsonObject.getString("persionId");
         String type = jsonObject.getString("type");
         Vacation leave =new Vacation();
         VacationExample vacationExample =new VacationExample();
@@ -188,7 +187,7 @@ public class LeaveServiceimpl implements LeaveService {
             returnJson.put("status","500");
             returnJson.put("msg","没有查到请假信息");
         }
-        return jsonObject;
+        return returnJson;
     }
 
     @Override
