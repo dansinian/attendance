@@ -93,7 +93,7 @@ public class LeaveServiceimpl implements LeaveService {
             if (success > 0) {
                 returnJson.put("leave", leave);
                 returnJson.put("msg", "添加请假信息成功");
-                returnJson.put("status", "500");
+                returnJson.put("status", "200");
             } else {
                 returnJson.put("leave", "");
                 returnJson.put("msg", "添加请假信息失败,请稍后重试");
@@ -206,7 +206,7 @@ public class LeaveServiceimpl implements LeaveService {
         } else {
             returnJson.put("leaves","");
             returnJson.put("msg","没有数据");
-            returnJson.put("status","200");
+            returnJson.put("status","500");
         }
         return returnJson;
     }
