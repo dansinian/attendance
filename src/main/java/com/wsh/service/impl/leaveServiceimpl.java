@@ -92,6 +92,8 @@ public class LeaveServiceimpl implements LeaveService {
             leave.setLeaveReason(jsonObject.getString("leaveReason"));
             int success = leaveMapper.insert(leave);
             if (success > 0) {
+                List<Teacher> teachers = teacherMapper.selectTeaNameLike(jsonObject.getString("approvalTea"));
+                returnJson.put("guidePhone",teachers.get(0).getTeaPhone());
                 returnJson.put("leave", leave);
                 returnJson.put("msg", "添加请假信息成功");
                 returnJson.put("status", "200");

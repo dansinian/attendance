@@ -159,7 +159,7 @@ public class CourseServiceimpl implements CourseService {
     @Override
     public JSONObject selectCourseByTeacher(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String searchKey = jsonObject.getString("teacherId");
+        String searchKey = jsonObject.getString("teacherName");
         CourseExample courseExample =new CourseExample();
         CourseExample.Criteria criteria= courseExample.createCriteria();
         criteria.andTeaNameEqualTo(searchKey);
@@ -173,42 +173,40 @@ public class CourseServiceimpl implements CourseService {
         }else {
             returnJson.put("course","");
         }
-
-        TeacherExample teacherExample = new TeacherExample();
-        TeacherExample.Criteria criteriateacher = teacherExample.createCriteria();
-        criteriateacher.andTeaIdEqualTo(searchKey);
-        List<Teacher> teachers = teacherMapper.selectByExample(teacherExample);
-        if (teachers.size()==1){
-            String Class = teachers.get(0).getTeaClass();
-            Class.replaceAll("，",",");
-            returnJson.put("teacherID",teachers.get(0).getTeaId());
-            String teaClass[] = Class.split(",");
-            JSONArray arraylevel1 = new JSONArray();
-            if (teaClass.length>0){
-                for (int i = 0; i < teaClass.length; i++) {
-                    JSONObject stuLevel2 = new JSONObject();
-                    JSONArray arraylevel3 = new JSONArray();
-                    StudentExample studentExample = new StudentExample();
-                    StudentExample.Criteria stucriteria = studentExample.createCriteria();
-                    stucriteria.andStuClassEqualTo(teaClass[i]);
-                    List<Student> students = studentMapper.selectByExample(studentExample);
-                    if (students.size()>0){
-                        for (int j = 0; j < students.size(); j++) {
-                            JSONObject stulevel3 = new JSONObject();
-                            stulevel3.put("name",students.get(j).getStuName());
-                            stulevel3.put("studentID",students.get(j).getStuId());
-                            arraylevel3.add(stulevel3);
+        List<Teacher> teachers = teacherMapper.selectTeaNameLike(searchKey);
+        JSONArray arraylevel1 = new JSONArray();
+        if (teachers.size()>0){
+            for (int k = 0; k <teachers.size(); k++) {
+                String Class = teachers.get(k).getTeaClass();
+                Class.replaceAll("，",",");
+                returnJson.put("teacherName",teachers.get(k).getTeaName());
+                String teaClass[] = Class.split(",");
+                if (teaClass.length>0){
+                    for (int i = 0; i < teaClass.length; i++) {
+                        JSONObject stuLevel2 = new JSONObject();
+                        JSONArray arraylevel3 = new JSONArray();
+                        StudentExample studentExample = new StudentExample();
+                        StudentExample.Criteria stucriteria = studentExample.createCriteria();
+                        stucriteria.andStuClassEqualTo(teaClass[i]);
+                        List<Student> students = studentMapper.selectByExample(studentExample);
+                        if (students.size()>0){
+                            for (int j = 0; j < students.size(); j++) {
+                                JSONObject stulevel3 = new JSONObject();
+                                stulevel3.put("name",students.get(j).getStuName());
+                                stulevel3.put("studentID",students.get(j).getStuId());
+                                arraylevel3.add(stulevel3);
+                            }
+                        }else {
+                            stuLevel2.put("Student","");
                         }
-                    }else {
-                        stuLevel2.put("Student","");
+                        stuLevel2.put("Student",arraylevel3);
+                        stuLevel2.put("teaClass",teaClass[i]);
+                        arraylevel1.add(stuLevel2);
                     }
-                    stuLevel2.put("Student",arraylevel3);
-                    stuLevel2.put("teaClass",teaClass[i]);
-                    arraylevel1.add(stuLevel2);
+                    returnJson.put("Class",arraylevel1);
+                } else {
+                    returnJson.put("Class","");
                 }
-                returnJson.put("Class",arraylevel1);
-            } else {
-                returnJson.put("Class","");
             }
         }else {
             returnJson.put("Class","");
