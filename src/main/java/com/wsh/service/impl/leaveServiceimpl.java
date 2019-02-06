@@ -9,6 +9,7 @@ import com.wsh.entity.*;
 import com.wsh.service.Course_arragementService;
 import com.wsh.service.GocourseService;
 import com.wsh.service.LeaveService;
+import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.IsChOrEnOrNum;
 import com.wsh.servlet.MessageLog;
 import com.wsh.servlet.OutData;
@@ -17,6 +18,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -62,22 +64,28 @@ public class LeaveServiceimpl implements LeaveService {
     }
 
     @Override
-    public JSONObject createLeave(JSONObject jsonObject) {
+    public JSONObject createLeave(JSONObject jsonObject) throws Exception{
         Vacation leave = new Vacation();
         JSONObject returnJson = new JSONObject();
+        DataAndNumber dataAndNumber = new DataAndNumber();
         VacationExample leaveExample = new VacationExample();
         String leaveID = OutData.createData();
         String stuName = jsonObject.getString("StuName" );
-        String startTime = jsonObject.getString("startTime");
-        String endTime = jsonObject.getString("endTime");
+        String startTime = dataAndNumber.dateToStamp(jsonObject.getString("startTime"));
+        String endTime = dataAndNumber.dateToStamp(jsonObject.getString("endTime"));
+        String ApplicationTime = dataAndNumber.dateToStamp(jsonObject.getString("applicationTime"));
         String StuId = jsonObject.getString("StuId");
         VacationExample.Criteria criteria = leaveExample.createCriteria();
         criteria.andStartTimeEqualTo(startTime).andEndTimeEqualTo(endTime).andStuIdEqualTo(StuId);
         List<Vacation> selectLeaves = leaveMapper.selectByExample(leaveExample);
         if (selectLeaves.size() > 0) {
+            Vacation leave1 = selectLeaves.get(0);
+            leave1.setStartTime(dataAndNumber.stampToDate(leave1.getStartTime()));
+            leave1.setEndTime(dataAndNumber.stampToDate(leave1.getEndTime()));
+            leave1.setApplicationTime(dataAndNumber.stampToDate(leave1.getApplicationTime()));
             returnJson.put("msg", "已存在该请假信息");
             returnJson.put("status", "500");
-            returnJson.put("leave", selectLeaves.get(0));
+            returnJson.put("leave", leave1);
         } else {
             leave.setLeaveId(leaveID);
             leave.setStuId(StuId);
@@ -85,16 +93,21 @@ public class LeaveServiceimpl implements LeaveService {
             leave.setStartTime(startTime);
             leave.setEndTime(endTime);
             leave.setStatus("0");
-            leave.setApplicationTime(jsonObject.getString("applicationTime"));
+            leave.setApplicationTime(ApplicationTime);
             leave.setLeaveDay(jsonObject.getString("leaveDay"));
             leave.setApprovalTea(jsonObject.getString("approvalTea"));
             leave.setLeavecourseTea(jsonObject.getString("leaveCourseTea"));
             leave.setLeaveReason(jsonObject.getString("leaveReason"));
             int success = leaveMapper.insert(leave);
             if (success > 0) {
+                List<Vacation> vacations = leaveMapper.selectByLeaveIdLike(leaveID);
+                Vacation vacation = vacations.get(0);
+                vacation.setStartTime(dataAndNumber.stampToDate(vacation.getStartTime()));
+                vacation.setEndTime(dataAndNumber.stampToDate(vacation.getEndTime()));
+                vacation.setApplicationTime(dataAndNumber.stampToDate(vacation.getApplicationTime()));
                 List<Teacher> teachers = teacherMapper.selectTeaNameLike(jsonObject.getString("approvalTea"));
                 returnJson.put("guidePhone",teachers.get(0).getTeaPhone());
-                returnJson.put("leave", leave);
+                returnJson.put("leave", vacation);
                 returnJson.put("msg", "添加请假信息成功");
                 returnJson.put("status", "200");
             } else {
@@ -107,52 +120,56 @@ public class LeaveServiceimpl implements LeaveService {
     }
 
     @Override
-    public JSONObject updateLeave(JSONObject jsonObject) {
+    public JSONObject updateLeave(JSONObject jsonObject) throws Exception{
+        Vacation leave =new Vacation();
         JSONObject returnJson = new JSONObject();
+        DataAndNumber dataAndNumber = new DataAndNumber();
+        VacationExample vacationExample =new VacationExample();
         String leaveID = jsonObject.getString("leaveId");
         String type = jsonObject.getString("type");
-        Vacation leave =new Vacation();
-        VacationExample vacationExample =new VacationExample();
+        String startTime = dataAndNumber.dateToStamp(jsonObject.getString("startTime"));
+        String endTime = dataAndNumber.dateToStamp(jsonObject.getString("endTime"));
+        String ApplicationTime = dataAndNumber.dateToStamp(jsonObject.getString("applicationTime"));
         VacationExample.Criteria criteria= vacationExample.createCriteria();
         criteria.andLeaveIdEqualTo(leaveID);
         List<Vacation> vacations=  leaveMapper.selectByExample(vacationExample);
         if ("guide".equals(type) || "student".equals(type)){
             if (vacations.size()==1){
                 leave.setLeaveId(leaveID);
-                leave.setStuId(jsonObject.getString("stuId"));
-                leave.setStuName(jsonObject.getString("stuName"));
-                leave.setApplicationTime(jsonObject.getString("applicationTime"));
-                leave.setStartTime(jsonObject.getString("startTime"));
-                leave.setEndTime(jsonObject.getString("endTime"));
+                leave.setStuId(jsonObject.getString("StuId"));
+                leave.setStuName(jsonObject.getString("StuName"));
+                leave.setApplicationTime(ApplicationTime);
+                leave.setStartTime(startTime);
+                leave.setEndTime(endTime);
                 leave.setLeaveDay(jsonObject.getString("leaveDay"));
                 leave.setApprovalTea(jsonObject.getString("approvalTea"));
-                leave.setStatus(jsonObject.getString("status"));
+                if (jsonObject.has("status")){
+                    leave.setStatus(jsonObject.getString("status"));
+                }
                 leave.setLeaveReason(jsonObject.getString("reason"));
-                Vacation vacation = vacations.get(0);
-                int ID = vacation.getId();
-                if("0".equals(vacation.getStatus())){
+                leave.setLeavecourseTea(jsonObject.getString("leaveCourseTea"));
+                if("0".equals(vacations.get(0).getStatus())){
                     int returnint =leaveMapper.updateByExampleSelective(leave,vacationExample);
                     if(returnint>0){
-                        Vacation vacation1 = leaveMapper.selectByPrimaryKey(ID);
+                        Vacation vacation1 = leaveMapper.selectByPrimaryKey(vacations.get(0).getId());
                         String status = vacation1.getStatus();
                         if ("1".equals(status)){
-                            String startTime = vacation1.getStartTime();
-                            String endTime = vacation1.getEndTime();
-                            List<CourseArrangement> array = arrangService.selectVacationCourse(startTime,endTime);
+                            String startTime1 = vacation1.getStartTime();
+                            String endTime1 = vacation1.getEndTime();
+                            List<CourseArrangement> array = arrangService.selectVacationCourse(startTime1,endTime1);
                             if (array.size()>0){
                                 for (int i = 0; i < array.size(); i++) {
                                     JSONObject IsGoCourse = new JSONObject();
-                                    CourseArrangement vacation2 = new CourseArrangement();
+                                    CourseArrangement vacation2 = array.get(i);
                                     CourseExample courseExample = new CourseExample();
                                     CourseExample.Criteria criteria1 = courseExample.createCriteria();
-                                    criteria1.andCourseIdEqualTo(vacation2.getCarmId());
+                                    criteria1.andCourseIdEqualTo(vacation2.getCourseId());
                                     List<Course> courses = courseMapper.selectByExample(courseExample);
                                     if (courses.size()>0){
                                         String TeaName = courses.get(0).getTeaName();
-                                        vacation2 = array.get(i);
                                         String courseId = vacation2.getCarmId();
                                         IsGoCourse.put("courseID",vacation2.getCourseId());
-                                        IsGoCourse.put("stuId",jsonObject.getString("stuId"));
+                                        IsGoCourse.put("stuId",jsonObject.getString("StuId"));
                                         IsGoCourse.put("courseTeacher",TeaName);
                                         IsGoCourse.put("isTruancy","0");
                                         IsGoCourse.put("courseTime",vacation2.getCarmTime());
@@ -161,6 +178,9 @@ public class LeaveServiceimpl implements LeaveService {
                                 }
                             }
                         }
+                        leave.setApplicationTime(dataAndNumber.stampToDate(ApplicationTime));
+                        leave.setStartTime(dataAndNumber.stampToDate(startTime));
+                        leave.setEndTime(dataAndNumber.stampToDate(endTime));
                         returnJson.put("leave",leave);
                         returnJson.put("msg","修改成功");
                         returnJson.put("status","200");

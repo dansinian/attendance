@@ -8,6 +8,7 @@ import com.wsh.entity.CourseArrangement;
 import com.wsh.entity.CourseArrangementExample;
 import com.wsh.entity.CourseExample;
 import com.wsh.service.Course_arragementService;
+import com.wsh.servlet.DataAndNumber;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,10 @@ public class Course_arragementServiceimpl implements Course_arragementService {
     @Override
     public JSONObject createArrangement(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String arragementID = jsonObject.getString("arragementId");
         CourseArrangement arragement = new CourseArrangement();
+        DataAndNumber dataAndNumber = new DataAndNumber();
         CourseArrangementExample arragementExample = new CourseArrangementExample();
+        String arragementID = jsonObject.getString("arragementId");
         CourseArrangementExample.Criteria criteria = arragementExample.createCriteria();
         criteria.andCarmIdEqualTo(arragementID);
         List<CourseArrangement> selectArrangements = arragementMapper.selectByExample(arragementExample);
@@ -62,12 +64,12 @@ public class Course_arragementServiceimpl implements Course_arragementService {
                 returnJson.put("arrangement", selectArrangements.get(0));
             } else {
                 arragement.setCarmId(arragementID);
-                arragement.setCarmTime(jsonObject.getString("carmTime"));
+                arragement.setCarmTime(dataAndNumber.dateToStamp(jsonObject.getString("carmTime")));
                 arragement.setCourseId(jsonObject.getString("courseId"));
-                arragementMapper.insert(arragement);
-                List<CourseArrangement> returnArrangements = arragementMapper.selectByExample(arragementExample);
-                if (returnArrangements.size() > 0) {
-                    returnJson.put("arragement", returnArrangements.get(0));
+                int success = arragementMapper.insert(arragement);
+                if (success > 0) {
+                    arragement.setCarmTime(jsonObject.getString("carmTime"));
+                    returnJson.put("arragement",arragement);
                     returnJson.put("msg", "添加课程安排信息成功");
                     returnJson.put("status", "200");
                 } else {
@@ -85,36 +87,32 @@ public class Course_arragementServiceimpl implements Course_arragementService {
     }
 
     @Override
-    public JSONObject updateArrangement(JSONObject jsonObject) {
+    public JSONObject updateArrangement(JSONObject jsonObject) throws Exception{
         JSONObject returnJson = new JSONObject();
-        String arragementID = jsonObject.getString("arragementId");
         CourseArrangement arragement =new CourseArrangement();
+        DataAndNumber dataAndNumber = new DataAndNumber();
         CourseArrangementExample courseExample =new CourseArrangementExample();
+        String arragementID = jsonObject.getString("arragementId");
         CourseArrangementExample.Criteria criteria= courseExample.createCriteria();
         criteria.andCarmIdEqualTo(arragementID);
-        try {
-            if (arragementMapper.selectByExample(courseExample).size()>0){
-                arragement.setCarmId(arragementID);
+        if (arragementMapper.selectByExample(courseExample).size()>0){
+            arragement.setCarmId(arragementID);
+            arragement.setCarmTime(dataAndNumber.dateToStamp(jsonObject.getString("carmTime")));
+            arragement.setCourseId(jsonObject.getString("courseId"));
+            int returnint =arragementMapper.updateByExampleSelective(arragement,courseExample);
+            if(returnint>0){
                 arragement.setCarmTime(jsonObject.getString("carmTime"));
-                arragement.setCourseId(jsonObject.getString("courseId"));
-                int returnint =arragementMapper.updateByExampleSelective(arragement,courseExample);
-                if(returnint>0){
-                    returnJson.put("arragement",arragement);
-                    returnJson.put("msg","修改成功");
-                    returnJson.put("status","200");
-                }else {
-                    returnJson.put("arragement","");
-                    returnJson.put("msg","修改失败");
-                    returnJson.put("status","500");
-                }
+                returnJson.put("arragement",arragement);
+                returnJson.put("msg","修改成功");
+                returnJson.put("status","200");
             }else {
                 returnJson.put("arragement","");
-                returnJson.put("msg","没有查到该课程数据");
+                returnJson.put("msg","修改失败");
                 returnJson.put("status","500");
             }
-        }catch (Exception e){
+        }else {
             returnJson.put("arragement","");
-            returnJson.put("msg","修改失败");
+            returnJson.put("msg","没有查到该课程数据");
             returnJson.put("status","500");
         }
         return returnJson;
@@ -124,10 +122,14 @@ public class Course_arragementServiceimpl implements Course_arragementService {
     public JSONObject selectArrangement(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         JSONArray returnJsarr = new JSONArray();
+        DataAndNumber dataAndNumber = new DataAndNumber();
         String keyWord = jsonObject.getString("content"); // 课程的名字
         List<CourseArrangement> arrangements =new ArrayList<CourseArrangement>();
         List<CourseArrangement> arrangementList =  arragementMapper.selectByCourNameLike(keyWord);
         if (arrangementList.size() >0) {
+            for (int i = 0; i < arrangementList.size(); i++) {
+                arrangementList.get(i).setCarmTime(dataAndNumber.stampToDate(arrangementList.get(i).getCarmTime()));
+            }
             returnJson.put("Arrangements",arrangementList);
             returnJson.put("status","200");
             returnJson.put("msg","");
@@ -140,30 +142,26 @@ public class Course_arragementServiceimpl implements Course_arragementService {
     }
 
     @Override
-    public JSONArray selectVacationCourse(String startTime, String endTime) {
-        JSONArray array = new JSONArray();
+    public List<CourseArrangement> selectVacationCourse(String startTime, String endTime) {
         CourseArrangementExample arrangementExample =new CourseArrangementExample();
         CourseArrangementExample.Criteria criteria = arrangementExample.createCriteria();
         criteria.andCarmTimeBetween(startTime,endTime);
         List<CourseArrangement> arrangements = arragementMapper.selectByExample(arrangementExample);
-        if (arrangements.size()>0){
-            for (CourseArrangement arrangement : arrangements) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put(arrangement.getCourseId(),arrangement.getCarmTime());
-                array.add(jsonObject);
-            }
-        }
-        return array;
+        return arrangements;
     }
 
     @Override
     public JSONObject selectAllArragement() {
         JSONObject returnJson = new JSONObject();
+        DataAndNumber dataAndNumber = new DataAndNumber();
         CourseArrangementExample arrangementExample =new CourseArrangementExample();
         CourseArrangementExample.Criteria criteria = arrangementExample.createCriteria();
         criteria.andIdIsNotNull();
         List<CourseArrangement> arrangements = arragementMapper.selectByExample(arrangementExample);
         if (arrangements.size()>0){
+            for (int i = 0; i < arrangements.size(); i++) {
+                arrangements.get(i).setCarmTime(dataAndNumber.stampToDate(arrangements.get(i).getCarmTime()));
+            }
             returnJson.put("Arrangements",arrangements);
             returnJson.put("msg","");
             returnJson.put("status","200");

@@ -5,10 +5,12 @@ import com.wsh.dao.IsgocourseMapper;
 import com.wsh.entity.Isgocourse;
 import com.wsh.entity.IsgocourseExample;
 import com.wsh.service.GocourseService;
+import com.wsh.servlet.DataAndNumber;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,12 +39,7 @@ public class GocourseServiceimpl implements GocourseService {
 
     @Override
     public JSONObject createGocourse(JSONObject jsonObject) {
-        /*
-        *   IsGoCourse.put("courseID",vacation2.getCourseId());
-            IsGoCourse.put("stuId",jsonObject.getString("stuId"));
-            IsGoCourse.put("courseTeacher",TeaName);
-            IsGoCourse.put("isTruancy","0");
-            IsGoCourse.put("courseTime",vacation2.getCarmTime());*/
+        DataAndNumber dataAndNumber = new DataAndNumber();
         JSONObject returnJson = new JSONObject();
         String gocourseID = jsonObject.getString("courseID");
         Isgocourse gocourse = new Isgocourse();
@@ -58,7 +55,7 @@ public class GocourseServiceimpl implements GocourseService {
             gocourse.setStuId(jsonObject.getString("stuId"));
             gocourse.setCourseTeacher(jsonObject.getString("courseTeacher"));
             gocourse.setIsTruancy(jsonObject.getString("isTruancy"));
-            gocourse.setCourseTime(jsonObject.getString("courseTime"));
+            gocourse.setCourseTime(dataAndNumber.stampToDate(jsonObject.getString("courseTime")));
             int success = gocourseMapper.insert(gocourse);
             if (success > 0) {
                 returnJson.put("msg", "添加旷课信息成功");

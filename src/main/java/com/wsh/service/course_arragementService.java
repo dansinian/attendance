@@ -11,7 +11,7 @@ import java.util.List;
 public interface Course_arragementService {
     JSONObject deleteArrangement(JSONObject jsonObject);
     JSONObject createArrangement(JSONObject jsonObject);
-    JSONObject updateArrangement(JSONObject jsonObject);
+    JSONObject updateArrangement(JSONObject jsonObject) throws Exception;
     JSONObject selectArrangement(JSONObject jsonObject);
     List<CourseArrangement> selectVacationCourse(String startTime, String endTime);
 
