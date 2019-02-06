@@ -29,4 +29,6 @@ public interface VacationMapper {
     int updateByPrimaryKey(Vacation record);
 
     List<Vacation> selectByLeaveIdLike(String leaveId);
+
+    List<Vacation> selectByStuNameLike(String StuName);
 }

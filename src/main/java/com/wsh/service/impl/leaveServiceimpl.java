@@ -9,6 +9,7 @@ import com.wsh.entity.*;
 import com.wsh.service.Course_arragementService;
 import com.wsh.service.GocourseService;
 import com.wsh.service.LeaveService;
+import com.wsh.servlet.IsChOrEnOrNum;
 import com.wsh.servlet.MessageLog;
 import com.wsh.servlet.OutData;
 import net.sf.json.JSONArray;
@@ -175,9 +176,15 @@ public class LeaveServiceimpl implements LeaveService {
     @Override
     public JSONObject selectLeave(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String keyWord = jsonObject.getString("content");
         List<Vacation> leaves =new ArrayList<Vacation>();
-        leaves = leaveMapper.selectByLeaveIdLike(keyWord);
+        String keyWord = jsonObject.getString("content");
+        IsChOrEnOrNum isChOrEnOrNum = new IsChOrEnOrNum();
+        String key = isChOrEnOrNum.IsChOrNum(keyWord);
+        if ("chinese".equals(key)){
+            leaves = leaveMapper.selectByStuNameLike(keyWord);
+        } else{
+            leaves = leaveMapper.selectByLeaveIdLike(keyWord);
+        }
         if (leaves.size()>0){
             returnJson.put("leaves",leaves);
             returnJson.put("status","200");

@@ -103,6 +103,12 @@
     where
     leave_ID LIKE CONCAT(CONCAT('%', #{leaveId}), '%');
   </select>
+  <select id="selectByStuNameLike" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from vacation
+    where
+    stu_name LIKE CONCAT(CONCAT('%', #{StuName}), '%');
+  </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from vacation
