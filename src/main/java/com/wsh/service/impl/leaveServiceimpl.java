@@ -181,7 +181,14 @@ public class LeaveServiceimpl implements LeaveService {
         IsChOrEnOrNum isChOrEnOrNum = new IsChOrEnOrNum();
         String key = isChOrEnOrNum.IsChOrNum(keyWord);
         if ("chinese".equals(key)){
-            leaves = leaveMapper.selectByStuNameLike(keyWord);
+            String type = jsonObject.getString("type");
+            if ("student".equals(type)){
+                leaves = leaveMapper.selectByStuNameLike(keyWord);
+            }else if ("guide".equals(type)){
+                leaves = leaveMapper.selectByGuideName(keyWord);
+            } else if ("teacher".equals(type)){
+                leaves = leaveMapper.selectByteacherName(keyWord);
+            }
         } else{
             leaves = leaveMapper.selectByLeaveIdLike(keyWord);
         }

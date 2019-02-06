@@ -31,4 +31,8 @@ public interface VacationMapper {
     List<Vacation> selectByLeaveIdLike(String leaveId);
 
     List<Vacation> selectByStuNameLike(String StuName);
+
+    List<Vacation> selectByGuideName(String guideName);
+
+    List<Vacation> selectByteacherName(String teaName);
 }

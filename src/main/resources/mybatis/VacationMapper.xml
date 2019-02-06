@@ -109,6 +109,18 @@
     where
     stu_name LIKE CONCAT(CONCAT('%', #{StuName}), '%');
   </select>
+  <select id="selectByGuideName" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from vacation
+    where
+    approval_tea LIKE CONCAT(CONCAT('%', #{guideName}), '%');
+  </select>
+  <select id="selectByteacherName" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from vacation
+    where
+    leavecourse_tea LIKE CONCAT(CONCAT('%', #{teaName}), '%');
+  </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from vacation
