@@ -97,12 +97,13 @@
     from vacation
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectByMajorLike" resultMap="BaseResultMap" parameterType="String">
+  <select id="selectByLeaveIdLike" resultMap="BaseResultMap" parameterType="String">
     select *
     from vacation
     where
     leave_ID LIKE CONCAT(CONCAT('%', #{leaveId}), '%');
   </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from vacation
     where id = #{id,jdbcType=INTEGER}
