@@ -70,7 +70,7 @@ public class Coursecontroller {
         String stringData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(stringData);
         JSONObject jsonData = courseService.selectCourseByTeacher(jsonObject);
-        if ("".equals(jsonData.getString("course"))&&"".equals(jsonData.getString("Class"))){
+        if ("".equals(jsonData.getString("Class"))){
             returnJson.put("data","");
             returnJson.put("status","500");
             returnJson.put("msg","没有查到数据");

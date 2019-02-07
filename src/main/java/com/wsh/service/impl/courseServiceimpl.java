@@ -159,23 +159,25 @@ public class CourseServiceimpl implements CourseService {
     @Override
     public JSONObject selectCourseByTeacher(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String searchKey = jsonObject.getString("teacherName");
-        CourseExample courseExample =new CourseExample();
-        CourseExample.Criteria criteria= courseExample.createCriteria();
-        criteria.andTeaNameEqualTo(searchKey);
-        List<Course> courses = courseMapper.selectByExample(courseExample);
-        ArrayList<String> courseName = new ArrayList<String>();
-        if (courses.size()>0){
-            for (int i = 0; i < courses.size(); i++) {
-                courseName.add(courses.get(i).getCourseName());
-            }
-            returnJson.put("course",courseName);
-        }else {
-            returnJson.put("course","");
-        }
-        List<Teacher> teachers = teacherMapper.selectTeaNameLike(searchKey);
-        JSONArray arraylevel1 = new JSONArray();
+        String searchKey = jsonObject.getString("teacherID");
+        TeacherExample teacherExample = new TeacherExample();
+        TeacherExample.Criteria criteria1 = teacherExample.createCriteria();
+        criteria1.andTeaIdEqualTo(searchKey);
+        List<Teacher> teachers = teacherMapper.selectByExample(teacherExample);
         if (teachers.size()>0){
+            String TeaName  = teachers.get(0).getTeaName();
+            ArrayList<String> courseName = new ArrayList<String>();
+            CourseExample courseExample =new CourseExample();
+            CourseExample.Criteria criteria= courseExample.createCriteria();
+            criteria.andTeaNameEqualTo(TeaName);
+            List<Course> courses = courseMapper.selectByExample(courseExample);
+            if (courses.size()>0){
+                for (int i = 0; i < courses.size(); i++) {
+                    courseName.add(courses.get(i).getCourseName());
+                }
+                returnJson.put("course",courseName);
+            }
+            JSONArray arraylevel1 = new JSONArray();
             for (int k = 0; k <teachers.size(); k++) {
                 String Class = teachers.get(k).getTeaClass();
                 Class.replaceAll("，",",");
