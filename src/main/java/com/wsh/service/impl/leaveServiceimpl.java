@@ -201,6 +201,7 @@ public class LeaveServiceimpl implements LeaveService {
         List<Vacation> leaves =new ArrayList<Vacation>();
         String keyWord = jsonObject.getString("content");
         IsChOrEnOrNum isChOrEnOrNum = new IsChOrEnOrNum();
+        DataAndNumber dataAndNumber = new DataAndNumber();
         String key = isChOrEnOrNum.IsChOrNum(keyWord);
         if ("chinese".equals(key)){
             String type = jsonObject.getString("type");
@@ -215,6 +216,11 @@ public class LeaveServiceimpl implements LeaveService {
             leaves = leaveMapper.selectByLeaveIdLike(keyWord);
         }
         if (leaves.size()>0){
+            for (int i = 0; i < leaves.size(); i++) {
+                leaves.get(i).setApplicationTime(dataAndNumber.stampToDate(leaves.get(i).getApplicationTime()));
+                leaves.get(i).setStartTime(dataAndNumber.stampToDate(leaves.get(i).getStartTime()));
+                leaves.get(i).setEndTime(dataAndNumber.stampToDate(leaves.get(i).getEndTime()));
+            }
             returnJson.put("leaves",leaves);
             returnJson.put("status","200");
             returnJson.put("msg","");
@@ -230,12 +236,17 @@ public class LeaveServiceimpl implements LeaveService {
     public JSONObject selectAllLeave() {
         JSONObject returnJson = new JSONObject();
         VacationExample vacationExample =new VacationExample();
+        DataAndNumber dataAndNumber = new DataAndNumber();
         VacationExample.Criteria criteria= vacationExample.createCriteria();
         criteria.andLeaveIdIsNotNull();
         List<Vacation> leaves = leaveMapper.selectByExample(vacationExample);
-        if (leaves.size()!=0){
-            JSONArray leaveJson= JSONArray.fromObject(leaves);
-            returnJson.put("leaves",leaveJson);
+        if (leaves.size()>0){
+            for (int i = 0; i < leaves.size(); i++) {
+                leaves.get(i).setApplicationTime(dataAndNumber.stampToDate(leaves.get(i).getApplicationTime()));
+                leaves.get(i).setStartTime(dataAndNumber.stampToDate(leaves.get(i).getStartTime()));
+                leaves.get(i).setEndTime(dataAndNumber.stampToDate(leaves.get(i).getEndTime()));
+            }
+            returnJson.put("leaves",leaves);
             returnJson.put("msg","");
             returnJson.put("status","200");
         } else {

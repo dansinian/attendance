@@ -70,14 +70,14 @@ public class Coursecontroller {
         String stringData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(stringData);
         JSONObject jsonData = courseService.selectCourseByTeacher(jsonObject);
-        if (!"".equals(jsonData.getString("course"))&&!"".equals(jsonData.getString("Class"))){
-            returnJson.put("data",jsonData);
-            returnJson.put("status","200");
-            returnJson.put("msg","");
-        }else {
+        if ("".equals(jsonData.getString("course"))&&"".equals(jsonData.getString("Class"))){
             returnJson.put("data","");
             returnJson.put("status","500");
             returnJson.put("msg","没有查到数据");
+        }else {
+            returnJson.put("data",jsonData);
+            returnJson.put("status","200");
+            returnJson.put("msg","");
         }
         return returnJson;
     }

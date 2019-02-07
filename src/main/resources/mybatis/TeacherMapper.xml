@@ -106,6 +106,12 @@
     where
     tea_department LIKE CONCAT(CONCAT('%', #{teaDep}), '%');
   </select>
+  <select id="selectTeaIdLike" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from teacher
+    where
+    tea_ID LIKE CONCAT(CONCAT('%', #{teaID}), '%');
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from teacher
     where id = #{id,jdbcType=INTEGER}

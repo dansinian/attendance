@@ -31,4 +31,6 @@ public interface TeacherMapper {
     List<Teacher> selectByDepLike(String teaDep);
 
     List<Teacher> selectTeaNameLike(String teaName);
+
+    List<Teacher> selectTeaIdLike(String teaID);
 }

@@ -129,7 +129,13 @@ public class TeacherServiceimpl implements TeacherService {
         JSONObject returnJson = new JSONObject();
         String keyWord = jsonObject.getString("content");
         List<Teacher> teachers =new ArrayList<Teacher>();
-        teachers = teacherMapper.selectTeaNameLike(keyWord);
+        IsChOrEnOrNum isChOrEnOrNum = new IsChOrEnOrNum();
+        String returnType = isChOrEnOrNum.IsChOrNum(keyWord);
+        if ("number".equals(returnType)){
+            teachers = teacherMapper.selectTeaIdLike(keyWord);
+        } else {
+            teachers = teacherMapper.selectTeaNameLike(keyWord);
+        }
         if (teachers.size() >0){
             returnJson.put("msg","");
             returnJson.put("status","200");
