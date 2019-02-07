@@ -37,7 +37,7 @@ public class Leavecontroller {
 
     @RequestMapping("/updateLeave")
     @ResponseBody
-    public JSONObject updateLeave(HttpServletRequest request, HttpServletResponse response){
+    public JSONObject updateLeave(HttpServletRequest request, HttpServletResponse response) throws Exception{
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
         return leaveService.updateLeave(jsonObject);
