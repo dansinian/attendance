@@ -106,7 +106,12 @@ public class LeaveServiceimpl implements LeaveService {
                 vacation.setEndTime(dataAndNumber.stampToDate(vacation.getEndTime()));
                 vacation.setApplicationTime(dataAndNumber.stampToDate(vacation.getApplicationTime()));
                 List<Teacher> teachers = teacherMapper.selectTeaNameLike(jsonObject.getString("approvalTea"));
-                returnJson.put("guidePhone",teachers.get(0).getTeaPhone());
+                if (teachers.size()>0){
+                    returnJson.put("guidePhone",teachers.get(0).getTeaPhone());
+                }else {
+                    returnJson.put("guidePhone","");
+
+                }
                 returnJson.put("leave", vacation);
                 returnJson.put("msg", "添加请假信息成功");
                 returnJson.put("status", "200");
