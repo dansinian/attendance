@@ -33,12 +33,11 @@ public class Usercontroller {
         return returnjson;
     }
 
-   // @CrossOrigin(methods = RequestMethod.POST)
-    @RequestMapping("/test")
+    @RequestMapping("/updatePass")
     @ResponseBody
-    public String test(HttpServletRequest request, HttpServletResponse response) throws Exception{
-
-        String s = request.getParameter("test");
-        return s;
+    public JSONObject updatePass(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return userService.updatePass(jsonObject);
     }
 }

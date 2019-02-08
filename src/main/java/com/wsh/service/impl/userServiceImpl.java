@@ -163,6 +163,80 @@ public class UserServiceImpl implements UserService {
         }
         return returnmap;
     }
+
+    @Override
+    public JSONObject updatePass(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        String oldpassword = jsonObject.getString("old");
+        String newpassword = jsonObject.getString("new");
+        String id= jsonObject.getString("id");
+        String type= jsonObject.getString("type");
+        if ("student".equals(type)){
+            StudentExample studentExample = new StudentExample();
+            StudentExample.Criteria criteria = studentExample.createCriteria();
+            criteria.andStuIdEqualTo(id);
+            List<Student> students = studentMapper.selectByExample(studentExample);
+            if (students.size()>0){
+                Student student = students.get(0);
+                if (student.getStuPassword().equals(oldpassword)){
+                    student.setStuPassword(newpassword);
+                    int success = studentMapper.updateByExampleSelective(student,studentExample);
+                   if (success>0){
+                       returnJson.put("msg","修改成功");
+                       returnJson.put("status","200");
+                       returnJson.put("student",student);
+                   }
+                }else {
+                    returnJson.put("msg","原密码错误");
+                    returnJson.put("status","500");
+                    returnJson.put("student",student);
+                }
+            }
+        }else if ("teacher".equals(type)){
+            TeacherExample teacherExample = new TeacherExample();
+            TeacherExample.Criteria criteria = teacherExample.createCriteria();
+            criteria.andTeaIdEqualTo(id);
+            List<Teacher> teachers = teacherMapper.selectByExample(teacherExample);
+            if (teachers.size()>0) {
+                Teacher teacher = teachers.get(0);
+                if (teacher.getTeaPassword().equals(oldpassword)){
+                    teacher.setTeaPassword(newpassword);
+                    int success = teacherMapper.updateByExampleSelective(teacher,teacherExample);
+                    if (success>0){
+                        returnJson.put("msg","修改成功");
+                        returnJson.put("status","200");
+                        returnJson.put("student",teacher);
+                    }
+                }else {
+                    returnJson.put("msg","原密码错误");
+                    returnJson.put("status","500");
+                    returnJson.put("student",teacher);
+                }
+            }
+        }else if ("admin".equals(type)){
+            UserExample userExample = new UserExample();
+            UserExample.Criteria criteria = userExample.createCriteria();
+            criteria.andUserNameEqualTo(id);
+            List<User> users = userMapper.selectByExample(userExample);
+            if (users.size()>0) {
+                User user = users.get(0);
+                if (user.getUserPassword().equals(oldpassword)){
+                    user.setUserPassword(newpassword);
+                    int success = userMapper.updateByExampleSelective(user,userExample);
+                    if (success>0){
+                        returnJson.put("msg","修改成功");
+                        returnJson.put("status","200");
+                        returnJson.put("student",user);
+                    }
+                }else {
+                    returnJson.put("msg","原密码错误");
+                    returnJson.put("status","500");
+                    returnJson.put("student",user);
+                }
+            }
+        }
+        return returnJson;
+    }
 }
 
 
