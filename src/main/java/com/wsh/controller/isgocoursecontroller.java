@@ -55,20 +55,14 @@ public class Isgocoursecontroller {
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
         List<Isgocourse> isgocourses = gocourseService.selectGocourse(jsonObject);
-        JSONArray isgocourseJson=JSONArray.fromObject(isgocourses);
-        if (isgocourses!=null){
-            if (isgocourses.size()>0){
-                returnJson.put("isgocourses",isgocourseJson);
-                returnJson.put("status","200");
-                returnJson.put("msg","");
-            }
-        }else if (isgocourses==null||isgocourses.size()==0){
-            returnJson.put("isgocourses",isgocourseJson);
-            returnJson.put("status","500");
-            returnJson.put("msg","没有查到旷课信息");
-        }else {
-            returnJson.put("status","500");
-            returnJson.put("msg","查询失败，请稍后重试");
+        if (isgocourses.size()>0){
+            returnJson.put("isgocourses",isgocourses);
+            returnJson.put("status","200");
+            returnJson.put("msg","");
+        } else {
+        returnJson.put("isgocourses","");
+        returnJson.put("status","500");
+        returnJson.put("msg","没有查到旷课信息");
         }
         return returnJson.toString();
     }

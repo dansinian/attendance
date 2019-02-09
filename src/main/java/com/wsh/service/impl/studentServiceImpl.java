@@ -1,21 +1,37 @@
 package com.wsh.service.impl;
 
-import com.wsh.dao.StudentMapper;
-import com.wsh.entity.Student;
-import com.wsh.entity.StudentExample;
+import com.wsh.dao.*;
+import com.wsh.entity.*;
 import com.wsh.service.StudentService;
+import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.IsChOrEnOrNum;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.awt.image.DataBufferNative;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
+    @Autowired
+    private TeacherMapper teacherMapper;
+    @Autowired
+    private CourseMapper courseMapper;
+    @Autowired
+    private CourseArrangementMapper arragementMapper;
+    @Autowired
+    private IsgocourseMapper gocourseMapper;
+    @Autowired
+    private ReportcourseMapper reportcourseMapper;
 
     @Override
     public JSONObject deleteStudent(JSONObject jsonObject) {
@@ -176,6 +192,149 @@ public class StudentServiceImpl implements StudentService {
             jsonObject.put("msg","没有查到学生信息");
         }
         return jsonObject;
+    }
+
+    @Override
+    public JSONObject selectByTeacher(JSONObject jsonObject){
+        String teaID = jsonObject.getString("teacherId");
+        JSONObject returnJson = new JSONObject();
+        Date date = new Date();
+        String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        String weekday = weekDays[w];
+        TeacherExample teacherExample = new TeacherExample();
+        TeacherExample.Criteria criteria = teacherExample.createCriteria();
+        criteria.andTeaIdEqualTo(teaID);
+        List<Teacher> teachers = teacherMapper.selectByExample(teacherExample);
+        if (teachers.size()>0){
+            Teacher teacher = teachers.get(0);
+            String teaName = teacher.getTeaName();
+            String teaclass = teacher.getTeaClass();
+            String teaDepart = teacher.getTeaDepartment();
+            teaclass.replaceAll("，",",");
+            String teaClass[] = teaclass.split(",");
+            if (teaClass.length>0) {
+                CourseExample courseExample = new CourseExample();
+                CourseExample.Criteria coursecriteria = courseExample.createCriteria();
+                for (int k = 0; k < teaClass.length; k++) {
+                coursecriteria.andTeaNameEqualTo(teaName).andCourseClassEqualTo(teaClass[k]);
+                List<Course> courses = courseMapper.selectByExample(courseExample);
+                if (courses.size() > 0) {
+                    CourseArrangementExample arrangementExample = new CourseArrangementExample();
+                    CourseArrangementExample.Criteria arrangementcriteria = arrangementExample.createCriteria();
+                    for (int i = 0; i < courses.size(); i++) {
+                        arrangementcriteria.andCarmTimeEqualTo(weekday).andCourseIdEqualTo(courses.get(i).getCourseId());
+                        List<CourseArrangement> arrangements = arragementMapper.selectByExample(arrangementExample);
+                        if (arrangements.size() > 0) {
+                            for (int j = 0; j < arrangements.size(); j++) {
+                                String courseID = arrangements.get(j).getCourseId();
+                                if (courseID.equals(courses.get(i).getCourseId())){
+                                    JSONArray stuarray = new JSONArray();
+                                    StudentExample studentExample =new StudentExample();
+                                    StudentExample.Criteria stucriteria= studentExample.createCriteria();
+                                    stucriteria.andStuClassEqualTo(courses.get(i).getCourseClass());
+                                    List<Student> students = studentMapper.selectByExample(studentExample);
+                                    if (students.size()>0){
+                                        for (int l = 0; l < students.size(); l++) {
+                                            JSONObject stujson = new JSONObject();
+                                            stujson.put("name",students.get(l).getStuName());
+                                            stujson.put("stuID",students.get(l).getStuId());
+                                            stuarray.add(stujson);
+                                        }
+                                        returnJson.put("student",stuarray);
+                                        returnJson.put("msg","");
+                                        returnJson.put("status","200");
+                                    }else {
+                                        returnJson.put("student","");
+                                        returnJson.put("msg","没有查到数据");
+                                        returnJson.put("status","500");
+                                    }
+                                }
+                            }
+                        } else {
+                            returnJson.put("student","");
+                            returnJson.put("msg","没有查到数据");
+                            returnJson.put("status","500");
+                        }
+                    }
+                } else {
+                    returnJson.put("student","");
+                    returnJson.put("msg","没有查到数据");
+                    returnJson.put("status","500");
+                }
+            }
+        }else{
+                returnJson.put("student","");
+                returnJson.put("msg","没有查到数据");
+                returnJson.put("status","500");
+            }
+    }else{
+            returnJson.put("student","");
+            returnJson.put("msg","没有查到数据");
+            returnJson.put("status","500");
+        }
+        return returnJson;
+    }
+
+    @Override
+    public JSONObject report(JSONObject jsonObject) throws ParseException {
+        DataAndNumber dataAndNumber = new DataAndNumber();
+        JSONObject returnJson = new JSONObject();
+        Date date = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = dataAndNumber.dateToStamp(df.format(new Date()));
+        String stuID = jsonObject.getString("stuId");
+        IsgocourseExample gocourseExample = new IsgocourseExample();
+        IsgocourseExample.Criteria criteria = gocourseExample.createCriteria();
+        Reportcourse reportcourse = new Reportcourse();
+        reportcourse.setStuId(stuID);
+        reportcourse.setReportTime(time);
+        int success = reportcourseMapper.insert(reportcourse);
+        if (success>0){
+            returnJson.put("msg","签到成功");
+            returnJson.put("status","200");
+        }else{
+            returnJson.put("msg","签到失败,请重试");
+            returnJson.put("status","500");
+        }
+        return returnJson;
+    }
+
+    @Override
+    public JSONObject selectReportStudent(JSONObject jsonObject) throws ParseException {
+        DataAndNumber dataAndNumber = new DataAndNumber();
+        JSONObject returnJson = new JSONObject();
+        String startTime = dataAndNumber.dateToStamp(jsonObject.getString("startTime"));
+        String endTime = dataAndNumber.dateToStamp(jsonObject.getString("endTime"));
+        ReportcourseExample reportcourseExample = new ReportcourseExample();
+        ReportcourseExample.Criteria criteria = reportcourseExample.createCriteria();
+        criteria.andReportTimeBetween(startTime,endTime);
+        List<Reportcourse> reportcourses = reportcourseMapper.selectByExample(reportcourseExample);
+        List<Student> students = new ArrayList<Student>();
+        if (reportcourses.size()>0){
+            for (int i = 0; i < reportcourses.size(); i++) {
+                String stuID = reportcourses.get(i).getStuId();
+                StudentExample studentExample =new StudentExample();
+                StudentExample.Criteria stucriteria= studentExample.createCriteria();
+                stucriteria.andStuIdEqualTo(stuID);
+                List<Student> students1 = studentMapper.selectByExample(studentExample);
+                if (students1.size()>0){
+                    for (int j = 0; j < students1.size(); j++) {
+                        students.add(students1.get(j));
+                    }
+                }
+            }
+            returnJson.put("msg","");
+            returnJson.put("status","200");
+            returnJson.put("students",students);
+        }else {
+            returnJson.put("msg","没有签到信息");
+            returnJson.put("status","500");
+            returnJson.put("students","");
+        }
+        return returnJson;
     }
 
 }
