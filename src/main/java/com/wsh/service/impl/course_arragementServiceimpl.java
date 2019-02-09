@@ -69,6 +69,7 @@ public class Course_arragementServiceimpl implements Course_arragementService {
                 arragement.setCarmId(arragementID);
                 arragement.setCarmTime(jsonObject.getString("carmTime"));
                 arragement.setCourseId(jsonObject.getString("courseId"));
+                arragement.setCourseId(jsonObject.getString("courseName"));
                 int success = arragementMapper.insert(arragement);
                 if (success > 0) {
                     returnJson.put("arragement",arragement);
