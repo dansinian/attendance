@@ -162,9 +162,6 @@ public class Course_arragementServiceimpl implements Course_arragementService {
         criteria.andIdIsNotNull();
         List<CourseArrangement> arrangements = arragementMapper.selectByExample(arrangementExample);
         if (arrangements.size()>0){
-            for (int i = 0; i < arrangements.size(); i++) {
-                arrangements.get(i).setCarmTime(dataAndNumber.stampToDate(arrangements.get(i).getCarmTime()));
-            }
             returnJson.put("Arrangements",arrangements);
             returnJson.put("msg","");
             returnJson.put("status","200");
