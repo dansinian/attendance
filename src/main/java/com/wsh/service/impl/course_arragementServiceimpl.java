@@ -9,11 +9,13 @@ import com.wsh.entity.CourseArrangementExample;
 import com.wsh.entity.CourseExample;
 import com.wsh.service.Course_arragementService;
 import com.wsh.servlet.DataAndNumber;
+import com.wsh.servlet.OutData;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,12 +50,13 @@ public class Course_arragementServiceimpl implements Course_arragementService {
     }
 
     @Override
-    public JSONObject createArrangement(JSONObject jsonObject) {
+    public JSONObject createArrangement(JSONObject jsonObject) throws ParseException {
         JSONObject returnJson = new JSONObject();
         CourseArrangement arragement = new CourseArrangement();
+        OutData outData = new OutData();
         DataAndNumber dataAndNumber = new DataAndNumber();
         CourseArrangementExample arragementExample = new CourseArrangementExample();
-        String arragementID = jsonObject.getString("arragementId");
+        String arragementID = dataAndNumber.dateToStamp(OutData.createData());
         CourseArrangementExample.Criteria criteria = arragementExample.createCriteria();
         criteria.andCarmIdEqualTo(arragementID);
         List<CourseArrangement> selectArrangements = arragementMapper.selectByExample(arragementExample);
@@ -64,11 +67,10 @@ public class Course_arragementServiceimpl implements Course_arragementService {
                 returnJson.put("arrangement", selectArrangements.get(0));
             } else {
                 arragement.setCarmId(arragementID);
-                arragement.setCarmTime(dataAndNumber.dateToStamp(jsonObject.getString("carmTime")));
+                arragement.setCarmTime(jsonObject.getString("carmTime"));
                 arragement.setCourseId(jsonObject.getString("courseId"));
                 int success = arragementMapper.insert(arragement);
                 if (success > 0) {
-                    arragement.setCarmTime(jsonObject.getString("carmTime"));
                     returnJson.put("arragement",arragement);
                     returnJson.put("msg", "添加课程安排信息成功");
                     returnJson.put("status", "200");

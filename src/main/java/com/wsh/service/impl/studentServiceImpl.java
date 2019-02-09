@@ -5,6 +5,7 @@ import com.wsh.entity.*;
 import com.wsh.service.StudentService;
 import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.IsChOrEnOrNum;
+import com.wsh.servlet.OutData;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -282,9 +283,8 @@ public class StudentServiceImpl implements StudentService {
     public JSONObject report(JSONObject jsonObject) throws ParseException {
         DataAndNumber dataAndNumber = new DataAndNumber();
         JSONObject returnJson = new JSONObject();
-        Date date = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String time = dataAndNumber.dateToStamp(df.format(new Date()));
+        OutData outData = new OutData();
+        String time = dataAndNumber.dateToStamp(OutData.createData());
         String stuID = jsonObject.getString("stuId");
         IsgocourseExample gocourseExample = new IsgocourseExample();
         IsgocourseExample.Criteria criteria = gocourseExample.createCriteria();
