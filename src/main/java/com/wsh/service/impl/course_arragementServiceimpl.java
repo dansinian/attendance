@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -53,12 +55,11 @@ public class Course_arragementServiceimpl implements Course_arragementService {
     public JSONObject createArrangement(JSONObject jsonObject) throws ParseException {
         JSONObject returnJson = new JSONObject();
         CourseArrangement arragement = new CourseArrangement();
-        OutData outData = new OutData();
-        DataAndNumber dataAndNumber = new DataAndNumber();
         CourseArrangementExample arragementExample = new CourseArrangementExample();
-        String arragementID = dataAndNumber.dateToStamp(OutData.createData());
+        OutData outData = new OutData();
+        String arragementID = outData.createData();
         CourseArrangementExample.Criteria criteria = arragementExample.createCriteria();
-        criteria.andCarmIdEqualTo(arragementID);
+        criteria.andCarmIdEqualTo(jsonObject.getString("carmTime")).andCourseIdEqualTo(jsonObject.getString("courseId"));
         List<CourseArrangement> selectArrangements = arragementMapper.selectByExample(arragementExample);
         try {
             if (selectArrangements.size() > 0) {
@@ -100,11 +101,10 @@ public class Course_arragementServiceimpl implements Course_arragementService {
         criteria.andCarmIdEqualTo(arragementID);
         if (arragementMapper.selectByExample(courseExample).size()>0){
             arragement.setCarmId(arragementID);
-            arragement.setCarmTime(dataAndNumber.dateToStamp(jsonObject.getString("carmTime")));
+            arragement.setCarmTime(jsonObject.getString("carmTime"));
             arragement.setCourseId(jsonObject.getString("courseId"));
             int returnint =arragementMapper.updateByExampleSelective(arragement,courseExample);
             if(returnint>0){
-                arragement.setCarmTime(jsonObject.getString("carmTime"));
                 returnJson.put("arragement",arragement);
                 returnJson.put("msg","修改成功");
                 returnJson.put("status","200");
@@ -130,9 +130,6 @@ public class Course_arragementServiceimpl implements Course_arragementService {
         List<CourseArrangement> arrangements =new ArrayList<CourseArrangement>();
         List<CourseArrangement> arrangementList =  arragementMapper.selectByCourNameLike(keyWord);
         if (arrangementList.size() >0) {
-            for (int i = 0; i < arrangementList.size(); i++) {
-                arrangementList.get(i).setCarmTime(dataAndNumber.stampToDate(arrangementList.get(i).getCarmTime()));
-            }
             returnJson.put("Arrangements",arrangementList);
             returnJson.put("status","200");
             returnJson.put("msg","");
