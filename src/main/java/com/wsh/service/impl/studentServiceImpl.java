@@ -217,11 +217,9 @@ public class StudentServiceImpl implements StudentService {
             teaclass.replaceAll("，",",");
             String teaClass[] = teaclass.split(",");
             if (teaClass.length>0) {
-                CourseExample courseExample = new CourseExample();
-                CourseExample.Criteria coursecriteria = courseExample.createCriteria();
                 for (int k = 0; k < teaClass.length; k++) {
-                coursecriteria.andTeaNameEqualTo(teaName).andCourseClassEqualTo(teaClass[k]);
-                List<Course> courses = courseMapper.selectByExample(courseExample);
+                String teacherClass = teaClass[k];
+                List<Course> courses = courseMapper.selectByTeaAndClass(teaName,teacherClass);
                 if (courses.size() > 0) {
                     CourseArrangementExample arrangementExample = new CourseArrangementExample();
                     CourseArrangementExample.Criteria arrangementcriteria = arrangementExample.createCriteria();
@@ -249,31 +247,31 @@ public class StudentServiceImpl implements StudentService {
                                         returnJson.put("status","200");
                                     }else {
                                         returnJson.put("student","");
-                                        returnJson.put("msg","没有查到数据");
+                                        returnJson.put("msg","没有查到学生数据");
                                         returnJson.put("status","500");
                                     }
                                 }
                             }
                         } else {
                             returnJson.put("student","");
-                            returnJson.put("msg","没有查到数据");
+                            returnJson.put("msg","没有查到课程安排信息");
                             returnJson.put("status","500");
                         }
                     }
                 } else {
                     returnJson.put("student","");
-                    returnJson.put("msg","没有查到数据");
+                    returnJson.put("msg","没有查到课程信息");
                     returnJson.put("status","500");
                 }
             }
         }else{
                 returnJson.put("student","");
-                returnJson.put("msg","没有查到数据");
+                returnJson.put("msg","没有查到该教师所带班级数据");
                 returnJson.put("status","500");
             }
     }else{
             returnJson.put("student","");
-            returnJson.put("msg","没有查到数据");
+            returnJson.put("msg","没有查到该教师数据");
             returnJson.put("status","500");
         }
         return returnJson;
