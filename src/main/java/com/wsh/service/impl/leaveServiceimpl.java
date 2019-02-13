@@ -69,7 +69,7 @@ public class LeaveServiceimpl implements LeaveService {
         JSONObject returnJson = new JSONObject();
         DataAndNumber dataAndNumber = new DataAndNumber();
         VacationExample leaveExample = new VacationExample();
-        String leaveID = OutData.createData();
+        String leaveID = dataAndNumber.dateToStamp(OutData.createData());
         String stuName = jsonObject.getString("StuName" );
         String startTime = dataAndNumber.dateToStamp(jsonObject.getString("startTime"));
         String endTime = dataAndNumber.dateToStamp(jsonObject.getString("endTime"));
@@ -171,13 +171,14 @@ public class LeaveServiceimpl implements LeaveService {
                                     criteria1.andCourseIdEqualTo(vacation2.getCourseId());
                                     List<Course> courses = courseMapper.selectByExample(courseExample);
                                     if (courses.size()>0){
+                                        String time = vacation2.getCourseWeek() + vacation2.getStartTime() +vacation2.getEndTime();
                                         String TeaName = courses.get(0).getTeaName();
                                         String courseId = vacation2.getCarmId();
                                         IsGoCourse.put("courseID",vacation2.getCourseId());
                                         IsGoCourse.put("stuId",jsonObject.getString("StuId"));
                                         IsGoCourse.put("courseTeacher",TeaName);
                                         IsGoCourse.put("isTruancy","0");
-                                        IsGoCourse.put("courseTime",vacation2.getCarmTime());
+                                        IsGoCourse.put("courseTime",time);
                                         JSONObject GoCourse = gocourseService.createGocourse(IsGoCourse);
                                     }
                                 }

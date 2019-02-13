@@ -14,7 +14,7 @@ public interface Course_arragementService {
     JSONObject createArrangement(JSONObject jsonObject) throws ParseException;
     JSONObject updateArrangement(JSONObject jsonObject) throws Exception;
     JSONObject selectArrangement(JSONObject jsonObject);
-    List<CourseArrangement> selectVacationCourse(String startTime, String endTime);
+    List<CourseArrangement> selectVacationCourse(String startTime, String endTime) throws ParseException;
 
     JSONObject selectAllArragement();
 }

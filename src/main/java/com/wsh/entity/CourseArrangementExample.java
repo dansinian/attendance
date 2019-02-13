@@ -234,76 +234,6 @@ public class CourseArrangementExample {
             return (Criteria) this;
         }
 
-        public Criteria andCarmTimeIsNull() {
-            addCriterion("carm_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeIsNotNull() {
-            addCriterion("carm_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeEqualTo(String value) {
-            addCriterion("carm_time =", value, "carmTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeNotEqualTo(String value) {
-            addCriterion("carm_time <>", value, "carmTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeGreaterThan(String value) {
-            addCriterion("carm_time >", value, "carmTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeGreaterThanOrEqualTo(String value) {
-            addCriterion("carm_time >=", value, "carmTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeLessThan(String value) {
-            addCriterion("carm_time <", value, "carmTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeLessThanOrEqualTo(String value) {
-            addCriterion("carm_time <=", value, "carmTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeLike(String value) {
-            addCriterion("carm_time like", value, "carmTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeNotLike(String value) {
-            addCriterion("carm_time not like", value, "carmTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeIn(List<String> values) {
-            addCriterion("carm_time in", values, "carmTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeNotIn(List<String> values) {
-            addCriterion("carm_time not in", values, "carmTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeBetween(String value1, String value2) {
-            addCriterion("carm_time between", value1, value2, "carmTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCarmTimeNotBetween(String value1, String value2) {
-            addCriterion("carm_time not between", value1, value2, "carmTime");
-            return (Criteria) this;
-        }
-
         public Criteria andCourseIdIsNull() {
             addCriterion("course_ID is null");
             return (Criteria) this;
@@ -441,6 +371,216 @@ public class CourseArrangementExample {
 
         public Criteria andCourseNameNotBetween(String value1, String value2) {
             addCriterion("course_name not between", value1, value2, "courseName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekIsNull() {
+            addCriterion("course_week is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekIsNotNull() {
+            addCriterion("course_week is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekEqualTo(String value) {
+            addCriterion("course_week =", value, "courseWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekNotEqualTo(String value) {
+            addCriterion("course_week <>", value, "courseWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekGreaterThan(String value) {
+            addCriterion("course_week >", value, "courseWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekGreaterThanOrEqualTo(String value) {
+            addCriterion("course_week >=", value, "courseWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekLessThan(String value) {
+            addCriterion("course_week <", value, "courseWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekLessThanOrEqualTo(String value) {
+            addCriterion("course_week <=", value, "courseWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekLike(String value) {
+            addCriterion("course_week like", value, "courseWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekNotLike(String value) {
+            addCriterion("course_week not like", value, "courseWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekIn(List<String> values) {
+            addCriterion("course_week in", values, "courseWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekNotIn(List<String> values) {
+            addCriterion("course_week not in", values, "courseWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekBetween(String value1, String value2) {
+            addCriterion("course_week between", value1, value2, "courseWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseWeekNotBetween(String value1, String value2) {
+            addCriterion("course_week not between", value1, value2, "courseWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeIsNull() {
+            addCriterion("start_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeIsNotNull() {
+            addCriterion("start_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeEqualTo(String value) {
+            addCriterion("start_time =", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeNotEqualTo(String value) {
+            addCriterion("start_time <>", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeGreaterThan(String value) {
+            addCriterion("start_time >", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("start_time >=", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeLessThan(String value) {
+            addCriterion("start_time <", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeLessThanOrEqualTo(String value) {
+            addCriterion("start_time <=", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeLike(String value) {
+            addCriterion("start_time like", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeNotLike(String value) {
+            addCriterion("start_time not like", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeIn(List<String> values) {
+            addCriterion("start_time in", values, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeNotIn(List<String> values) {
+            addCriterion("start_time not in", values, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeBetween(String value1, String value2) {
+            addCriterion("start_time between", value1, value2, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeNotBetween(String value1, String value2) {
+            addCriterion("start_time not between", value1, value2, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIsNull() {
+            addCriterion("end_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIsNotNull() {
+            addCriterion("end_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeEqualTo(String value) {
+            addCriterion("end_time =", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotEqualTo(String value) {
+            addCriterion("end_time <>", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeGreaterThan(String value) {
+            addCriterion("end_time >", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("end_time >=", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLessThan(String value) {
+            addCriterion("end_time <", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLessThanOrEqualTo(String value) {
+            addCriterion("end_time <=", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLike(String value) {
+            addCriterion("end_time like", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotLike(String value) {
+            addCriterion("end_time not like", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIn(List<String> values) {
+            addCriterion("end_time in", values, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotIn(List<String> values) {
+            addCriterion("end_time not in", values, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeBetween(String value1, String value2) {
+            addCriterion("end_time between", value1, value2, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotBetween(String value1, String value2) {
+            addCriterion("end_time not between", value1, value2, "endTime");
             return (Criteria) this;
         }
     }

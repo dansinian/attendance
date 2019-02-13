@@ -13,7 +13,7 @@ public interface StudentService {
     JSONObject updateStudent(JSONObject jsonObject);
     JSONObject selectStudent(JSONObject jsonObject);
     JSONObject selectAllStudent();
-    JSONObject selectByTeacher(JSONObject jsonObject);
+    JSONObject selectByTeacher(JSONObject jsonObject) throws ParseException;
     JSONObject report(JSONObject jsonObject) throws ParseException;
     JSONObject selectReportStudent(JSONObject jsonObject) throws ParseException;
 }

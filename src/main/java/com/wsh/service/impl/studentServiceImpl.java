@@ -6,6 +6,7 @@ import com.wsh.service.StudentService;
 import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.IsChOrEnOrNum;
 import com.wsh.servlet.OutData;
+import com.wsh.servlet.OutputWeek;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,15 +197,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public JSONObject selectByTeacher(JSONObject jsonObject){
+    public JSONObject selectByTeacher(JSONObject jsonObject) throws ParseException {
         String teaID = jsonObject.getString("teacherId");
         JSONObject returnJson = new JSONObject();
+        OutputWeek outputWeek = new OutputWeek();
         Date date = new Date();
-        String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        String weekday = weekDays[w];
+        String dateStr = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(date);
+        String weekday = outputWeek.OutputWeek(dateStr).getString("week");
+        String reportTime = dateStr.substring(11, 13) + dateStr.substring(14, 16);
         TeacherExample teacherExample = new TeacherExample();
         TeacherExample.Criteria criteria = teacherExample.createCriteria();
         criteria.andTeaIdEqualTo(teaID);
@@ -223,7 +223,7 @@ public class StudentServiceImpl implements StudentService {
                     CourseArrangementExample arrangementExample = new CourseArrangementExample();
                     CourseArrangementExample.Criteria arrangementcriteria = arrangementExample.createCriteria();
                     for (int i = 0; i < courses.size(); i++) {
-                        arrangementcriteria.andCarmTimeEqualTo(weekday).andCourseIdEqualTo(courses.get(i).getCourseId());
+                        arrangementcriteria.andCourseWeekEqualTo(weekday).andCourseIdEqualTo(courses.get(i).getCourseId()).andStartTimeLessThanOrEqualTo(reportTime).andEndTimeGreaterThanOrEqualTo(reportTime);
                         List<CourseArrangement> arrangements = arragementMapper.selectByExample(arrangementExample);
                         if (arrangements.size() > 0) {
                             for (int j = 0; j < arrangements.size(); j++) {
@@ -273,11 +273,9 @@ public class StudentServiceImpl implements StudentService {
     public JSONObject report(JSONObject jsonObject) throws ParseException {
         DataAndNumber dataAndNumber = new DataAndNumber();
         JSONObject returnJson = new JSONObject();
-        OutData outData = new OutData();
+
         String time = dataAndNumber.dateToStamp(OutData.createData());
         String stuID = jsonObject.getString("stuId");
-        IsgocourseExample gocourseExample = new IsgocourseExample();
-        IsgocourseExample.Criteria criteria = gocourseExample.createCriteria();
         Reportcourse reportcourse = new Reportcourse();
         reportcourse.setStuId(stuID);
         reportcourse.setReportTime(time);

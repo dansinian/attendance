@@ -5,11 +5,15 @@ public class CourseArrangement {
 
     private String carmId;
 
-    private String carmTime;
-
     private String courseId;
 
     private String courseName;
+
+    private String courseWeek;
+
+    private String startTime;
+
+    private String endTime;
 
     public Integer getId() {
         return id;
@@ -27,14 +31,6 @@ public class CourseArrangement {
         this.carmId = carmId == null ? null : carmId.trim();
     }
 
-    public String getCarmTime() {
-        return carmTime;
-    }
-
-    public void setCarmTime(String carmTime) {
-        this.carmTime = carmTime == null ? null : carmTime.trim();
-    }
-
     public String getCourseId() {
         return courseId;
     }
@@ -49,5 +45,29 @@ public class CourseArrangement {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName == null ? null : courseName.trim();
+    }
+
+    public String getCourseWeek() {
+        return courseWeek;
+    }
+
+    public void setCourseWeek(String courseWeek) {
+        this.courseWeek = courseWeek == null ? null : courseWeek.trim();
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime == null ? null : startTime.trim();
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime == null ? null : endTime.trim();
     }
 }

@@ -10,6 +10,7 @@ import com.wsh.entity.CourseExample;
 import com.wsh.service.Course_arragementService;
 import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.OutData;
+import com.wsh.servlet.OutputWeek;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class Course_arragementServiceimpl implements Course_arragementService {
     @Override
     public JSONObject deleteArrangement(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String arragementID = jsonObject.getString("arragementId");
+        String arragementID = jsonObject.getString("carmId");
         String returnString ="";
         CourseArrangementExample arragementExample =new CourseArrangementExample();
         CourseArrangementExample.Criteria criteria= arragementExample.createCriteria();
@@ -57,7 +59,7 @@ public class Course_arragementServiceimpl implements Course_arragementService {
         CourseArrangement arragement = new CourseArrangement();
         CourseArrangementExample arragementExample = new CourseArrangementExample();
         OutData outData = new OutData();
-        String arragementID = outData.createData();
+        String carmIdID = outData.createData();
         CourseArrangementExample.Criteria criteria = arragementExample.createCriteria();
         criteria.andCarmIdEqualTo(jsonObject.getString("carmTime")).andCourseIdEqualTo(jsonObject.getString("courseId"));
         List<CourseArrangement> selectArrangements = arragementMapper.selectByExample(arragementExample);
@@ -67,10 +69,12 @@ public class Course_arragementServiceimpl implements Course_arragementService {
                 returnJson.put("status", "500");
                 returnJson.put("arrangement", selectArrangements.get(0));
             } else {
-                arragement.setCarmId(arragementID);
-                arragement.setCarmTime(jsonObject.getString("carmTime"));
+                arragement.setCarmId(carmIdID);
                 arragement.setCourseId(jsonObject.getString("courseId"));
                 arragement.setCourseName(jsonObject.getString("courseName"));
+                arragement.setCourseWeek(jsonObject.getString("courseWeek"));
+                arragement.setStartTime(jsonObject.getString("startTime").replace(":",""));
+                arragement.setEndTime(jsonObject.getString("endTime").replace(":",""));
                 int success = arragementMapper.insert(arragement);
                 if (success > 0) {
                     returnJson.put("arragement",arragement);
@@ -96,14 +100,16 @@ public class Course_arragementServiceimpl implements Course_arragementService {
         CourseArrangement arragement =new CourseArrangement();
         DataAndNumber dataAndNumber = new DataAndNumber();
         CourseArrangementExample courseExample =new CourseArrangementExample();
-        String arragementID = jsonObject.getString("arragementId");
+        String carmIdID = jsonObject.getString("arragementId");
         CourseArrangementExample.Criteria criteria= courseExample.createCriteria();
-        criteria.andCarmIdEqualTo(arragementID);
+        criteria.andCarmIdEqualTo(carmIdID);
         if (arragementMapper.selectByExample(courseExample).size()>0){
-            arragement.setCarmId(arragementID);
-            arragement.setCarmTime(jsonObject.getString("carmTime"));
+            arragement.setCarmId(carmIdID);
             arragement.setCourseId(jsonObject.getString("courseId"));
             arragement.setCourseName(jsonObject.getString("courseName"));
+            arragement.setCourseWeek(jsonObject.getString("courseWeek"));
+            arragement.setStartTime(jsonObject.getString("startTime").replace(":",""));
+            arragement.setEndTime(jsonObject.getString("endTime").replace(":",""));
             int returnint =arragementMapper.updateByExampleSelective(arragement,courseExample);
             if(returnint>0){
                 returnJson.put("arragement",arragement);
@@ -128,9 +134,14 @@ public class Course_arragementServiceimpl implements Course_arragementService {
         JSONArray returnJsarr = new JSONArray();
         DataAndNumber dataAndNumber = new DataAndNumber();
         String keyWord = jsonObject.getString("content"); // 课程的名字
-        List<CourseArrangement> arrangements =new ArrayList<CourseArrangement>();
         List<CourseArrangement> arrangementList =  arragementMapper.selectByCourNameLike(keyWord);
         if (arrangementList.size() >0) {
+            for (int i = 0; i <arrangementList.size() ; i++) {
+                StringBuffer s = new StringBuffer(arrangementList.get(i).getStartTime());
+                s.insert(2,":");
+                String b = new String(s);
+                arrangementList.get(i).setStartTime(b);
+            }
             returnJson.put("Arrangements",arrangementList);
             returnJson.put("status","200");
             returnJson.put("msg","");
@@ -143,12 +154,33 @@ public class Course_arragementServiceimpl implements Course_arragementService {
     }
 
     @Override
-    public List<CourseArrangement> selectVacationCourse(String startTime, String endTime) {
+    public List<CourseArrangement> selectVacationCourse(String startTime, String endTime) throws ParseException {
+        OutputWeek outputWeek = new OutputWeek();
+        DataAndNumber dataAndNumber = new DataAndNumber();
+        String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+        List<CourseArrangement> arrans = new ArrayList<CourseArrangement>();
+        String startDate = dataAndNumber.stampToDate(startTime);
+        String endDate = dataAndNumber.stampToDate(endTime);
+        startDate = startDate.substring(11, 13);
+        String a = startDate.substring(14, 16);
+        endDate = endDate.substring(11, 13);
+        String b = endDate.substring(14, 16);
+        startDate = startTime + a;
+        endTime = endTime + b;
         CourseArrangementExample arrangementExample =new CourseArrangementExample();
         CourseArrangementExample.Criteria criteria = arrangementExample.createCriteria();
-        criteria.andCarmTimeBetween(startTime,endTime);
-        List<CourseArrangement> arrangements = arragementMapper.selectByExample(arrangementExample);
-        return arrangements;
+        JSONObject startJson = outputWeek.OutputWeek(startTime);
+        JSONObject endJson = outputWeek.OutputWeek(endTime);
+        int m = startJson.getInt("int");
+        int n = endJson.getInt("int");
+            for (int i = n; i < m; i++) {
+                criteria.andCourseWeekEqualTo(weekDays[i]).andStartTimeGreaterThanOrEqualTo(startDate).andEndTimeLessThanOrEqualTo(endDate);
+                List<CourseArrangement> arrangements = arragementMapper.selectByExample(arrangementExample);
+                if (arrangements.size()>0){
+                        arrans.addAll(arrangements);
+                }
+            }
+        return arrans;
     }
 
     @Override
