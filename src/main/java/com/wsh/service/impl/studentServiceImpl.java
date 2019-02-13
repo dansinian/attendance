@@ -214,7 +214,6 @@ public class StudentServiceImpl implements StudentService {
             String teaName = teacher.getTeaName();
             String teaclass = teacher.getTeaClass();
             String teaDepart = teacher.getTeaDepartment();
-            teaclass.replaceAll("，",",");
             String teaClass[] = teaclass.split(",");
             if (teaClass.length>0) {
                 for (int k = 0; k < teaClass.length; k++) {
@@ -233,7 +232,7 @@ public class StudentServiceImpl implements StudentService {
                                     JSONArray stuarray = new JSONArray();
                                     StudentExample studentExample =new StudentExample();
                                     StudentExample.Criteria stucriteria= studentExample.createCriteria();
-                                    stucriteria.andStuClassEqualTo(courses.get(i).getCourseClass());
+                                    stucriteria.andStuClassEqualTo(teacherClass);
                                     List<Student> students = studentMapper.selectByExample(studentExample);
                                     if (students.size()>0){
                                         for (int l = 0; l < students.size(); l++) {
@@ -245,6 +244,7 @@ public class StudentServiceImpl implements StudentService {
                                         returnJson.put("student",stuarray);
                                         returnJson.put("msg","");
                                         returnJson.put("status","200");
+                                        return returnJson;
                                     }else {
                                         returnJson.put("student","");
                                         returnJson.put("msg","没有查到学生数据");
@@ -252,16 +252,8 @@ public class StudentServiceImpl implements StudentService {
                                     }
                                 }
                             }
-                        } else {
-                            returnJson.put("student","");
-                            returnJson.put("msg","没有查到课程安排信息");
-                            returnJson.put("status","500");
                         }
                     }
-                } else {
-                    returnJson.put("student","");
-                    returnJson.put("msg","没有查到课程信息");
-                    returnJson.put("status","500");
                 }
             }
         }else{
