@@ -56,12 +56,16 @@ public class Course_arragementServiceimpl implements Course_arragementService {
     @Override
     public JSONObject createArrangement(JSONObject jsonObject) throws ParseException {
         JSONObject returnJson = new JSONObject();
+        DataAndNumber dataAndNumber = new DataAndNumber();
         CourseArrangement arragement = new CourseArrangement();
         CourseArrangementExample arragementExample = new CourseArrangementExample();
         OutData outData = new OutData();
-        String carmIdID = outData.createData();
+        String carmId = outData.createData();
+        carmId = dataAndNumber.dateToStamp(carmId);
+        String startTime = jsonObject.getString("startTime").replace(":","");
+        String endTime = jsonObject.getString("endTime").replace(":","");
         CourseArrangementExample.Criteria criteria = arragementExample.createCriteria();
-        criteria.andCarmIdEqualTo(jsonObject.getString("carmTime")).andCourseIdEqualTo(jsonObject.getString("courseId"));
+        criteria.andStartTimeEqualTo(startTime).andCourseIdEqualTo(jsonObject.getString("courseId")).andEndTimeEqualTo(endTime);
         List<CourseArrangement> selectArrangements = arragementMapper.selectByExample(arragementExample);
         try {
             if (selectArrangements.size() > 0) {
@@ -69,12 +73,12 @@ public class Course_arragementServiceimpl implements Course_arragementService {
                 returnJson.put("status", "500");
                 returnJson.put("arrangement", selectArrangements.get(0));
             } else {
-                arragement.setCarmId(carmIdID);
+                arragement.setCarmId(carmId);
                 arragement.setCourseId(jsonObject.getString("courseId"));
                 arragement.setCourseName(jsonObject.getString("courseName"));
                 arragement.setCourseWeek(jsonObject.getString("courseWeek"));
-                arragement.setStartTime(jsonObject.getString("startTime").replace(":",""));
-                arragement.setEndTime(jsonObject.getString("endTime").replace(":",""));
+                arragement.setStartTime(startTime);
+                arragement.setEndTime(endTime);
                 int success = arragementMapper.insert(arragement);
                 if (success > 0) {
                     returnJson.put("arragement",arragement);
@@ -192,6 +196,12 @@ public class Course_arragementServiceimpl implements Course_arragementService {
         criteria.andIdIsNotNull();
         List<CourseArrangement> arrangements = arragementMapper.selectByExample(arrangementExample);
         if (arrangements.size()>0){
+            for (int i = 0; i <arrangements.size() ; i++) {
+                StringBuffer s = new StringBuffer(arrangements.get(i).getStartTime());
+                s.insert(2,":");
+                String b = new String(s);
+                arrangements.get(i).setStartTime(b);
+            }
             returnJson.put("Arrangements",arrangements);
             returnJson.put("msg","");
             returnJson.put("status","200");

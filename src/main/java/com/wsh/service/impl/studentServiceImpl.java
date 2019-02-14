@@ -203,7 +203,8 @@ public class StudentServiceImpl implements StudentService {
         OutputWeek outputWeek = new OutputWeek();
         Date date = new Date();
         String dateStr = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(date);
-        String weekday = outputWeek.OutputWeek(dateStr).getString("week");
+        String weekDate = dateStr.substring(0,10);
+        String weekday = outputWeek.OutputWeek(weekDate).getString("week");
         String reportTime = dateStr.substring(11, 13) + dateStr.substring(14, 16);
         TeacherExample teacherExample = new TeacherExample();
         TeacherExample.Criteria criteria = teacherExample.createCriteria();
