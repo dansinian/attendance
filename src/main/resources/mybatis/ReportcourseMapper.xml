@@ -3,8 +3,10 @@
 <mapper namespace="com.wsh.dao.ReportcourseMapper" >
   <resultMap id="BaseResultMap" type="com.wsh.entity.Reportcourse" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="report_time" property="reportTime" jdbcType="VARCHAR" />
     <result column="stu_id" property="stuId" jdbcType="VARCHAR" />
+    <result column="report_course" property="reportCourse" jdbcType="VARCHAR" />
+    <result column="report_week" property="reportWeek" jdbcType="VARCHAR" />
+    <result column="report_time" property="reportTime" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -65,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, report_time, stu_id
+    id, stu_id, report_course, report_week, report_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.ReportcourseExample" >
     select
@@ -98,10 +100,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.wsh.entity.Reportcourse" >
-    insert into reportcourse (id, report_time, stu_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{reportTime,jdbcType=VARCHAR}, #{stuId,jdbcType=VARCHAR}
-      )
+    insert into reportcourse (id, stu_id, report_course, 
+      report_week, report_time)
+    values (#{id,jdbcType=INTEGER}, #{stuId,jdbcType=VARCHAR}, #{reportCourse,jdbcType=VARCHAR}, 
+      #{reportWeek,jdbcType=VARCHAR}, #{reportTime,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wsh.entity.Reportcourse" >
     insert into reportcourse
@@ -109,22 +111,34 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="reportTime != null" >
-        report_time,
-      </if>
       <if test="stuId != null" >
         stu_id,
+      </if>
+      <if test="reportCourse != null" >
+        report_course,
+      </if>
+      <if test="reportWeek != null" >
+        report_week,
+      </if>
+      <if test="reportTime != null" >
+        report_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="reportTime != null" >
-        #{reportTime,jdbcType=VARCHAR},
-      </if>
       <if test="stuId != null" >
         #{stuId,jdbcType=VARCHAR},
+      </if>
+      <if test="reportCourse != null" >
+        #{reportCourse,jdbcType=VARCHAR},
+      </if>
+      <if test="reportWeek != null" >
+        #{reportWeek,jdbcType=VARCHAR},
+      </if>
+      <if test="reportTime != null" >
+        #{reportTime,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -140,11 +154,17 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.reportTime != null" >
-        report_time = #{record.reportTime,jdbcType=VARCHAR},
-      </if>
       <if test="record.stuId != null" >
         stu_id = #{record.stuId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reportCourse != null" >
+        report_course = #{record.reportCourse,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reportWeek != null" >
+        report_week = #{record.reportWeek,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reportTime != null" >
+        report_time = #{record.reportTime,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -154,8 +174,10 @@
   <update id="updateByExample" parameterType="map" >
     update reportcourse
     set id = #{record.id,jdbcType=INTEGER},
-      report_time = #{record.reportTime,jdbcType=VARCHAR},
-      stu_id = #{record.stuId,jdbcType=VARCHAR}
+      stu_id = #{record.stuId,jdbcType=VARCHAR},
+      report_course = #{record.reportCourse,jdbcType=VARCHAR},
+      report_week = #{record.reportWeek,jdbcType=VARCHAR},
+      report_time = #{record.reportTime,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -163,19 +185,27 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wsh.entity.Reportcourse" >
     update reportcourse
     <set >
-      <if test="reportTime != null" >
-        report_time = #{reportTime,jdbcType=VARCHAR},
-      </if>
       <if test="stuId != null" >
         stu_id = #{stuId,jdbcType=VARCHAR},
+      </if>
+      <if test="reportCourse != null" >
+        report_course = #{reportCourse,jdbcType=VARCHAR},
+      </if>
+      <if test="reportWeek != null" >
+        report_week = #{reportWeek,jdbcType=VARCHAR},
+      </if>
+      <if test="reportTime != null" >
+        report_time = #{reportTime,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wsh.entity.Reportcourse" >
     update reportcourse
-    set report_time = #{reportTime,jdbcType=VARCHAR},
-      stu_id = #{stuId,jdbcType=VARCHAR}
+    set stu_id = #{stuId,jdbcType=VARCHAR},
+      report_course = #{reportCourse,jdbcType=VARCHAR},
+      report_week = #{reportWeek,jdbcType=VARCHAR},
+      report_time = #{reportTime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

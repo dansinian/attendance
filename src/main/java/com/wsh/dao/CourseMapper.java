@@ -33,4 +33,6 @@ public interface CourseMapper {
     List<Course> selectByNameLike(String name);
 
     List<Course> selectByTeaAndClass(String teaName,String teacherClass);
+
+    Course selectCourseById(String courseId);
 }

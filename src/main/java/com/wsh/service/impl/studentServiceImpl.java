@@ -202,7 +202,7 @@ public class StudentServiceImpl implements StudentService {
         JSONObject returnJson = new JSONObject();
         OutputWeek outputWeek = new OutputWeek();
         Date date = new Date();
-        String dateStr = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(date);
+        String dateStr = OutData.createData();
         String weekDate = dateStr.substring(0,10);
         String weekday = outputWeek.OutputWeek(weekDate).getString("week");
         String reportTime = dateStr.substring(11, 13) + dateStr.substring(14, 16);
@@ -245,6 +245,7 @@ public class StudentServiceImpl implements StudentService {
                                         returnJson.put("student",stuarray);
                                         returnJson.put("msg","");
                                         returnJson.put("status","200");
+                                        returnJson.put("course",courses.get(i).getCourseId());
                                         return returnJson;
                                     }else {
                                         returnJson.put("student","");
@@ -272,14 +273,19 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public JSONObject report(JSONObject jsonObject) throws ParseException {
+        String stuID = jsonObject.getString("stuId");
+        String courseId = jsonObject.getString("courseId");
         DataAndNumber dataAndNumber = new DataAndNumber();
         JSONObject returnJson = new JSONObject();
-
-        String time = dataAndNumber.dateToStamp(OutData.createData());
-        String stuID = jsonObject.getString("stuId");
+        String time = OutData.createData();
+        String weekDate = time.substring(0,10);
+        weekDate = OutputWeek.OutputWeek(weekDate).getString("week");
+        String reportTime = time.substring(11, 13) + time.substring(14, 16);
         Reportcourse reportcourse = new Reportcourse();
         reportcourse.setStuId(stuID);
-        reportcourse.setReportTime(time);
+        reportcourse.setReportTime(reportTime);
+        reportcourse.setReportWeek(weekDate);
+        reportcourse.setReportCourse(courseId);
         int success = reportcourseMapper.insert(reportcourse);
         if (success>0){
             returnJson.put("msg","签到成功");
@@ -295,11 +301,13 @@ public class StudentServiceImpl implements StudentService {
     public JSONObject selectReportStudent(JSONObject jsonObject) throws ParseException {
         DataAndNumber dataAndNumber = new DataAndNumber();
         JSONObject returnJson = new JSONObject();
-        String startTime = dataAndNumber.dateToStamp(jsonObject.getString("startTime"));
-        String endTime = dataAndNumber.dateToStamp(jsonObject.getString("endTime"));
+        String week = jsonObject.getString("week");
+        String courseId = jsonObject.getString("courseId");
+        String startTime = jsonObject.getString("startTime").replace(":","");
+        String endTime = jsonObject.getString("endTime").replace(":","");
         ReportcourseExample reportcourseExample = new ReportcourseExample();
         ReportcourseExample.Criteria criteria = reportcourseExample.createCriteria();
-        criteria.andReportTimeBetween(startTime,endTime);
+        criteria.andReportCourseEqualTo(courseId).andReportWeekEqualTo(week).andReportTimeBetween(startTime,endTime);
         List<Reportcourse> reportcourses = reportcourseMapper.selectByExample(reportcourseExample);
         List<Student> students = new ArrayList<Student>();
         if (reportcourses.size()>0){
@@ -310,14 +318,14 @@ public class StudentServiceImpl implements StudentService {
                 stucriteria.andStuIdEqualTo(stuID);
                 List<Student> students1 = studentMapper.selectByExample(studentExample);
                 if (students1.size()>0){
-                    for (int j = 0; j < students1.size(); j++) {
-                        students.add(students1.get(j));
-                    }
+                        students.addAll(students1);
                 }
             }
-            returnJson.put("msg","");
-            returnJson.put("status","200");
-            returnJson.put("students",students);
+            if (students.size()>0){
+                returnJson.put("msg","");
+                returnJson.put("status","200");
+                returnJson.put("students",students);
+            }
         }else {
             returnJson.put("msg","没有签到信息");
             returnJson.put("status","500");

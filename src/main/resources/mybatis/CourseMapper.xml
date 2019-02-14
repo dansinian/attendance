@@ -97,6 +97,13 @@
     where
     course_major LIKE CONCAT(CONCAT('%', #{major}), '%');
   </select>
+  <select id="selectCourseById" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from course
+    where
+    course_ID = #{courseId};
+  </select>
+
   <select id="selectByTeaAndClass" resultMap="BaseResultMap" parameterType="String">
     select *
     from course

@@ -164,76 +164,6 @@ public class ReportcourseExample {
             return (Criteria) this;
         }
 
-        public Criteria andReportTimeIsNull() {
-            addCriterion("report_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeIsNotNull() {
-            addCriterion("report_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeEqualTo(String value) {
-            addCriterion("report_time =", value, "reportTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeNotEqualTo(String value) {
-            addCriterion("report_time <>", value, "reportTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeGreaterThan(String value) {
-            addCriterion("report_time >", value, "reportTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeGreaterThanOrEqualTo(String value) {
-            addCriterion("report_time >=", value, "reportTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeLessThan(String value) {
-            addCriterion("report_time <", value, "reportTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeLessThanOrEqualTo(String value) {
-            addCriterion("report_time <=", value, "reportTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeLike(String value) {
-            addCriterion("report_time like", value, "reportTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeNotLike(String value) {
-            addCriterion("report_time not like", value, "reportTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeIn(List<String> values) {
-            addCriterion("report_time in", values, "reportTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeNotIn(List<String> values) {
-            addCriterion("report_time not in", values, "reportTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeBetween(String value1, String value2) {
-            addCriterion("report_time between", value1, value2, "reportTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andReportTimeNotBetween(String value1, String value2) {
-            addCriterion("report_time not between", value1, value2, "reportTime");
-            return (Criteria) this;
-        }
-
         public Criteria andStuIdIsNull() {
             addCriterion("stu_id is null");
             return (Criteria) this;
@@ -301,6 +231,216 @@ public class ReportcourseExample {
 
         public Criteria andStuIdNotBetween(String value1, String value2) {
             addCriterion("stu_id not between", value1, value2, "stuId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseIsNull() {
+            addCriterion("report_course is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseIsNotNull() {
+            addCriterion("report_course is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseEqualTo(String value) {
+            addCriterion("report_course =", value, "reportCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseNotEqualTo(String value) {
+            addCriterion("report_course <>", value, "reportCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseGreaterThan(String value) {
+            addCriterion("report_course >", value, "reportCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseGreaterThanOrEqualTo(String value) {
+            addCriterion("report_course >=", value, "reportCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseLessThan(String value) {
+            addCriterion("report_course <", value, "reportCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseLessThanOrEqualTo(String value) {
+            addCriterion("report_course <=", value, "reportCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseLike(String value) {
+            addCriterion("report_course like", value, "reportCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseNotLike(String value) {
+            addCriterion("report_course not like", value, "reportCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseIn(List<String> values) {
+            addCriterion("report_course in", values, "reportCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseNotIn(List<String> values) {
+            addCriterion("report_course not in", values, "reportCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseBetween(String value1, String value2) {
+            addCriterion("report_course between", value1, value2, "reportCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportCourseNotBetween(String value1, String value2) {
+            addCriterion("report_course not between", value1, value2, "reportCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekIsNull() {
+            addCriterion("report_week is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekIsNotNull() {
+            addCriterion("report_week is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekEqualTo(String value) {
+            addCriterion("report_week =", value, "reportWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekNotEqualTo(String value) {
+            addCriterion("report_week <>", value, "reportWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekGreaterThan(String value) {
+            addCriterion("report_week >", value, "reportWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekGreaterThanOrEqualTo(String value) {
+            addCriterion("report_week >=", value, "reportWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekLessThan(String value) {
+            addCriterion("report_week <", value, "reportWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekLessThanOrEqualTo(String value) {
+            addCriterion("report_week <=", value, "reportWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekLike(String value) {
+            addCriterion("report_week like", value, "reportWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekNotLike(String value) {
+            addCriterion("report_week not like", value, "reportWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekIn(List<String> values) {
+            addCriterion("report_week in", values, "reportWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekNotIn(List<String> values) {
+            addCriterion("report_week not in", values, "reportWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekBetween(String value1, String value2) {
+            addCriterion("report_week between", value1, value2, "reportWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportWeekNotBetween(String value1, String value2) {
+            addCriterion("report_week not between", value1, value2, "reportWeek");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeIsNull() {
+            addCriterion("report_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeIsNotNull() {
+            addCriterion("report_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeEqualTo(String value) {
+            addCriterion("report_time =", value, "reportTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeNotEqualTo(String value) {
+            addCriterion("report_time <>", value, "reportTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeGreaterThan(String value) {
+            addCriterion("report_time >", value, "reportTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("report_time >=", value, "reportTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeLessThan(String value) {
+            addCriterion("report_time <", value, "reportTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeLessThanOrEqualTo(String value) {
+            addCriterion("report_time <=", value, "reportTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeLike(String value) {
+            addCriterion("report_time like", value, "reportTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeNotLike(String value) {
+            addCriterion("report_time not like", value, "reportTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeIn(List<String> values) {
+            addCriterion("report_time in", values, "reportTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeNotIn(List<String> values) {
+            addCriterion("report_time not in", values, "reportTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeBetween(String value1, String value2) {
+            addCriterion("report_time between", value1, value2, "reportTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportTimeNotBetween(String value1, String value2) {
+            addCriterion("report_time not between", value1, value2, "reportTime");
             return (Criteria) this;
         }
     }
