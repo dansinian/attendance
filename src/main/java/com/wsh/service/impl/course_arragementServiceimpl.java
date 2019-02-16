@@ -142,9 +142,17 @@ public class Course_arragementServiceimpl implements Course_arragementService {
         if (arrangementList.size() >0) {
             for (int i = 0; i <arrangementList.size() ; i++) {
                 StringBuffer s = new StringBuffer(arrangementList.get(i).getStartTime());
-                s.insert(2,":");
-                String b = new String(s);
-                arrangementList.get(i).setStartTime(b);
+                if (!"".equals(s)){
+                    s.insert(2,":");
+                    String b = new String(s);
+                    arrangementList.get(i).setStartTime(b);
+                }
+                StringBuffer d = new StringBuffer(arrangementList.get(i).getEndTime());
+                if (!"".equals(d)){
+                    d.insert(2,":");
+                    String c = new String(d);
+                    arrangementList.get(i).setEndTime(c);
+                }
             }
             returnJson.put("Arrangements",arrangementList);
             returnJson.put("status","200");
@@ -198,9 +206,17 @@ public class Course_arragementServiceimpl implements Course_arragementService {
         if (arrangements.size()>0){
             for (int i = 0; i <arrangements.size() ; i++) {
                 StringBuffer s = new StringBuffer(arrangements.get(i).getStartTime());
-                s.insert(2,":");
-                String b = new String(s);
-                arrangements.get(i).setStartTime(b);
+                if (!"".equals(s)){
+                    s.insert(2,":");
+                    String b = new String(s);
+                    arrangements.get(i).setStartTime(b);
+                }
+                StringBuffer d = new StringBuffer(arrangements.get(i).getEndTime());
+                if (!"".equals(d)){
+                    d.insert(2,":");
+                    String c = new String(d);
+                    arrangements.get(i).setEndTime(c);
+                }
             }
             returnJson.put("Arrangements",arrangements);
             returnJson.put("msg","");
