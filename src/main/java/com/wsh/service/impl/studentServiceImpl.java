@@ -279,13 +279,15 @@ public class StudentServiceImpl implements StudentService {
         JSONObject returnJson = new JSONObject();
         String time = OutData.createData();
         String weekDate = time.substring(0,10);
-        weekDate = OutputWeek.OutputWeek(weekDate).getString("week");
+        String week = OutputWeek.OutputWeek(weekDate).getString("week");
         String reportTime = time.substring(11, 13) + time.substring(14, 16);
+        weekDate = weekDate.replaceAll("-","");
         Reportcourse reportcourse = new Reportcourse();
         reportcourse.setStuId(stuID);
         reportcourse.setReportTime(reportTime);
-        reportcourse.setReportWeek(weekDate);
+        reportcourse.setReportWeek(week);
         reportcourse.setReportCourse(courseId);
+        reportcourse.setReportDay(weekDate);
         int success = reportcourseMapper.insert(reportcourse);
         if (success>0){
             returnJson.put("msg","签到成功");
@@ -311,14 +313,50 @@ public class StudentServiceImpl implements StudentService {
         List<Reportcourse> reportcourses = reportcourseMapper.selectByExample(reportcourseExample);
         List<Student> students = new ArrayList<Student>();
         if (reportcourses.size()>0){
+            StudentExample studentExample =new StudentExample();
+            StudentExample.Criteria stucriteria= studentExample.createCriteria();
             for (int i = 0; i < reportcourses.size(); i++) {
                 String stuID = reportcourses.get(i).getStuId();
-                StudentExample studentExample =new StudentExample();
-                StudentExample.Criteria stucriteria= studentExample.createCriteria();
                 stucriteria.andStuIdEqualTo(stuID);
                 List<Student> students1 = studentMapper.selectByExample(studentExample);
                 if (students1.size()>0){
                         students.addAll(students1);
+                }
+            }
+            if (students.size()>0){
+                returnJson.put("msg","");
+                returnJson.put("status","200");
+                returnJson.put("students",students);
+            }
+        }else {
+            returnJson.put("msg","没有签到信息");
+            returnJson.put("status","500");
+            returnJson.put("students","");
+        }
+        return returnJson;
+    }
+
+    @Override
+    public JSONObject selectWeekReport(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        String StuClass = jsonObject.getString("stuClass");
+        String courseId = jsonObject.getString("courseId");
+        String startTime = jsonObject.getString("startTime").replace("-","");
+        String endTime = jsonObject.getString("endTime").replace("-","");
+        ReportcourseExample reportcourseExample = new ReportcourseExample();
+        ReportcourseExample.Criteria criteria = reportcourseExample.createCriteria();
+        criteria.andReportCourseEqualTo(courseId).andReportDayBetween(startTime,endTime);
+        List<Reportcourse> reportcourses = reportcourseMapper.selectByExample(reportcourseExample);
+        List<Student> students = new ArrayList<Student>();
+        if (reportcourses.size()>0){
+            StudentExample studentExample =new StudentExample();
+            StudentExample.Criteria stucriteria= studentExample.createCriteria();
+            for (int i = 0; i < reportcourses.size(); i++) {
+                String stuID = reportcourses.get(i).getStuId();
+                stucriteria.andStuIdEqualTo(stuID).andStuClassEqualTo(StuClass);
+                List<Student> students1 = studentMapper.selectByExample(studentExample);
+                if (students1.size()>0){
+                    students.addAll(students1);
                 }
             }
             if (students.size()>0){

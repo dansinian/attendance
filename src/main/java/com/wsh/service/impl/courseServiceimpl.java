@@ -167,6 +167,7 @@ public class CourseServiceimpl implements CourseService {
         if (teachers.size()>0){
             String TeaName  = teachers.get(0).getTeaName();
             ArrayList<String> courseName = new ArrayList<String>();
+            ArrayList<String> courseID = new ArrayList<String>();
             CourseExample courseExample =new CourseExample();
             CourseExample.Criteria criteria= courseExample.createCriteria();
             criteria.andTeaNameEqualTo(TeaName);
@@ -174,8 +175,10 @@ public class CourseServiceimpl implements CourseService {
             if (courses.size()>0){
                 for (int i = 0; i < courses.size(); i++) {
                     courseName.add(courses.get(i).getCourseName());
+                    courseID.add(courses.get(i).getCourseId());
                 }
                 returnJson.put("course",courseName);
+                returnJson.put("courseId",courseID);
             }
             JSONArray arraylevel1 = new JSONArray();
             for (int k = 0; k <teachers.size(); k++) {

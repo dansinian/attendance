@@ -443,6 +443,76 @@ public class ReportcourseExample {
             addCriterion("report_time not between", value1, value2, "reportTime");
             return (Criteria) this;
         }
+
+        public Criteria andReportDayIsNull() {
+            addCriterion("report_day is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayIsNotNull() {
+            addCriterion("report_day is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayEqualTo(String value) {
+            addCriterion("report_day =", value, "reportDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayNotEqualTo(String value) {
+            addCriterion("report_day <>", value, "reportDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayGreaterThan(String value) {
+            addCriterion("report_day >", value, "reportDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayGreaterThanOrEqualTo(String value) {
+            addCriterion("report_day >=", value, "reportDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayLessThan(String value) {
+            addCriterion("report_day <", value, "reportDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayLessThanOrEqualTo(String value) {
+            addCriterion("report_day <=", value, "reportDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayLike(String value) {
+            addCriterion("report_day like", value, "reportDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayNotLike(String value) {
+            addCriterion("report_day not like", value, "reportDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayIn(List<String> values) {
+            addCriterion("report_day in", values, "reportDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayNotIn(List<String> values) {
+            addCriterion("report_day not in", values, "reportDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayBetween(String value1, String value2) {
+            addCriterion("report_day between", value1, value2, "reportDay");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportDayNotBetween(String value1, String value2) {
+            addCriterion("report_day not between", value1, value2, "reportDay");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

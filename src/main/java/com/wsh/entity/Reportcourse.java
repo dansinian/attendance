@@ -11,6 +11,8 @@ public class Reportcourse {
 
     private String reportTime;
 
+    private String reportDay;
+
     public Integer getId() {
         return id;
     }
@@ -49,5 +51,13 @@ public class Reportcourse {
 
     public void setReportTime(String reportTime) {
         this.reportTime = reportTime == null ? null : reportTime.trim();
+    }
+
+    public String getReportDay() {
+        return reportDay;
+    }
+
+    public void setReportDay(String reportDay) {
+        this.reportDay = reportDay == null ? null : reportDay.trim();
     }
 }

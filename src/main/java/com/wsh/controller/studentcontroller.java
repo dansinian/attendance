@@ -82,5 +82,12 @@ public class Studentcontroller {
         return studentService.selectReportStudent(jsonObject);
     }
 
+    @RequestMapping("/selectWeekReport")
+    @ResponseBody
+    public JSONObject selectWeekReport(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return studentService.selectWeekReport(jsonObject);
+    }
 
 }

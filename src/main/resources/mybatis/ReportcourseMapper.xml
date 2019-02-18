@@ -7,6 +7,7 @@
     <result column="report_course" property="reportCourse" jdbcType="VARCHAR" />
     <result column="report_week" property="reportWeek" jdbcType="VARCHAR" />
     <result column="report_time" property="reportTime" jdbcType="VARCHAR" />
+    <result column="report_day" property="reportDay" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, stu_id, report_course, report_week, report_time
+    id, stu_id, report_course, report_week, report_time, report_day
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.ReportcourseExample" >
     select
@@ -101,9 +102,11 @@
   </delete>
   <insert id="insert" parameterType="com.wsh.entity.Reportcourse" >
     insert into reportcourse (id, stu_id, report_course, 
-      report_week, report_time)
+      report_week, report_time, report_day
+      )
     values (#{id,jdbcType=INTEGER}, #{stuId,jdbcType=VARCHAR}, #{reportCourse,jdbcType=VARCHAR}, 
-      #{reportWeek,jdbcType=VARCHAR}, #{reportTime,jdbcType=VARCHAR})
+      #{reportWeek,jdbcType=VARCHAR}, #{reportTime,jdbcType=VARCHAR}, #{reportDay,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wsh.entity.Reportcourse" >
     insert into reportcourse
@@ -123,6 +126,9 @@
       <if test="reportTime != null" >
         report_time,
       </if>
+      <if test="reportDay != null" >
+        report_day,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -139,6 +145,9 @@
       </if>
       <if test="reportTime != null" >
         #{reportTime,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDay != null" >
+        #{reportDay,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -166,6 +175,9 @@
       <if test="record.reportTime != null" >
         report_time = #{record.reportTime,jdbcType=VARCHAR},
       </if>
+      <if test="record.reportDay != null" >
+        report_day = #{record.reportDay,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -177,7 +189,8 @@
       stu_id = #{record.stuId,jdbcType=VARCHAR},
       report_course = #{record.reportCourse,jdbcType=VARCHAR},
       report_week = #{record.reportWeek,jdbcType=VARCHAR},
-      report_time = #{record.reportTime,jdbcType=VARCHAR}
+      report_time = #{record.reportTime,jdbcType=VARCHAR},
+      report_day = #{record.reportDay,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -197,6 +210,9 @@
       <if test="reportTime != null" >
         report_time = #{reportTime,jdbcType=VARCHAR},
       </if>
+      <if test="reportDay != null" >
+        report_day = #{reportDay,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -205,7 +221,8 @@
     set stu_id = #{stuId,jdbcType=VARCHAR},
       report_course = #{reportCourse,jdbcType=VARCHAR},
       report_week = #{reportWeek,jdbcType=VARCHAR},
-      report_time = #{reportTime,jdbcType=VARCHAR}
+      report_time = #{reportTime,jdbcType=VARCHAR},
+      report_day = #{reportDay,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
