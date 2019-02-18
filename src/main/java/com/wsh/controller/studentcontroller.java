@@ -61,7 +61,7 @@ public class Studentcontroller {
 
     @RequestMapping("/selectStudentByTeacher")
     @ResponseBody
-    public JSONObject selectStudentByTeacher(HttpServletRequest request, HttpServletResponse response){
+    public JSONObject selectStudentByTeacher(HttpServletRequest request, HttpServletResponse response) throws ParseException{
         String jsonData =request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
         return studentService.selectByTeacher(jsonObject);
