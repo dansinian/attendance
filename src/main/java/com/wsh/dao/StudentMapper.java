@@ -33,4 +33,6 @@ public interface StudentMapper {
     List<Student> selectByClassLike(String Stuclass);
 
     List<Student> selectByStuIdLike(String StuId);
+
+    Student selectstuBystuId(String stuID,String stuClass);
 }

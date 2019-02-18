@@ -347,16 +347,28 @@ public class StudentServiceImpl implements StudentService {
         ReportcourseExample.Criteria criteria = reportcourseExample.createCriteria();
         criteria.andReportCourseEqualTo(courseId).andReportDayBetween(startTime,endTime);
         List<Reportcourse> reportcourses = reportcourseMapper.selectByExample(reportcourseExample);
-        List<Student> students = new ArrayList<Student>();
+        JSONArray students = new JSONArray();
         if (reportcourses.size()>0){
-            StudentExample studentExample =new StudentExample();
-            StudentExample.Criteria stucriteria= studentExample.createCriteria();
             for (int i = 0; i < reportcourses.size(); i++) {
                 String stuID = reportcourses.get(i).getStuId();
-                stucriteria.andStuIdEqualTo(stuID).andStuClassEqualTo(StuClass);
-                List<Student> students1 = studentMapper.selectByExample(studentExample);
-                if (students1.size()>0){
-                    students.addAll(students1);
+                Student students1 = studentMapper.selectstuBystuId(stuID,StuClass);
+                if (students1!=null){
+                    JSONObject stuJson = new JSONObject();
+                    stuJson.put("stuId",stuID);
+                    stuJson.put("stuName",students1.getStuName());
+                    stuJson.put("stuClass",students1.getStuClass());
+                    String reportDay = reportcourses.get(i).getReportDay();
+                    String reportTime = reportcourses.get(i).getReportTime();
+                    StringBuffer stuDay = new StringBuffer(reportDay);
+                    StringBuffer stuTime = new StringBuffer(reportTime);
+                    stuTime.insert(2,":");
+                    stuDay.insert(4,"-");
+                    stuDay.insert(7,"-");
+                    String studay = new String(stuDay);
+                    String stutime = new String(stuTime);
+                    stuJson.put("reportDay",studay);
+                    stuJson.put("reportTime",stutime);
+                    students.add(stuJson);
                 }
             }
             if (students.size()>0){
