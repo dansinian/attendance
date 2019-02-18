@@ -313,10 +313,10 @@ public class StudentServiceImpl implements StudentService {
         List<Reportcourse> reportcourses = reportcourseMapper.selectByExample(reportcourseExample);
         List<Student> students = new ArrayList<Student>();
         if (reportcourses.size()>0){
-            StudentExample studentExample =new StudentExample();
-            StudentExample.Criteria stucriteria= studentExample.createCriteria();
             for (int i = 0; i < reportcourses.size(); i++) {
                 String stuID = reportcourses.get(i).getStuId();
+                StudentExample studentExample =new StudentExample();
+                StudentExample.Criteria stucriteria= studentExample.createCriteria();
                 stucriteria.andStuIdEqualTo(stuID);
                 List<Student> students1 = studentMapper.selectByExample(studentExample);
                 if (students1.size()>0){
