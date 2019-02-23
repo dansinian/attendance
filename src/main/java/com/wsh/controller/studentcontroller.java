@@ -85,9 +85,18 @@ public class Studentcontroller {
     @RequestMapping("/selectWeekReport")
     @ResponseBody
     public JSONObject selectWeekReport(HttpServletRequest request){
-        String jsonData = request.getParameter("data");
+        String jsonData = "{\"stuClass\":\"Èí¼þÈý°à\",\"courseId\":\"20190211203657596\",\"startTime\":\"2019-02-11\",\"endTime\":\"2019-02-15\"}"/*request.getParameter("data")*/;
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
         return studentService.selectWeekReport(jsonObject);
+    }
+
+    @RequestMapping("/selectMyReport")
+    @ResponseBody
+    public JSONObject selectMyReport(HttpServletRequest request){
+        String jsonData = "{\"stuId\":\"2511150406\",\"startTime\":\"2019-02-11\",\"endTime\":\"2019-02-15\"}";
+        /*request.getParameter("data");*/
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return studentService.selectMyReport(jsonObject);
     }
 
 }

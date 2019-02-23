@@ -18,4 +18,6 @@ public interface StudentService {
     JSONObject selectReportStudent(JSONObject jsonObject) throws ParseException;
 
     JSONObject selectWeekReport(JSONObject jsonObject);
+
+    JSONObject selectMyReport(JSONObject jsonObject);
 }

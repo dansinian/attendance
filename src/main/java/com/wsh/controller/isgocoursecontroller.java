@@ -32,11 +32,11 @@ public class Isgocoursecontroller {
 
     @RequestMapping("/creategocourse")
     @ResponseBody
-    public String createIsgocourse(HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public JSONObject createIsgocourse(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
         JSONObject returnJson = gocourseService.createGocourse(jsonObject);
-        return returnJson.toString();
+        return returnJson;
     }
 
     @RequestMapping("/updategocourse")
@@ -50,7 +50,7 @@ public class Isgocoursecontroller {
 
     @RequestMapping("/selectgocourse")
     @ResponseBody
-    public String selectIsgocourse(HttpServletRequest request, HttpServletResponse response){
+    public JSONObject selectIsgocourse(HttpServletRequest request, HttpServletResponse response){
         JSONObject returnJson = new JSONObject();
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
@@ -64,7 +64,15 @@ public class Isgocoursecontroller {
         returnJson.put("status","500");
         returnJson.put("msg","没有查到旷课信息");
         }
-        return returnJson.toString();
+        return returnJson;
+    }
+
+    @RequestMapping("/createAllStudent")
+    @ResponseBody
+    public JSONObject createAllStudent(HttpServletRequest request, HttpServletResponse response)throws Exception{
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return gocourseService.createAllStudent(jsonObject);
     }
 
 }

@@ -11,4 +11,6 @@ public interface GocourseService {
     JSONObject createGocourse(JSONObject jsonObject);
     JSONObject updateGocourse(JSONObject jsonObject);
     List<Isgocourse> selectGocourse(JSONObject jsonObject);
+
+    JSONObject createAllStudent(JSONObject jsonObject);
 }

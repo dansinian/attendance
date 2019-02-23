@@ -1,10 +1,7 @@
 package com.wsh.service.impl;
 
 
-import com.wsh.dao.CourseArrangementMapper;
-import com.wsh.dao.CourseMapper;
-import com.wsh.dao.TeacherMapper;
-import com.wsh.dao.VacationMapper;
+import com.wsh.dao.*;
 import com.wsh.entity.*;
 import com.wsh.service.Course_arragementService;
 import com.wsh.service.GocourseService;
@@ -39,6 +36,8 @@ public class LeaveServiceimpl implements LeaveService {
     private CourseMapper courseMapper;
     @Autowired
     private GocourseService gocourseService;
+    @Autowired
+    private StudentMapper studentMapper;
 
     @Override
     public JSONObject deleteLeave(JSONObject jsonObject) {
@@ -171,14 +170,15 @@ public class LeaveServiceimpl implements LeaveService {
                                     criteria1.andCourseIdEqualTo(vacation2.getCourseId());
                                     List<Course> courses = courseMapper.selectByExample(courseExample);
                                     if (courses.size()>0){
+                                        Student student = studentMapper.selectstuBystuId(jsonObject.getString("StuId"));
                                         String time = vacation2.getCourseWeek() + vacation2.getStartTime() +vacation2.getEndTime();
                                         String TeaName = courses.get(0).getTeaName();
-                                        String courseId = vacation2.getCarmId();
                                         IsGoCourse.put("courseID",vacation2.getCourseId());
                                         IsGoCourse.put("stuId",jsonObject.getString("StuId"));
                                         IsGoCourse.put("courseTeacher",TeaName);
                                         IsGoCourse.put("isTruancy","0");
                                         IsGoCourse.put("courseTime",time);
+                                        IsGoCourse.put("stuClass",student.getStuClass());
                                         JSONObject GoCourse = gocourseService.createGocourse(IsGoCourse);
                                     }
                                 }

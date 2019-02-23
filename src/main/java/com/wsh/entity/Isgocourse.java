@@ -13,6 +13,8 @@ public class Isgocourse {
 
     private String courseTime;
 
+    private String stuClass;
+
     public Integer getId() {
         return id;
     }
@@ -59,5 +61,13 @@ public class Isgocourse {
 
     public void setCourseTime(String courseTime) {
         this.courseTime = courseTime == null ? null : courseTime.trim();
+    }
+
+    public String getStuClass() {
+        return stuClass;
+    }
+
+    public void setStuClass(String stuClass) {
+        this.stuClass = stuClass == null ? null : stuClass.trim();
     }
 }

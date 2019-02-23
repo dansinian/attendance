@@ -341,17 +341,50 @@ public class StudentServiceImpl implements StudentService {
         JSONObject returnJson = new JSONObject();
         String StuClass = jsonObject.getString("stuClass");
         String courseId = jsonObject.getString("courseId");
-        String startTime = jsonObject.getString("startTime").replace("-","");
-        String endTime = jsonObject.getString("endTime").replace("-","");
+        String startTime = jsonObject.getString("startTime");
+        String endTime = jsonObject.getString("endTime");
+
+        String courseStarTime = startTime + " " + "00:00:00";
+        String courseEndTime = endTime + " " + "00:00:00";
+        try {
+            courseStarTime = DataAndNumber.dateToStamp(courseStarTime);
+            courseEndTime = DataAndNumber.dateToStamp(courseEndTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        startTime = startTime.replace("-","");
+        endTime = endTime.replace("-","");
         ReportcourseExample reportcourseExample = new ReportcourseExample();
         ReportcourseExample.Criteria criteria = reportcourseExample.createCriteria();
         criteria.andReportCourseEqualTo(courseId).andReportDayBetween(startTime,endTime);
         List<Reportcourse> reportcourses = reportcourseMapper.selectByExample(reportcourseExample);
+        IsgocourseExample gocourseExample = new IsgocourseExample();
+        IsgocourseExample.Criteria goCriteria = gocourseExample.createCriteria();
+        goCriteria.andStuClassEqualTo(StuClass).andCourseTimeBetween(courseStarTime,courseEndTime);
+        List<Isgocourse> goucourses = gocourseMapper.selectByExample(gocourseExample);
         JSONArray students = new JSONArray();
+        if (goucourses.size()>0){
+            for (int i = 0; i < goucourses.size(); i++) {
+                String stuID = goucourses.get(i).getStuId();
+                Student students1 = studentMapper.selectstuBystuId(stuID);
+                if (students1!=null){
+                    JSONObject stuJson = new JSONObject();
+                    String leaveDate =  DataAndNumber.stampToDate(goucourses.get(i).getCourseTime());
+
+                    stuJson.put("stuId",stuID);
+                    stuJson.put("stuName",students1.getStuName());
+                    stuJson.put("stuClass",students1.getStuClass());
+                    stuJson.put("isTruancy",goucourses.get(i).getIsTruancy());
+                    stuJson.put("truancyDay",leaveDate.substring(0,10));
+                    stuJson.put("truancyTime",leaveDate.substring(11,16));
+                    students.add(stuJson);
+                }
+            }
+        }
         if (reportcourses.size()>0){
             for (int i = 0; i < reportcourses.size(); i++) {
                 String stuID = reportcourses.get(i).getStuId();
-                Student students1 = studentMapper.selectstuBystuId(stuID,StuClass);
+                Student students1 = studentMapper.selectstuBystuId(stuID);
                 if (students1!=null){
                     JSONObject stuJson = new JSONObject();
                     stuJson.put("stuId",stuID);
@@ -384,4 +417,84 @@ public class StudentServiceImpl implements StudentService {
         return returnJson;
     }
 
+    @Override
+    public JSONObject selectMyReport(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        String stuId = jsonObject.getString("stuId");
+        String startTime = jsonObject.getString("startTime");
+        String endTime = jsonObject.getString("endTime");
+        String courseStarTime = startTime + " " + "00:00:00";
+        String courseEndTime = endTime + " " + "00:00:00";
+        try {
+            courseStarTime = DataAndNumber.dateToStamp(courseStarTime);
+            courseEndTime = DataAndNumber.dateToStamp(courseEndTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        startTime = startTime.replace("-", "");
+        endTime = endTime.replace("-", "");
+        ReportcourseExample reportcourseExample = new ReportcourseExample();
+        ReportcourseExample.Criteria criteria = reportcourseExample.createCriteria();
+        criteria.andStuIdEqualTo(stuId).andReportDayBetween(startTime, endTime);
+        List<Reportcourse> reportcourses = reportcourseMapper.selectByExample(reportcourseExample);
+
+        IsgocourseExample gocourseExample = new IsgocourseExample();
+        IsgocourseExample.Criteria goCriteria = gocourseExample.createCriteria();
+        goCriteria.andStuIdEqualTo(stuId).andCourseTimeBetween(courseStarTime, courseEndTime);
+        List<Isgocourse> goucourses = gocourseMapper.selectByExample(gocourseExample);
+        JSONArray stuJsarray = new JSONArray();
+        if (reportcourses.size() > 0) {
+            for (int i = 0; i < reportcourses.size(); i++) {
+                String courseID = reportcourses.get(i).getReportCourse();
+                Course course = courseMapper.selectCourseById(courseID);
+                JSONObject courseJson = new JSONObject();
+                String reportDay = reportcourses.get(i).getReportDay();
+                String reportTime = reportcourses.get(i).getReportTime();
+                StringBuffer stuDay = new StringBuffer(reportDay);
+                StringBuffer stuTime = new StringBuffer(reportTime);
+                stuTime.insert(2, ":");
+                stuDay.insert(4, "-");
+                stuDay.insert(7, "-");
+                String studay = new String(stuDay);
+                String stutime = new String(stuTime);
+                courseJson.put("reportCourse", course.getCourseName());
+                courseJson.put("reportDay", studay);
+                courseJson.put("reportTime", stutime);
+                courseJson.put("reportStatus", "2"); // 0旷课 1请假 2签到
+                stuJsarray.add(courseJson);
+            }
+        }
+        if (goucourses.size() > 0) {
+            for (int i = 0; i < goucourses.size(); i++) {
+                String courseID = goucourses.get(i).getCourseId();
+                String leaveDate = DataAndNumber.stampToDate(goucourses.get(i).getCourseTime());
+                Course course = courseMapper.selectCourseById(courseID);
+                JSONObject courseJson = new JSONObject();
+                String reportDay = reportcourses.get(i).getReportDay();
+                String reportTime = reportcourses.get(i).getReportTime();
+                StringBuffer stuDay = new StringBuffer(reportDay);
+                StringBuffer stuTime = new StringBuffer(reportTime);
+                stuTime.insert(2, ":");
+                stuDay.insert(4, "-");
+                stuDay.insert(7, "-");
+                String studay = new String(stuDay);
+                String stutime = new String(stuTime);
+                courseJson.put("truancyCourse", course.getCourseName());
+                courseJson.put("truancyDay", leaveDate.substring(0, 10));
+                courseJson.put("truancyTime", leaveDate.substring(11, 16));
+                courseJson.put("reportStatus", goucourses.get(i).getIsTruancy()); // 0旷课 1请假 2签到
+                stuJsarray.add(courseJson);
+            }
+        }
+        if (stuJsarray.size() > 0) {
+            returnJson.put("msg", "");
+            returnJson.put("status", "200");
+            returnJson.put("students", stuJsarray);
+        } else {
+            returnJson.put("msg", "没有查到信息");
+            returnJson.put("status", "500");
+            returnJson.put("students", "");
+        }
+        return returnJson;
+    }
 }

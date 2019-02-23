@@ -2,12 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wsh.dao.IsgocourseMapper" >
   <resultMap id="BaseResultMap" type="com.wsh.entity.Isgocourse" >
-    <result column="id" property="id" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="INTEGER" />
     <result column="course_id" property="courseId" jdbcType="VARCHAR" />
     <result column="stu_id" property="stuId" jdbcType="VARCHAR" />
     <result column="course_teacher" property="courseTeacher" jdbcType="VARCHAR" />
     <result column="is_truancy" property="isTruancy" jdbcType="VARCHAR" />
     <result column="course_time" property="courseTime" jdbcType="VARCHAR" />
+    <result column="stu_class" property="stuClass" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, course_id, stu_id, course_teacher, is_truancy, course_time
+    id, course_id, stu_id, course_teacher, is_truancy, course_time, stu_class
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.IsgocourseExample" >
     select
@@ -84,6 +85,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from isgocourse
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from isgocourse
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="com.wsh.entity.IsgocourseExample" >
     delete from isgocourse
     <if test="_parameter != null" >
@@ -92,11 +103,11 @@
   </delete>
   <insert id="insert" parameterType="com.wsh.entity.Isgocourse" >
     insert into isgocourse (id, course_id, stu_id, 
-      course_teacher, is_truancy, course_time
-      )
+      course_teacher, is_truancy, course_time, 
+      stu_class)
     values (#{id,jdbcType=INTEGER}, #{courseId,jdbcType=VARCHAR}, #{stuId,jdbcType=VARCHAR}, 
-      #{courseTeacher,jdbcType=VARCHAR}, #{isTruancy,jdbcType=VARCHAR}, #{courseTime,jdbcType=VARCHAR}
-      )
+      #{courseTeacher,jdbcType=VARCHAR}, #{isTruancy,jdbcType=VARCHAR}, #{courseTime,jdbcType=VARCHAR}, 
+      #{stuClass,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wsh.entity.Isgocourse" >
     insert into isgocourse
@@ -119,6 +130,9 @@
       <if test="courseTime != null" >
         course_time,
       </if>
+      <if test="stuClass != null" >
+        stu_class,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -138,6 +152,9 @@
       </if>
       <if test="courseTime != null" >
         #{courseTime,jdbcType=VARCHAR},
+      </if>
+      <if test="stuClass != null" >
+        #{stuClass,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -168,6 +185,9 @@
       <if test="record.courseTime != null" >
         course_time = #{record.courseTime,jdbcType=VARCHAR},
       </if>
+      <if test="record.stuClass != null" >
+        stu_class = #{record.stuClass,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -180,9 +200,44 @@
       stu_id = #{record.stuId,jdbcType=VARCHAR},
       course_teacher = #{record.courseTeacher,jdbcType=VARCHAR},
       is_truancy = #{record.isTruancy,jdbcType=VARCHAR},
-      course_time = #{record.courseTime,jdbcType=VARCHAR}
+      course_time = #{record.courseTime,jdbcType=VARCHAR},
+      stu_class = #{record.stuClass,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wsh.entity.Isgocourse" >
+    update isgocourse
+    <set >
+      <if test="courseId != null" >
+        course_id = #{courseId,jdbcType=VARCHAR},
+      </if>
+      <if test="stuId != null" >
+        stu_id = #{stuId,jdbcType=VARCHAR},
+      </if>
+      <if test="courseTeacher != null" >
+        course_teacher = #{courseTeacher,jdbcType=VARCHAR},
+      </if>
+      <if test="isTruancy != null" >
+        is_truancy = #{isTruancy,jdbcType=VARCHAR},
+      </if>
+      <if test="courseTime != null" >
+        course_time = #{courseTime,jdbcType=VARCHAR},
+      </if>
+      <if test="stuClass != null" >
+        stu_class = #{stuClass,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wsh.entity.Isgocourse" >
+    update isgocourse
+    set course_id = #{courseId,jdbcType=VARCHAR},
+      stu_id = #{stuId,jdbcType=VARCHAR},
+      course_teacher = #{courseTeacher,jdbcType=VARCHAR},
+      is_truancy = #{isTruancy,jdbcType=VARCHAR},
+      course_time = #{courseTime,jdbcType=VARCHAR},
+      stu_class = #{stuClass,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

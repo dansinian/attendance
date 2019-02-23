@@ -232,7 +232,7 @@
   <select id="selectstuBystuId" parameterType="String" resultMap="BaseResultMap">
     select *
     from student
-    where stu_ID = #{0} and stu_class = #{1}
+    where stu_ID = #{stuID}
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
     update student
