@@ -10,7 +10,7 @@ public interface TeacherMapper {
 
     int deleteByExample(TeacherExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String teaId);
 
     int insert(Teacher record);
 
@@ -18,7 +18,7 @@ public interface TeacherMapper {
 
     List<Teacher> selectByExample(TeacherExample example);
 
-    Teacher selectByPrimaryKey(Integer id);
+    Teacher selectByPrimaryKey(String teaId);
 
     int updateByExampleSelective(@Param("record") Teacher record, @Param("example") TeacherExample example);
 

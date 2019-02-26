@@ -13,6 +13,8 @@ public class Question {
 
     private Integer replyCount;
 
+    private String queCourse;
+
     public Integer getQueId() {
         return queId;
     }
@@ -59,5 +61,13 @@ public class Question {
 
     public void setReplyCount(Integer replyCount) {
         this.replyCount = replyCount;
+    }
+
+    public String getQueCourse() {
+        return queCourse;
+    }
+
+    public void setQueCourse(String queCourse) {
+        this.queCourse = queCourse == null ? null : queCourse.trim();
     }
 }

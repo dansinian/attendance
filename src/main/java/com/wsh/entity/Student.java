@@ -1,11 +1,9 @@
 package com.wsh.entity;
 
 public class Student {
-    private Integer id;
+    private String stuId;
 
     private String stuName;
-
-    private String stuId;
 
     private String stuGrade;
 
@@ -23,12 +21,12 @@ public class Student {
 
     private String stuHeadImg;
 
-    public Integer getId() {
-        return id;
+    public String getStuId() {
+        return stuId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setStuId(String stuId) {
+        this.stuId = stuId == null ? null : stuId.trim();
     }
 
     public String getStuName() {
@@ -37,14 +35,6 @@ public class Student {
 
     public void setStuName(String stuName) {
         this.stuName = stuName == null ? null : stuName.trim();
-    }
-
-    public String getStuId() {
-        return stuId;
-    }
-
-    public void setStuId(String stuId) {
-        this.stuId = stuId == null ? null : stuId.trim();
     }
 
     public String getStuGrade() {

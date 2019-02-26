@@ -1,8 +1,6 @@
 package com.wsh.entity;
 
 public class Teacher {
-    private Integer id;
-
     private String teaId;
 
     private String teaName;
@@ -20,14 +18,6 @@ public class Teacher {
     private String teaHeadImg;
 
     private String teaNickname;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getTeaId() {
         return teaId;

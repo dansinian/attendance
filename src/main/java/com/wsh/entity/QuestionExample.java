@@ -483,6 +483,76 @@ public class QuestionExample {
             addCriterion("reply_count not between", value1, value2, "replyCount");
             return (Criteria) this;
         }
+
+        public Criteria andQueCourseIsNull() {
+            addCriterion("que_course is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseIsNotNull() {
+            addCriterion("que_course is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseEqualTo(String value) {
+            addCriterion("que_course =", value, "queCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseNotEqualTo(String value) {
+            addCriterion("que_course <>", value, "queCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseGreaterThan(String value) {
+            addCriterion("que_course >", value, "queCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseGreaterThanOrEqualTo(String value) {
+            addCriterion("que_course >=", value, "queCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseLessThan(String value) {
+            addCriterion("que_course <", value, "queCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseLessThanOrEqualTo(String value) {
+            addCriterion("que_course <=", value, "queCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseLike(String value) {
+            addCriterion("que_course like", value, "queCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseNotLike(String value) {
+            addCriterion("que_course not like", value, "queCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseIn(List<String> values) {
+            addCriterion("que_course in", values, "queCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseNotIn(List<String> values) {
+            addCriterion("que_course not in", values, "queCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseBetween(String value1, String value2) {
+            addCriterion("que_course between", value1, value2, "queCourse");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueCourseNotBetween(String value1, String value2) {
+            addCriterion("que_course not between", value1, value2, "queCourse");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

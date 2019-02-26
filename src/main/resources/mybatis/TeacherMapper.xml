@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wsh.dao.TeacherMapper" >
   <resultMap id="BaseResultMap" type="com.wsh.entity.Teacher" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="tea_id" property="teaId" jdbcType="VARCHAR" />
+    <id column="tea_id" property="teaId" jdbcType="VARCHAR" />
     <result column="tea_name" property="teaName" jdbcType="VARCHAR" />
     <result column="tea_phone" property="teaPhone" jdbcType="VARCHAR" />
     <result column="tea_pass" property="teaPass" jdbcType="VARCHAR" />
@@ -72,8 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, tea_id, tea_name, tea_phone, tea_pass, tea_course, tea_class, tea_department, 
-    tea_head_img, tea_nickname
+    tea_id, tea_name, tea_phone, tea_pass, tea_course, tea_class, tea_department, tea_head_img, 
+    tea_nickname
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.TeacherExample" >
     select
@@ -89,15 +88,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from teacher
-    where id = #{id,jdbcType=INTEGER}
+    where tea_id = #{teaId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from teacher
-    where id = #{id,jdbcType=INTEGER}
+    where tea_id = #{teaId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.wsh.entity.TeacherExample" >
     delete from teacher
@@ -106,21 +105,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.wsh.entity.Teacher" >
-    insert into teacher (id, tea_id, tea_name, 
-      tea_phone, tea_pass, tea_course, 
-      tea_class, tea_department, tea_head_img, 
-      tea_nickname)
-    values (#{id,jdbcType=INTEGER}, #{teaId,jdbcType=VARCHAR}, #{teaName,jdbcType=VARCHAR}, 
-      #{teaPhone,jdbcType=VARCHAR}, #{teaPass,jdbcType=VARCHAR}, #{teaCourse,jdbcType=VARCHAR}, 
-      #{teaClass,jdbcType=VARCHAR}, #{teaDepartment,jdbcType=VARCHAR}, #{teaHeadImg,jdbcType=VARCHAR}, 
-      #{teaNickname,jdbcType=VARCHAR})
+    insert into teacher (tea_id, tea_name, tea_phone, 
+      tea_pass, tea_course, tea_class, 
+      tea_department, tea_head_img, tea_nickname
+      )
+    values (#{teaId,jdbcType=VARCHAR}, #{teaName,jdbcType=VARCHAR}, #{teaPhone,jdbcType=VARCHAR}, 
+      #{teaPass,jdbcType=VARCHAR}, #{teaCourse,jdbcType=VARCHAR}, #{teaClass,jdbcType=VARCHAR}, 
+      #{teaDepartment,jdbcType=VARCHAR}, #{teaHeadImg,jdbcType=VARCHAR}, #{teaNickname,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wsh.entity.Teacher" >
     insert into teacher
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
       <if test="teaId != null" >
         tea_id,
       </if>
@@ -150,9 +146,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="teaId != null" >
         #{teaId,jdbcType=VARCHAR},
       </if>
@@ -191,9 +184,6 @@
   <update id="updateByExampleSelective" parameterType="map" >
     update teacher
     <set >
-      <if test="record.id != null" >
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
       <if test="record.teaId != null" >
         tea_id = #{record.teaId,jdbcType=VARCHAR},
       </if>
@@ -228,8 +218,7 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update teacher
-    set id = #{record.id,jdbcType=INTEGER},
-      tea_id = #{record.teaId,jdbcType=VARCHAR},
+    set tea_id = #{record.teaId,jdbcType=VARCHAR},
       tea_name = #{record.teaName,jdbcType=VARCHAR},
       tea_phone = #{record.teaPhone,jdbcType=VARCHAR},
       tea_pass = #{record.teaPass,jdbcType=VARCHAR},
@@ -245,9 +234,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wsh.entity.Teacher" >
     update teacher
     <set >
-      <if test="teaId != null" >
-        tea_id = #{teaId,jdbcType=VARCHAR},
-      </if>
       <if test="teaName != null" >
         tea_name = #{teaName,jdbcType=VARCHAR},
       </if>
@@ -273,12 +259,11 @@
         tea_nickname = #{teaNickname,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where tea_id = #{teaId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wsh.entity.Teacher" >
     update teacher
-    set tea_id = #{teaId,jdbcType=VARCHAR},
-      tea_name = #{teaName,jdbcType=VARCHAR},
+    set tea_name = #{teaName,jdbcType=VARCHAR},
       tea_phone = #{teaPhone,jdbcType=VARCHAR},
       tea_pass = #{teaPass,jdbcType=VARCHAR},
       tea_course = #{teaCourse,jdbcType=VARCHAR},
@@ -286,6 +271,6 @@
       tea_department = #{teaDepartment,jdbcType=VARCHAR},
       tea_head_img = #{teaHeadImg,jdbcType=VARCHAR},
       tea_nickname = #{teaNickname,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where tea_id = #{teaId,jdbcType=VARCHAR}
   </update>
 </mapper>
