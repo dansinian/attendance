@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wsh.dao.QuestionMapper" >
+  <resultMap id="BaseResultMap" type="com.wsh.entity.Question" >
+    <id column="que_id" property="queId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="click_count" property="clickCount" jdbcType="INTEGER" />
+    <result column="praise_count" property="praiseCount" jdbcType="INTEGER" />
+    <result column="reply_count" property="replyCount" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.wsh.entity.QuestionWithBLOBs" extends="BaseResultMap" >
+    <result column="que_title" property="queTitle" jdbcType="LONGVARCHAR" />
+    <result column="que_summary" property="queSummary" jdbcType="LONGVARCHAR" />
+    <result column="que_detail" property="queDetail" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    que_id, user_id, create_time, click_count, praise_count, reply_count
+  </sql>
+  <sql id="Blob_Column_List" >
+    que_title, que_summary, que_detail
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.wsh.entity.QuestionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from question
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.QuestionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from question
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from question
+    where que_id = #{queId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from question
+    where que_id = #{queId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wsh.entity.QuestionExample" >
+    delete from question
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wsh.entity.QuestionWithBLOBs" >
+    insert into question (que_id, user_id, create_time, 
+      click_count, praise_count, reply_count, 
+      que_title, que_summary, que_detail
+      )
+    values (#{queId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{clickCount,jdbcType=INTEGER}, #{praiseCount,jdbcType=INTEGER}, #{replyCount,jdbcType=INTEGER}, 
+      #{queTitle,jdbcType=LONGVARCHAR}, #{queSummary,jdbcType=LONGVARCHAR}, #{queDetail,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wsh.entity.QuestionWithBLOBs" >
+    insert into question
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="queId != null" >
+        que_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="clickCount != null" >
+        click_count,
+      </if>
+      <if test="praiseCount != null" >
+        praise_count,
+      </if>
+      <if test="replyCount != null" >
+        reply_count,
+      </if>
+      <if test="queTitle != null" >
+        que_title,
+      </if>
+      <if test="queSummary != null" >
+        que_summary,
+      </if>
+      <if test="queDetail != null" >
+        que_detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="queId != null" >
+        #{queId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="clickCount != null" >
+        #{clickCount,jdbcType=INTEGER},
+      </if>
+      <if test="praiseCount != null" >
+        #{praiseCount,jdbcType=INTEGER},
+      </if>
+      <if test="replyCount != null" >
+        #{replyCount,jdbcType=INTEGER},
+      </if>
+      <if test="queTitle != null" >
+        #{queTitle,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="queSummary != null" >
+        #{queSummary,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="queDetail != null" >
+        #{queDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wsh.entity.QuestionExample" resultType="java.lang.Integer" >
+    select count(*) from question
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update question
+    <set >
+      <if test="record.queId != null" >
+        que_id = #{record.queId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clickCount != null" >
+        click_count = #{record.clickCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.praiseCount != null" >
+        praise_count = #{record.praiseCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.replyCount != null" >
+        reply_count = #{record.replyCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.queTitle != null" >
+        que_title = #{record.queTitle,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.queSummary != null" >
+        que_summary = #{record.queSummary,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.queDetail != null" >
+        que_detail = #{record.queDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update question
+    set que_id = #{record.queId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=VARCHAR},
+      click_count = #{record.clickCount,jdbcType=INTEGER},
+      praise_count = #{record.praiseCount,jdbcType=INTEGER},
+      reply_count = #{record.replyCount,jdbcType=INTEGER},
+      que_title = #{record.queTitle,jdbcType=LONGVARCHAR},
+      que_summary = #{record.queSummary,jdbcType=LONGVARCHAR},
+      que_detail = #{record.queDetail,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update question
+    set que_id = #{record.queId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=VARCHAR},
+      click_count = #{record.clickCount,jdbcType=INTEGER},
+      praise_count = #{record.praiseCount,jdbcType=INTEGER},
+      reply_count = #{record.replyCount,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wsh.entity.QuestionWithBLOBs" >
+    update question
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="clickCount != null" >
+        click_count = #{clickCount,jdbcType=INTEGER},
+      </if>
+      <if test="praiseCount != null" >
+        praise_count = #{praiseCount,jdbcType=INTEGER},
+      </if>
+      <if test="replyCount != null" >
+        reply_count = #{replyCount,jdbcType=INTEGER},
+      </if>
+      <if test="queTitle != null" >
+        que_title = #{queTitle,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="queSummary != null" >
+        que_summary = #{queSummary,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="queDetail != null" >
+        que_detail = #{queDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where que_id = #{queId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wsh.entity.QuestionWithBLOBs" >
+    update question
+    set user_id = #{userId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      click_count = #{clickCount,jdbcType=INTEGER},
+      praise_count = #{praiseCount,jdbcType=INTEGER},
+      reply_count = #{replyCount,jdbcType=INTEGER},
+      que_title = #{queTitle,jdbcType=LONGVARCHAR},
+      que_summary = #{queSummary,jdbcType=LONGVARCHAR},
+      que_detail = #{queDetail,jdbcType=LONGVARCHAR}
+    where que_id = #{queId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wsh.entity.Question" >
+    update question
+    set user_id = #{userId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      click_count = #{clickCount,jdbcType=INTEGER},
+      praise_count = #{praiseCount,jdbcType=INTEGER},
+      reply_count = #{replyCount,jdbcType=INTEGER}
+    where que_id = #{queId,jdbcType=INTEGER}
+  </update>
+</mapper>
