@@ -81,17 +81,17 @@
 	<!--Mybatis的 SqlSessionFactory工厂整合到Spring中 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<!-- 连接池 -->
-		<property name="dataSource" ref="druid"></property>
+		<property name="dataSource" ref="druid"/>
 		<!-- mapper注册 -->
 		<property name="mapperLocations">
 			<list>
-				<value>classpath:mybatis/*-mapper.xml</value>
+				<value>classpath:mybatis/*Mapper.xml</value>
 			</list>
 		</property>
 		<!-- 可选：别名 
 			 定义了实体的包，则在mapper文件中使用实体时，直接写类名即可
 		-->
-		<property name="typeAliasesPackage" value="com.wsh.entity"></property>
+		<property name="typeAliasesPackage" value="com.wsh.entity"/>
 	</bean>
 	<!-- 
 		MapperScannerConfigurer:构建DAO实现类，并将对象纳入工厂
@@ -105,7 +105,7 @@
 		<!-- DAO接口文件位置:找到了所有需要定制实现类的DAO接口 -->
 		<!-- 在value中可以有多个DAO的接口路径，用 ‘,’隔开  -->
 		<!-- <property name="basePackage" value="com.c72.dao,com.c73.dao"></property> -->
-		<property name="basePackage" value="com.wsh.dao"></property>
+		<property name="basePackage" value="com.wsh.dao"/>
 		<!-- dao对应的mapper文件      SqlSession  -->
 		<!-- <property name="sqlSessionFactory" ref="sqlSessionFactory"></property> -->
 		<!-- 如果工厂中只有一个SqlSessionFactory,则此设置可以省略 -->
@@ -114,7 +114,7 @@
 
 	<!-- 并不是真正的事务管理器，但是，其掌握着事务的管理逻辑 -->
 	<bean id="tx" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="druid"></property>
+		<property name="dataSource" ref="druid"/>
 	</bean>
 	<!-- 告知spring，哪些包中的类里有注解需要解析 扫描 -->
 	<!-- <context:component-scan base-package="com.c72,com.c73,a.b.c"></context:component-scan> -->
