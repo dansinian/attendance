@@ -42,7 +42,7 @@
                 </javaClientGenerator>
                 <!-- 指定数据库表 -->
                 <!-- enableCountByExample....false去掉Example文件  -->
-                <table tableName="question"></table>
+                <table tableName="teacher"></table>
 
         </context>
 </generatorConfiguration>
