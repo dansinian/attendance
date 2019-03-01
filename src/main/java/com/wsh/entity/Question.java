@@ -1,7 +1,13 @@
 package com.wsh.entity;
 
 public class Question {
-    private Integer queId;
+    private String queId;
+
+    private String queTitle;
+
+    private String queSummary;
+
+    private String queDetail;
 
     private String userId;
 
@@ -15,12 +21,36 @@ public class Question {
 
     private String queCourse;
 
-    public Integer getQueId() {
+    public String getQueId() {
         return queId;
     }
 
-    public void setQueId(Integer queId) {
-        this.queId = queId;
+    public void setQueId(String queId) {
+        this.queId = queId == null ? null : queId.trim();
+    }
+
+    public String getQueTitle() {
+        return queTitle;
+    }
+
+    public void setQueTitle(String queTitle) {
+        this.queTitle = queTitle == null ? null : queTitle.trim();
+    }
+
+    public String getQueSummary() {
+        return queSummary;
+    }
+
+    public void setQueSummary(String queSummary) {
+        this.queSummary = queSummary == null ? null : queSummary.trim();
+    }
+
+    public String getQueDetail() {
+        return queDetail;
+    }
+
+    public void setQueDetail(String queDetail) {
+        this.queDetail = queDetail == null ? null : queDetail.trim();
     }
 
     public String getUserId() {

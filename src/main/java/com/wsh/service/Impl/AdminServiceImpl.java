@@ -5,7 +5,6 @@ import com.wsh.dao.StudentMapper;
 import com.wsh.dao.TeacherMapper;
 import com.wsh.entity.*;
 import com.wsh.service.AdminService;
-import com.wsh.servlet.ConvertBeanTomap;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

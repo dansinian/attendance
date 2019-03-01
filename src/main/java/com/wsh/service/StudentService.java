@@ -1,8 +1,6 @@
 package com.wsh.service;
-
 import net.sf.json.JSONObject;
 
-import java.text.ParseException;
 
 public interface StudentService {
     JSONObject deleteStudent(JSONObject jsonObject);

@@ -19,42 +19,42 @@ public class Studentcontroller {
     private StudentService studentService;
 
     @RequestMapping("/deleteStudent")
-        @ResponseBody
-        public JSONObject deleteStudent(HttpServletRequest request, HttpServletResponse response){
+    @ResponseBody
+    public JSONObject deleteStudent(HttpServletRequest request){
+    String jsonData = request.getParameter("data");
+    JSONObject jsonObject = JSONObject.fromObject(jsonData);
+    return studentService.deleteStudent(jsonObject);
+    }
+
+    @RequestMapping("/createStudent")
+    @ResponseBody
+    public JSONObject createStudent(HttpServletRequest request){
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        return studentService.deleteStudent(jsonObject);
-        }
+        JSONObject returnJson = studentService.createStudent(jsonObject);
+        return returnJson;
+    }
 
-        @RequestMapping("/createStudent")
-        @ResponseBody
-        public JSONObject createStudent(HttpServletRequest request, HttpServletResponse response){
-            String jsonData = request.getParameter("data");
+    @RequestMapping("/updateStudent")
+    @ResponseBody
+    public JSONObject updateStudent(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        JSONObject returnJson = studentService.updateStudent(jsonObject);
+        return returnJson;
+    }
+
+    @RequestMapping("/selectStudent")
+    @ResponseBody
+    public JSONObject selectStudent(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        if (!"".equals(jsonData)){
             JSONObject jsonObject = JSONObject.fromObject(jsonData);
-            JSONObject returnJson = studentService.createStudent(jsonObject);
-            return returnJson;
+            return studentService.selectStudent(jsonObject);
+        } else {
+            return studentService.selectAllStudent();
         }
-
-        @RequestMapping("/updateStudent")
-        @ResponseBody
-        public JSONObject updateStudent(HttpServletRequest request, HttpServletResponse response){
-            String jsonData = request.getParameter("data");
-            JSONObject jsonObject = JSONObject.fromObject(jsonData);
-            JSONObject returnJson = studentService.updateStudent(jsonObject);
-            return returnJson;
-        }
-
-        @RequestMapping("/selectStudent")
-        @ResponseBody
-        public JSONObject selectStudent(HttpServletRequest request, HttpServletResponse response){
-            String jsonData = request.getParameter("data");
-            if (!"".equals(jsonData)){
-                JSONObject jsonObject = JSONObject.fromObject(jsonData);
-                return studentService.selectStudent(jsonObject);
-            } else {
-                return studentService.selectAllStudent();
-            }
-        }
+    }
 
 
 }

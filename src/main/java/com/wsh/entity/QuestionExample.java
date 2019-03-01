@@ -114,53 +114,273 @@ public class QuestionExample {
             return (Criteria) this;
         }
 
-        public Criteria andQueIdEqualTo(Integer value) {
+        public Criteria andQueIdEqualTo(String value) {
             addCriterion("que_id =", value, "queId");
             return (Criteria) this;
         }
 
-        public Criteria andQueIdNotEqualTo(Integer value) {
+        public Criteria andQueIdNotEqualTo(String value) {
             addCriterion("que_id <>", value, "queId");
             return (Criteria) this;
         }
 
-        public Criteria andQueIdGreaterThan(Integer value) {
+        public Criteria andQueIdGreaterThan(String value) {
             addCriterion("que_id >", value, "queId");
             return (Criteria) this;
         }
 
-        public Criteria andQueIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andQueIdGreaterThanOrEqualTo(String value) {
             addCriterion("que_id >=", value, "queId");
             return (Criteria) this;
         }
 
-        public Criteria andQueIdLessThan(Integer value) {
+        public Criteria andQueIdLessThan(String value) {
             addCriterion("que_id <", value, "queId");
             return (Criteria) this;
         }
 
-        public Criteria andQueIdLessThanOrEqualTo(Integer value) {
+        public Criteria andQueIdLessThanOrEqualTo(String value) {
             addCriterion("que_id <=", value, "queId");
             return (Criteria) this;
         }
 
-        public Criteria andQueIdIn(List<Integer> values) {
+        public Criteria andQueIdLike(String value) {
+            addCriterion("que_id like", value, "queId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueIdNotLike(String value) {
+            addCriterion("que_id not like", value, "queId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueIdIn(List<String> values) {
             addCriterion("que_id in", values, "queId");
             return (Criteria) this;
         }
 
-        public Criteria andQueIdNotIn(List<Integer> values) {
+        public Criteria andQueIdNotIn(List<String> values) {
             addCriterion("que_id not in", values, "queId");
             return (Criteria) this;
         }
 
-        public Criteria andQueIdBetween(Integer value1, Integer value2) {
+        public Criteria andQueIdBetween(String value1, String value2) {
             addCriterion("que_id between", value1, value2, "queId");
             return (Criteria) this;
         }
 
-        public Criteria andQueIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andQueIdNotBetween(String value1, String value2) {
             addCriterion("que_id not between", value1, value2, "queId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleIsNull() {
+            addCriterion("que_title is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleIsNotNull() {
+            addCriterion("que_title is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleEqualTo(String value) {
+            addCriterion("que_title =", value, "queTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleNotEqualTo(String value) {
+            addCriterion("que_title <>", value, "queTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleGreaterThan(String value) {
+            addCriterion("que_title >", value, "queTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleGreaterThanOrEqualTo(String value) {
+            addCriterion("que_title >=", value, "queTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleLessThan(String value) {
+            addCriterion("que_title <", value, "queTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleLessThanOrEqualTo(String value) {
+            addCriterion("que_title <=", value, "queTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleLike(String value) {
+            addCriterion("que_title like", value, "queTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleNotLike(String value) {
+            addCriterion("que_title not like", value, "queTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleIn(List<String> values) {
+            addCriterion("que_title in", values, "queTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleNotIn(List<String> values) {
+            addCriterion("que_title not in", values, "queTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleBetween(String value1, String value2) {
+            addCriterion("que_title between", value1, value2, "queTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueTitleNotBetween(String value1, String value2) {
+            addCriterion("que_title not between", value1, value2, "queTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryIsNull() {
+            addCriterion("que_summary is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryIsNotNull() {
+            addCriterion("que_summary is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryEqualTo(String value) {
+            addCriterion("que_summary =", value, "queSummary");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryNotEqualTo(String value) {
+            addCriterion("que_summary <>", value, "queSummary");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryGreaterThan(String value) {
+            addCriterion("que_summary >", value, "queSummary");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryGreaterThanOrEqualTo(String value) {
+            addCriterion("que_summary >=", value, "queSummary");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryLessThan(String value) {
+            addCriterion("que_summary <", value, "queSummary");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryLessThanOrEqualTo(String value) {
+            addCriterion("que_summary <=", value, "queSummary");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryLike(String value) {
+            addCriterion("que_summary like", value, "queSummary");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryNotLike(String value) {
+            addCriterion("que_summary not like", value, "queSummary");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryIn(List<String> values) {
+            addCriterion("que_summary in", values, "queSummary");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryNotIn(List<String> values) {
+            addCriterion("que_summary not in", values, "queSummary");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryBetween(String value1, String value2) {
+            addCriterion("que_summary between", value1, value2, "queSummary");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueSummaryNotBetween(String value1, String value2) {
+            addCriterion("que_summary not between", value1, value2, "queSummary");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailIsNull() {
+            addCriterion("que_detail is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailIsNotNull() {
+            addCriterion("que_detail is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailEqualTo(String value) {
+            addCriterion("que_detail =", value, "queDetail");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailNotEqualTo(String value) {
+            addCriterion("que_detail <>", value, "queDetail");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailGreaterThan(String value) {
+            addCriterion("que_detail >", value, "queDetail");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailGreaterThanOrEqualTo(String value) {
+            addCriterion("que_detail >=", value, "queDetail");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailLessThan(String value) {
+            addCriterion("que_detail <", value, "queDetail");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailLessThanOrEqualTo(String value) {
+            addCriterion("que_detail <=", value, "queDetail");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailLike(String value) {
+            addCriterion("que_detail like", value, "queDetail");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailNotLike(String value) {
+            addCriterion("que_detail not like", value, "queDetail");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailIn(List<String> values) {
+            addCriterion("que_detail in", values, "queDetail");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailNotIn(List<String> values) {
+            addCriterion("que_detail not in", values, "queDetail");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailBetween(String value1, String value2) {
+            addCriterion("que_detail between", value1, value2, "queDetail");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueDetailNotBetween(String value1, String value2) {
+            addCriterion("que_detail not between", value1, value2, "queDetail");
             return (Criteria) this;
         }
 

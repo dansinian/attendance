@@ -74,6 +74,18 @@
     tea_id, tea_name, tea_phone, tea_pass, tea_course, tea_class, tea_department, tea_head_img, 
     tea_nickname
   </sql>
+  <select id="selectTeaNameLike" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from teacher
+    where
+    tea_name LIKE CONCAT(CONCAT('%', #{teaName}), '%');
+  </select>
+  <select id="selectByDepLike" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from teacher
+    where
+    tea_department LIKE CONCAT(CONCAT('%', #{teaDep}), '%');
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.TeacherExample" >
     select
     <if test="distinct" >
