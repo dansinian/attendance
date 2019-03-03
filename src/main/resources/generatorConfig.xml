@@ -42,7 +42,10 @@
                 </javaClientGenerator>
                 <!-- 指定数据库表 -->
                 <!-- enableCountByExample....false去掉Example文件  -->
-                <table tableName="teacher"></table>
+                <table tableName="user">
+                        <columnOverride column="autograph" jdbcType="VARCHAR" />
+                        <!--<columnOverride column="que_detail" jdbcType="VARCHAR" />-->
+                </table>
 
         </context>
 </generatorConfiguration>

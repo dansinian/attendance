@@ -13,6 +13,8 @@ public class Comment {
 
     private String createTime;
 
+    private String commentImg;
+
     public String getCommentId() {
         return commentId;
     }
@@ -59,5 +61,13 @@ public class Comment {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime == null ? null : createTime.trim();
+    }
+
+    public String getCommentImg() {
+        return commentImg;
+    }
+
+    public void setCommentImg(String commentImg) {
+        this.commentImg = commentImg == null ? null : commentImg.trim();
     }
 }

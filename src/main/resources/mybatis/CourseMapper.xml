@@ -2,13 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wsh.dao.CourseMapper" >
   <resultMap id="BaseResultMap" type="com.wsh.entity.Course" >
-    <id column="course_id" property="courseId" jdbcType="VARCHAR" />
-    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
-    <result column="tea_name" property="teaName" jdbcType="VARCHAR" />
-    <result column="course_class" property="courseClass" jdbcType="VARCHAR" />
-    <result column="course_major" property="courseMajor" jdbcType="VARCHAR" />
-    <result column="course_department" property="courseDepartment" jdbcType="VARCHAR" />
-    <result column="course_detail" property="courseDetail" jdbcType="VARCHAR" />
+    <id column="cou_id" property="couId" jdbcType="INTEGER" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="major" property="major" jdbcType="VARCHAR" />
+    <result column="course" property="course" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -69,15 +66,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    course_id, course_name, tea_name, course_class, course_major, course_department, 
-    course_detail
+    cou_id, department, major, course
   </sql>
-  <select id="selectByNameLike" resultMap="BaseResultMap" parameterType="String">
-    select *
-    from forum.course
-    where
-    course_name LIKE CONCAT(CONCAT('%', #{courName}), '%');
-  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.CourseExample" >
     select
     <if test="distinct" >
@@ -92,15 +82,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from course
-    where course_id = #{courseId,jdbcType=VARCHAR}
+    where cou_id = #{couId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from course
-    where course_id = #{courseId,jdbcType=VARCHAR}
+    where cou_id = #{couId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.wsh.entity.CourseExample" >
     delete from course
@@ -109,59 +99,39 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.wsh.entity.Course" >
-    insert into course (course_id, course_name, tea_name, 
-      course_class, course_major, course_department, 
-      course_detail)
-    values (#{courseId,jdbcType=VARCHAR}, #{courseName,jdbcType=VARCHAR}, #{teaName,jdbcType=VARCHAR}, 
-      #{courseClass,jdbcType=VARCHAR}, #{courseMajor,jdbcType=VARCHAR}, #{courseDepartment,jdbcType=VARCHAR}, 
-      #{courseDetail,jdbcType=VARCHAR})
+    insert into course (cou_id, department, major, 
+      course)
+    values (#{couId,jdbcType=INTEGER}, #{department,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, 
+      #{course,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wsh.entity.Course" >
     insert into course
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="courseId != null" >
-        course_id,
+      <if test="couId != null" >
+        cou_id,
       </if>
-      <if test="courseName != null" >
-        course_name,
+      <if test="department != null" >
+        department,
       </if>
-      <if test="teaName != null" >
-        tea_name,
+      <if test="major != null" >
+        major,
       </if>
-      <if test="courseClass != null" >
-        course_class,
-      </if>
-      <if test="courseMajor != null" >
-        course_major,
-      </if>
-      <if test="courseDepartment != null" >
-        course_department,
-      </if>
-      <if test="courseDetail != null" >
-        course_detail,
+      <if test="course != null" >
+        course,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="courseId != null" >
-        #{courseId,jdbcType=VARCHAR},
+      <if test="couId != null" >
+        #{couId,jdbcType=INTEGER},
       </if>
-      <if test="courseName != null" >
-        #{courseName,jdbcType=VARCHAR},
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
       </if>
-      <if test="teaName != null" >
-        #{teaName,jdbcType=VARCHAR},
+      <if test="major != null" >
+        #{major,jdbcType=VARCHAR},
       </if>
-      <if test="courseClass != null" >
-        #{courseClass,jdbcType=VARCHAR},
-      </if>
-      <if test="courseMajor != null" >
-        #{courseMajor,jdbcType=VARCHAR},
-      </if>
-      <if test="courseDepartment != null" >
-        #{courseDepartment,jdbcType=VARCHAR},
-      </if>
-      <if test="courseDetail != null" >
-        #{courseDetail,jdbcType=VARCHAR},
+      <if test="course != null" >
+        #{course,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -174,26 +144,17 @@
   <update id="updateByExampleSelective" parameterType="map" >
     update course
     <set >
-      <if test="record.courseId != null" >
-        course_id = #{record.courseId,jdbcType=VARCHAR},
+      <if test="record.couId != null" >
+        cou_id = #{record.couId,jdbcType=INTEGER},
       </if>
-      <if test="record.courseName != null" >
-        course_name = #{record.courseName,jdbcType=VARCHAR},
+      <if test="record.department != null" >
+        department = #{record.department,jdbcType=VARCHAR},
       </if>
-      <if test="record.teaName != null" >
-        tea_name = #{record.teaName,jdbcType=VARCHAR},
+      <if test="record.major != null" >
+        major = #{record.major,jdbcType=VARCHAR},
       </if>
-      <if test="record.courseClass != null" >
-        course_class = #{record.courseClass,jdbcType=VARCHAR},
-      </if>
-      <if test="record.courseMajor != null" >
-        course_major = #{record.courseMajor,jdbcType=VARCHAR},
-      </if>
-      <if test="record.courseDepartment != null" >
-        course_department = #{record.courseDepartment,jdbcType=VARCHAR},
-      </if>
-      <if test="record.courseDetail != null" >
-        course_detail = #{record.courseDetail,jdbcType=VARCHAR},
+      <if test="record.course != null" >
+        course = #{record.course,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -202,13 +163,10 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update course
-    set course_id = #{record.courseId,jdbcType=VARCHAR},
-      course_name = #{record.courseName,jdbcType=VARCHAR},
-      tea_name = #{record.teaName,jdbcType=VARCHAR},
-      course_class = #{record.courseClass,jdbcType=VARCHAR},
-      course_major = #{record.courseMajor,jdbcType=VARCHAR},
-      course_department = #{record.courseDepartment,jdbcType=VARCHAR},
-      course_detail = #{record.courseDetail,jdbcType=VARCHAR}
+    set cou_id = #{record.couId,jdbcType=INTEGER},
+      department = #{record.department,jdbcType=VARCHAR},
+      major = #{record.major,jdbcType=VARCHAR},
+      course = #{record.course,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -216,35 +174,23 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wsh.entity.Course" >
     update course
     <set >
-      <if test="courseName != null" >
-        course_name = #{courseName,jdbcType=VARCHAR},
+      <if test="department != null" >
+        department = #{department,jdbcType=VARCHAR},
       </if>
-      <if test="teaName != null" >
-        tea_name = #{teaName,jdbcType=VARCHAR},
+      <if test="major != null" >
+        major = #{major,jdbcType=VARCHAR},
       </if>
-      <if test="courseClass != null" >
-        course_class = #{courseClass,jdbcType=VARCHAR},
-      </if>
-      <if test="courseMajor != null" >
-        course_major = #{courseMajor,jdbcType=VARCHAR},
-      </if>
-      <if test="courseDepartment != null" >
-        course_department = #{courseDepartment,jdbcType=VARCHAR},
-      </if>
-      <if test="courseDetail != null" >
-        course_detail = #{courseDetail,jdbcType=VARCHAR},
+      <if test="course != null" >
+        course = #{course,jdbcType=VARCHAR},
       </if>
     </set>
-    where course_id = #{courseId,jdbcType=VARCHAR}
+    where cou_id = #{couId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wsh.entity.Course" >
     update course
-    set course_name = #{courseName,jdbcType=VARCHAR},
-      tea_name = #{teaName,jdbcType=VARCHAR},
-      course_class = #{courseClass,jdbcType=VARCHAR},
-      course_major = #{courseMajor,jdbcType=VARCHAR},
-      course_department = #{courseDepartment,jdbcType=VARCHAR},
-      course_detail = #{courseDetail,jdbcType=VARCHAR}
-    where course_id = #{courseId,jdbcType=VARCHAR}
+    set department = #{department,jdbcType=VARCHAR},
+      major = #{major,jdbcType=VARCHAR},
+      course = #{course,jdbcType=VARCHAR}
+    where cou_id = #{couId,jdbcType=INTEGER}
   </update>
 </mapper>

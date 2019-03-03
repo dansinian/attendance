@@ -1,7 +1,6 @@
 package com.wsh.controller;
 
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;

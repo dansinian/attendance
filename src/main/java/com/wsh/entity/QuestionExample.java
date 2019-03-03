@@ -773,6 +773,136 @@ public class QuestionExample {
             addCriterion("que_course not between", value1, value2, "queCourse");
             return (Criteria) this;
         }
+
+        public Criteria andUnreadIsNull() {
+            addCriterion("unread is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnreadIsNotNull() {
+            addCriterion("unread is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnreadEqualTo(Integer value) {
+            addCriterion("unread =", value, "unread");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnreadNotEqualTo(Integer value) {
+            addCriterion("unread <>", value, "unread");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnreadGreaterThan(Integer value) {
+            addCriterion("unread >", value, "unread");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnreadGreaterThanOrEqualTo(Integer value) {
+            addCriterion("unread >=", value, "unread");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnreadLessThan(Integer value) {
+            addCriterion("unread <", value, "unread");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnreadLessThanOrEqualTo(Integer value) {
+            addCriterion("unread <=", value, "unread");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnreadIn(List<Integer> values) {
+            addCriterion("unread in", values, "unread");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnreadNotIn(List<Integer> values) {
+            addCriterion("unread not in", values, "unread");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnreadBetween(Integer value1, Integer value2) {
+            addCriterion("unread between", value1, value2, "unread");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnreadNotBetween(Integer value1, Integer value2) {
+            addCriterion("unread not between", value1, value2, "unread");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgIsNull() {
+            addCriterion("que_img is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgIsNotNull() {
+            addCriterion("que_img is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgEqualTo(String value) {
+            addCriterion("que_img =", value, "queImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgNotEqualTo(String value) {
+            addCriterion("que_img <>", value, "queImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgGreaterThan(String value) {
+            addCriterion("que_img >", value, "queImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgGreaterThanOrEqualTo(String value) {
+            addCriterion("que_img >=", value, "queImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgLessThan(String value) {
+            addCriterion("que_img <", value, "queImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgLessThanOrEqualTo(String value) {
+            addCriterion("que_img <=", value, "queImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgLike(String value) {
+            addCriterion("que_img like", value, "queImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgNotLike(String value) {
+            addCriterion("que_img not like", value, "queImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgIn(List<String> values) {
+            addCriterion("que_img in", values, "queImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgNotIn(List<String> values) {
+            addCriterion("que_img not in", values, "queImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgBetween(String value1, String value2) {
+            addCriterion("que_img between", value1, value2, "queImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andQueImgNotBetween(String value1, String value2) {
+            addCriterion("que_img not between", value1, value2, "queImg");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

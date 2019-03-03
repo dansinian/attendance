@@ -513,6 +513,76 @@ public class CommentExample {
             addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
+
+        public Criteria andCommentImgIsNull() {
+            addCriterion("comment_img is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgIsNotNull() {
+            addCriterion("comment_img is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgEqualTo(String value) {
+            addCriterion("comment_img =", value, "commentImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgNotEqualTo(String value) {
+            addCriterion("comment_img <>", value, "commentImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgGreaterThan(String value) {
+            addCriterion("comment_img >", value, "commentImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgGreaterThanOrEqualTo(String value) {
+            addCriterion("comment_img >=", value, "commentImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgLessThan(String value) {
+            addCriterion("comment_img <", value, "commentImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgLessThanOrEqualTo(String value) {
+            addCriterion("comment_img <=", value, "commentImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgLike(String value) {
+            addCriterion("comment_img like", value, "commentImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgNotLike(String value) {
+            addCriterion("comment_img not like", value, "commentImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgIn(List<String> values) {
+            addCriterion("comment_img in", values, "commentImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgNotIn(List<String> values) {
+            addCriterion("comment_img not in", values, "commentImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgBetween(String value1, String value2) {
+            addCriterion("comment_img between", value1, value2, "commentImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentImgNotBetween(String value1, String value2) {
+            addCriterion("comment_img not between", value1, value2, "commentImg");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

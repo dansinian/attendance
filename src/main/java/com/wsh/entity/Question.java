@@ -21,6 +21,10 @@ public class Question {
 
     private String queCourse;
 
+    private Integer unread;
+
+    private String queImg;
+
     public String getQueId() {
         return queId;
     }
@@ -99,5 +103,21 @@ public class Question {
 
     public void setQueCourse(String queCourse) {
         this.queCourse = queCourse == null ? null : queCourse.trim();
+    }
+
+    public Integer getUnread() {
+        return unread;
+    }
+
+    public void setUnread(Integer unread) {
+        this.unread = unread;
+    }
+
+    public String getQueImg() {
+        return queImg;
+    }
+
+    public void setQueImg(String queImg) {
+        this.queImg = queImg == null ? null : queImg.trim();
     }
 }

@@ -8,6 +8,7 @@
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="prase_count" property="praseCount" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="comment_img" property="commentImg" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    comment_id, que_id, user_id, content, prase_count, create_time
+    comment_id, que_id, user_id, content, prase_count, create_time, comment_img
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.CommentExample" >
     select
@@ -102,11 +103,11 @@
   </delete>
   <insert id="insert" parameterType="com.wsh.entity.Comment" >
     insert into comment (comment_id, que_id, user_id, 
-      content, prase_count, create_time
-      )
+      content, prase_count, create_time, 
+      comment_img)
     values (#{commentId,jdbcType=VARCHAR}, #{queId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
-      #{content,jdbcType=VARCHAR}, #{praseCount,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}
-      )
+      #{content,jdbcType=VARCHAR}, #{praseCount,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, 
+      #{commentImg,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wsh.entity.Comment" >
     insert into comment
@@ -129,6 +130,9 @@
       <if test="createTime != null" >
         create_time,
       </if>
+      <if test="commentImg != null" >
+        comment_img,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="commentId != null" >
@@ -148,6 +152,9 @@
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="commentImg != null" >
+        #{commentImg,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -178,6 +185,9 @@
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=VARCHAR},
       </if>
+      <if test="record.commentImg != null" >
+        comment_img = #{record.commentImg,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -190,7 +200,8 @@
       user_id = #{record.userId,jdbcType=VARCHAR},
       content = #{record.content,jdbcType=VARCHAR},
       prase_count = #{record.praseCount,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=VARCHAR}
+      create_time = #{record.createTime,jdbcType=VARCHAR},
+      comment_img = #{record.commentImg,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -213,6 +224,9 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=VARCHAR},
       </if>
+      <if test="commentImg != null" >
+        comment_img = #{commentImg,jdbcType=VARCHAR},
+      </if>
     </set>
     where comment_id = #{commentId,jdbcType=VARCHAR}
   </update>
@@ -222,7 +236,8 @@
       user_id = #{userId,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
       prase_count = #{praseCount,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=VARCHAR}
+      create_time = #{createTime,jdbcType=VARCHAR},
+      comment_img = #{commentImg,jdbcType=VARCHAR}
     where comment_id = #{commentId,jdbcType=VARCHAR}
   </update>
 </mapper>

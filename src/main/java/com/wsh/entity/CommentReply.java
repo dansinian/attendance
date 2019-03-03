@@ -3,6 +3,8 @@ package com.wsh.entity;
 public class CommentReply {
     private String commentId;
 
+    private String replyId;
+
     private String userId;
 
     private String replyuserId;
@@ -13,14 +15,20 @@ public class CommentReply {
 
     private String createTime;
 
-    private String replyId;
-
     public String getCommentId() {
         return commentId;
     }
 
     public void setCommentId(String commentId) {
         this.commentId = commentId == null ? null : commentId.trim();
+    }
+
+    public String getReplyId() {
+        return replyId;
+    }
+
+    public void setReplyId(String replyId) {
+        this.replyId = replyId == null ? null : replyId.trim();
     }
 
     public String getUserId() {
@@ -61,13 +69,5 @@ public class CommentReply {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime == null ? null : createTime.trim();
-    }
-
-    public String getReplyId() {
-        return replyId;
-    }
-
-    public void setReplyId(String replyId) {
-        this.replyId = replyId == null ? null : replyId.trim();
     }
 }

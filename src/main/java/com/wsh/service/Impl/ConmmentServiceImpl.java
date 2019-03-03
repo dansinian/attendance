@@ -1,8 +1,11 @@
 package com.wsh.service.Impl;
 
 import com.wsh.dao.CommentMapper;
+import com.wsh.dao.QuestionMapper;
+import com.wsh.dao.UserMapper;
 import com.wsh.entity.Comment;
 import com.wsh.entity.CommentExample;
+import com.wsh.entity.Question;
 import com.wsh.service.CommentService;
 import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.OutData;
@@ -17,6 +20,10 @@ import java.util.List;
 public class ConmmentServiceImpl implements CommentService {
     @Autowired
     private CommentMapper commentMapper;
+    @Autowired
+    private QuestionMapper questionMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public JSONObject deleteConmment(JSONObject jsonObject) {
@@ -37,6 +44,8 @@ public class ConmmentServiceImpl implements CommentService {
     public JSONObject createConmment(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String DateString = new String();
+        String questionId = jsonObject.getString("questionId");
+        String userId = jsonObject.getString("userId");
         try {
             DateString = DataAndNumber.dateToStamp(OutData.createData());
         } catch (ParseException e) {
@@ -44,17 +53,24 @@ public class ConmmentServiceImpl implements CommentService {
         }
         Comment comment = new Comment();
         comment.setCommentId(DateString);
-        comment.setQueId(jsonObject.getString("questionId"));
-        comment.setUserId(jsonObject.getString("userId"));
+        comment.setQueId(questionId);
+        comment.setUserId(userId);
         comment.setContent(jsonObject.getString("content"));
         comment.setPraseCount(0);
         comment.setCreateTime(DateString);
+        comment.setCommentImg(jsonObject.optString("commentImg"));
 
         int success = commentMapper.insert( comment);
-        if (success > 0){
-            returnJson.put("user", comment);
+        if (success > 0) {
+            Question question = questionMapper.selectByPrimaryKey(questionId);
+            question.setUnread(question.getUnread()+1);
+            questionMapper.updateByPrimaryKeySelective(question);
+            returnJson.put("comment", comment);
             returnJson.put("msg", "评论成功");
             returnJson.put("status", "200");
+        } else {
+            returnJson.put("msg", "评论失败");
+            returnJson.put("status", "500");
         }
         return returnJson;
     }

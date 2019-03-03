@@ -54,6 +54,8 @@ public class QuestionServiceImpl implements QuestionService {
        question.setPraiseCount(0);
        question.setReplyCount(0);
        question.setQueCourse(jsonObject.optString("queCourse"));
+       question.setUnread(0);
+       question.setQueImg(jsonObject.optString("queImg"));
         int success = questionMapper.insert( question);
         if (success > 0){
             returnJson.put("question", question);
@@ -83,6 +85,8 @@ public class QuestionServiceImpl implements QuestionService {
             question.setPraiseCount(jsonObject.optInt("praiseCount"));
             question.setReplyCount(jsonObject.optInt("replyCount"));
             question.setQueCourse(jsonObject.optString("queCourse"));
+            question.setUnread(0);
+            question.setQueImg(jsonObject.optString("queImg"));
             int returnint =questionMapper.updateByPrimaryKeySelective(question);
             if(returnint>0){
                 returnJson.put("question",question);

@@ -36,27 +36,15 @@ public class CourseController {
     public JSONObject createCourse(HttpServletRequest request) {
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        JSONObject retrunJson = courseService.createCourse(jsonObject);
-        return retrunJson;
-    }
-
-    @RequestMapping("/updateCourse")
-    @ResponseBody
-    public JSONObject updateCourse(HttpServletRequest request) {
-        String jsonData = request.getParameter("data");
-        JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        return courseService.updateCourse(jsonObject);
+        return courseService.createCourse(jsonObject);
     }
 
     @RequestMapping("/selectCourse")
     @ResponseBody
     public JSONObject selectCourse(HttpServletRequest request) {
         String jsonData = request.getParameter("data");
-        if (!"".equals(jsonData)) {
-            JSONObject jsonObject = JSONObject.fromObject(jsonData);
-            return courseService.selectCourse(jsonObject);
-        } else {
-            return courseService.selectAllCourse();
-        }
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return courseService.selectCourse(jsonObject);
+
     }
 }

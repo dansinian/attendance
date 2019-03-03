@@ -28,8 +28,7 @@ public class CommentController {
     public JSONObject createComment(HttpServletRequest request){
         String jsonData = request.getParameter("data");
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        JSONObject returnJson = commentService.createConmment(jsonObject);
-        return returnJson;
+        return commentService.createConmment(jsonObject);
     }
 
     @RequestMapping("/selectComment")

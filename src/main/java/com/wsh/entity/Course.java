@@ -1,73 +1,43 @@
 package com.wsh.entity;
 
 public class Course {
-    private String courseId;
+    private Integer couId;
 
-    private String courseName;
+    private String department;
 
-    private String teaName;
+    private String major;
 
-    private String courseClass;
+    private String course;
 
-    private String courseMajor;
-
-    private String courseDepartment;
-
-    private String courseDetail;
-
-    public String getCourseId() {
-        return courseId;
+    public Integer getCouId() {
+        return couId;
     }
 
-    public void setCourseId(String courseId) {
-        this.courseId = courseId == null ? null : courseId.trim();
+    public void setCouId(Integer couId) {
+        this.couId = couId;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName == null ? null : courseName.trim();
+    public void setDepartment(String department) {
+        this.department = department == null ? null : department.trim();
     }
 
-    public String getTeaName() {
-        return teaName;
+    public String getMajor() {
+        return major;
     }
 
-    public void setTeaName(String teaName) {
-        this.teaName = teaName == null ? null : teaName.trim();
+    public void setMajor(String major) {
+        this.major = major == null ? null : major.trim();
     }
 
-    public String getCourseClass() {
-        return courseClass;
+    public String getCourse() {
+        return course;
     }
 
-    public void setCourseClass(String courseClass) {
-        this.courseClass = courseClass == null ? null : courseClass.trim();
-    }
-
-    public String getCourseMajor() {
-        return courseMajor;
-    }
-
-    public void setCourseMajor(String courseMajor) {
-        this.courseMajor = courseMajor == null ? null : courseMajor.trim();
-    }
-
-    public String getCourseDepartment() {
-        return courseDepartment;
-    }
-
-    public void setCourseDepartment(String courseDepartment) {
-        this.courseDepartment = courseDepartment == null ? null : courseDepartment.trim();
-    }
-
-    public String getCourseDetail() {
-        return courseDetail;
-    }
-
-    public void setCourseDetail(String courseDetail) {
-        this.courseDetail = courseDetail == null ? null : courseDetail.trim();
+    public void setCourse(String course) {
+        this.course = course == null ? null : course.trim();
     }
 }

@@ -174,6 +174,76 @@ public class CommentReplyExample {
             return (Criteria) this;
         }
 
+        public Criteria andReplyIdIsNull() {
+            addCriterion("reply_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdIsNotNull() {
+            addCriterion("reply_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdEqualTo(String value) {
+            addCriterion("reply_id =", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdNotEqualTo(String value) {
+            addCriterion("reply_id <>", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdGreaterThan(String value) {
+            addCriterion("reply_id >", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdGreaterThanOrEqualTo(String value) {
+            addCriterion("reply_id >=", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdLessThan(String value) {
+            addCriterion("reply_id <", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdLessThanOrEqualTo(String value) {
+            addCriterion("reply_id <=", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdLike(String value) {
+            addCriterion("reply_id like", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdNotLike(String value) {
+            addCriterion("reply_id not like", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdIn(List<String> values) {
+            addCriterion("reply_id in", values, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdNotIn(List<String> values) {
+            addCriterion("reply_id not in", values, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdBetween(String value1, String value2) {
+            addCriterion("reply_id between", value1, value2, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdNotBetween(String value1, String value2) {
+            addCriterion("reply_id not between", value1, value2, "replyId");
+            return (Criteria) this;
+        }
+
         public Criteria andUserIdIsNull() {
             addCriterion("user_id is null");
             return (Criteria) this;
@@ -511,76 +581,6 @@ public class CommentReplyExample {
 
         public Criteria andCreateTimeNotBetween(String value1, String value2) {
             addCriterion("create_time not between", value1, value2, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdIsNull() {
-            addCriterion("reply_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdIsNotNull() {
-            addCriterion("reply_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdEqualTo(String value) {
-            addCriterion("reply_id =", value, "replyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdNotEqualTo(String value) {
-            addCriterion("reply_id <>", value, "replyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdGreaterThan(String value) {
-            addCriterion("reply_id >", value, "replyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdGreaterThanOrEqualTo(String value) {
-            addCriterion("reply_id >=", value, "replyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdLessThan(String value) {
-            addCriterion("reply_id <", value, "replyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdLessThanOrEqualTo(String value) {
-            addCriterion("reply_id <=", value, "replyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdLike(String value) {
-            addCriterion("reply_id like", value, "replyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdNotLike(String value) {
-            addCriterion("reply_id not like", value, "replyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdIn(List<String> values) {
-            addCriterion("reply_id in", values, "replyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdNotIn(List<String> values) {
-            addCriterion("reply_id not in", values, "replyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdBetween(String value1, String value2) {
-            addCriterion("reply_id between", value1, value2, "replyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplyIdNotBetween(String value1, String value2) {
-            addCriterion("reply_id not between", value1, value2, "replyId");
             return (Criteria) this;
         }
     }
