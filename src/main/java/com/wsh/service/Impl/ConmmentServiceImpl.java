@@ -29,7 +29,7 @@ public class ConmmentServiceImpl implements CommentService {
     public JSONObject deleteConmment(JSONObject jsonObject) {
         String commentId = jsonObject.getString("commentId");
         JSONObject returnJSon = new JSONObject();
-        int returncourse= commentMapper.deleteByPrimaryKey(commentId);
+        int returncourse= commentMapper.deleteByCommentId(commentId);
         if (returncourse>0){
             returnJSon.put("msg","删除成功");
             returnJSon.put("status","200");
@@ -43,16 +43,17 @@ public class ConmmentServiceImpl implements CommentService {
     @Override
     public JSONObject createConmment(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String DateString = new String();
+        String DateString = OutData.createData();
         String questionId = jsonObject.getString("questionId");
         String userId = jsonObject.getString("userId");
+        String commentId = "";
         try {
-            DateString = DataAndNumber.dateToStamp(OutData.createData());
+            commentId = DataAndNumber.dateToStamp(DateString);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         Comment comment = new Comment();
-        comment.setCommentId(DateString);
+        comment.setCommentId(commentId);
         comment.setQueId(questionId);
         comment.setUserId(userId);
         comment.setContent(jsonObject.getString("content"));

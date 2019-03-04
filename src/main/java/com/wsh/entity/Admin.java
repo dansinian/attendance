@@ -1,19 +1,9 @@
 package com.wsh.entity;
 
 public class Admin {
-    private Integer id;
-
     private String adminId;
 
     private String adminPass;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getAdminId() {
         return adminId;

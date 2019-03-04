@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wsh.dao.AdminMapper" >
   <resultMap id="BaseResultMap" type="com.wsh.entity.Admin" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="admin_id" property="adminId" jdbcType="VARCHAR" />
+    <id column="admin_id" property="adminId" jdbcType="VARCHAR" />
     <result column="admin_pass" property="adminPass" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -65,7 +64,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, admin_id, admin_pass
+    admin_id, admin_pass
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.AdminExample" >
     select
@@ -81,15 +80,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from admin
-    where id = #{id,jdbcType=INTEGER}
+    where admin_id = #{adminId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from admin
-    where id = #{id,jdbcType=INTEGER}
+    where admin_id = #{adminId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.wsh.entity.AdminExample" >
     delete from admin
@@ -98,17 +97,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.wsh.entity.Admin" >
-    insert into admin (id, admin_id, admin_pass
-      )
-    values (#{id,jdbcType=INTEGER}, #{adminId,jdbcType=VARCHAR}, #{adminPass,jdbcType=VARCHAR}
-      )
+    insert into admin (admin_id, admin_pass)
+    values (#{adminId,jdbcType=VARCHAR}, #{adminPass,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wsh.entity.Admin" >
     insert into admin
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
       <if test="adminId != null" >
         admin_id,
       </if>
@@ -117,9 +111,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="adminId != null" >
         #{adminId,jdbcType=VARCHAR},
       </if>
@@ -137,9 +128,6 @@
   <update id="updateByExampleSelective" parameterType="map" >
     update admin
     <set >
-      <if test="record.id != null" >
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
       <if test="record.adminId != null" >
         admin_id = #{record.adminId,jdbcType=VARCHAR},
       </if>
@@ -153,8 +141,7 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update admin
-    set id = #{record.id,jdbcType=INTEGER},
-      admin_id = #{record.adminId,jdbcType=VARCHAR},
+    set admin_id = #{record.adminId,jdbcType=VARCHAR},
       admin_pass = #{record.adminPass,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -163,19 +150,15 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wsh.entity.Admin" >
     update admin
     <set >
-      <if test="adminId != null" >
-        admin_id = #{adminId,jdbcType=VARCHAR},
-      </if>
       <if test="adminPass != null" >
         admin_pass = #{adminPass,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where admin_id = #{adminId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wsh.entity.Admin" >
     update admin
-    set admin_id = #{adminId,jdbcType=VARCHAR},
-      admin_pass = #{adminPass,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    set admin_pass = #{adminPass,jdbcType=VARCHAR}
+    where admin_id = #{adminId,jdbcType=VARCHAR}
   </update>
 </mapper>

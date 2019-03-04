@@ -19,5 +19,15 @@ public class SortList {
         });
         return list;
     }
+
+    public static List sortTime(List<Question> list){
+        Collections.sort( list,new Comparator<Question>() {
+            @Override
+            public int compare(Question Q1, Question Q2) {
+                return Q2.getQueId().compareTo(Q1.getQueId());
+            }
+        });
+        return list;
+    }
 }
 

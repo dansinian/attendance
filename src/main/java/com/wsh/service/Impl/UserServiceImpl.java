@@ -143,4 +143,53 @@ public class UserServiceImpl implements UserService {
         }
         return jsonObject;
     }
+
+    @Override
+    public JSONObject userLogin(JSONObject jsonObject) {
+        JSONObject returnmap = new JSONObject();
+        String account = jsonObject.getString("userId");
+        String password = jsonObject.getString("password");
+        User user = userMapper.selectByPrimaryKey(account);
+        if (user != null){
+            String jdbcpassword = user.getUserPass();
+            if (jdbcpassword.equals(password)) {
+                returnmap.put("msg","");
+                returnmap.put("status","200");
+                returnmap.put("admin", user);
+            } else {
+                returnmap.put("msg","密码错误");
+                returnmap.put("status","500");
+            }
+        }else {
+            returnmap.put("status","500");
+            returnmap.put("msg","用户不存在");
+        }
+        return returnmap;
+    }
+
+    @Override
+    public JSONObject updatePass(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        String oldpassword = jsonObject.getString("oldpass");
+        String newpassword = jsonObject.getString("newpass");
+        String id= jsonObject.getString("adminId");
+        User user = userMapper.selectByPrimaryKey(id);
+        if (user != null) {
+            if (user.getUserPass().equals(oldpassword)){
+                user.setUserPass(newpassword);
+                int success = userMapper.updateByPrimaryKey(user);
+                if (success>0){
+                    returnJson.put("msg","修改成功");
+                    returnJson.put("status","200");
+                }
+            }else {
+                returnJson.put("msg","原密码错误");
+                returnJson.put("status","500");
+            }
+        }
+        return returnJson;
+    }
+
+
 }
+

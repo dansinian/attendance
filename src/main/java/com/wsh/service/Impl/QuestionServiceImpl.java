@@ -1,8 +1,9 @@
 package com.wsh.service.Impl;
 
+import com.wsh.dao.CommentMapper;
+import com.wsh.dao.CommentReplyMapper;
 import com.wsh.dao.QuestionMapper;
-import com.wsh.entity.Question;
-import com.wsh.entity.QuestionExample;
+import com.wsh.entity.*;
 import com.wsh.service.QuestionService;
 import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.OutData;
@@ -18,6 +19,10 @@ import java.util.List;
 public class QuestionServiceImpl implements QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private CommentMapper commentMapper;
+    @Autowired
+    private CommentReplyMapper replyMapper;
 
     @Override
     public JSONObject deleteQuestion(JSONObject jsonObject) {
@@ -38,13 +43,14 @@ public class QuestionServiceImpl implements QuestionService {
     public JSONObject createQuestion(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String DateString = new String();
+        String queID = "";
         try {
-            DateString = DataAndNumber.dateToStamp(OutData.createData());
+            queID = DataAndNumber.dateToStamp(OutData.createData());
         } catch (ParseException e) {
             e.printStackTrace();
         }
         Question question = new Question();
-       question.setQueId(DateString);
+       question.setQueId(queID);
        question.setQueTitle(jsonObject.optString("title"));
        question.setQueSummary(jsonObject.optString("summary"));
        question.setQueDetail(jsonObject.optString("detail"));
@@ -127,7 +133,7 @@ public class QuestionServiceImpl implements QuestionService {
         JSONObject returnJson = new JSONObject();
         QuestionExample questionExample = new QuestionExample();
         QuestionExample.Criteria criteria = questionExample.createCriteria();
-        criteria.andQueIdIsNotNull();
+        criteria.andQueIdIsNotNull().andUserIdNotEqualTo("admin");
         List<Question> questions = questionMapper.selectByExample(questionExample);
         questions =  SortList.sort(questions);
         if (questions.size() > 0){
@@ -138,6 +144,85 @@ public class QuestionServiceImpl implements QuestionService {
             returnJson.put("questions","");
             returnJson.put("status","500");
             returnJson.put("msg","没有查到信息");
+        }
+        return returnJson;
+    }
+
+    @Override
+    public JSONObject questionDetail(JSONObject jsonObject) {
+        String quesId = jsonObject.getString("questionId");
+        JSONObject returnJson = new JSONObject();
+        Question question = questionMapper.selectByPrimaryKey(quesId);
+        if (question != null) {
+            returnJson.put("question",question);
+            CommentExample commentExample = new CommentExample();
+            CommentExample.Criteria criteria = commentExample.createCriteria();
+            criteria.andQueIdEqualTo(quesId);
+            List<Comment> comments =  commentMapper.selectByExample(commentExample); // 查到该问题下所有的一级评论
+            if (comments.size() > 0 ) {
+                for (int i = 0; i < comments.size(); i++) {  // 进入每一个一级评论 对二级回复进行组装
+                    String commentID = comments.get(i).getCommentId();
+                    String userId = comments.get(i).getUserId();
+                    CommentReplyExample replyExample = new CommentReplyExample();
+                    CommentReplyExample.Criteria criteria1 = replyExample.createCriteria();
+                    criteria1.andCommentIdEqualTo(commentID).andReplyuserIdEqualTo(userId);
+                    List<CommentReply> replies = replyMapper.selectByExample(replyExample); // 查到所有回复一级留言,并且回复的是该问题的评论
+                    while(true) {
+                        CommentReplyExample replyExample1 = new CommentReplyExample();
+                        CommentReplyExample.Criteria criteria2 = replyExample.createCriteria();
+                        criteria2.andCommentIdEqualTo(commentID).andReplyuserIdEqualTo(userId);
+                        List<CommentReply> replyList =  replyMapper.selectByExample(replyExample1);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public JSONObject myQuestionList(JSONObject jsonObject) {
+        String userDepart = jsonObject.getString("userDepartment");
+        String newDate = "";
+        JSONObject returnJson = new JSONObject();
+        try {
+            newDate = DataAndNumber.dateToStamp(OutData.createData());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        QuestionExample questionExample = new QuestionExample();
+        QuestionExample.Criteria criteria = questionExample.createCriteria();
+        criteria.andQueIdLessThanOrEqualTo(newDate).andUserIdNotEqualTo("admin");
+        List<Question> questions = questionMapper.selectByExample(questionExample);
+        if (questions.size() > 0 ) {
+            questions = SortList.sortTime(questions);
+            returnJson.put("msg","");
+            returnJson.put("status","200");
+            returnJson.put("questions",questions);
+        } else {
+            returnJson.put("msg","没有数据");
+            returnJson.put("status","500");
+            returnJson.put("questions","");
+        }
+        return returnJson;
+    }
+
+    @Override
+    public JSONObject adminList(JSONObject jsonObject) {
+        String userDepart = jsonObject.getString("userDepartment");
+        JSONObject returnJson = new JSONObject();
+        QuestionExample questionExample = new QuestionExample();
+        QuestionExample.Criteria criteria = questionExample.createCriteria();
+        criteria.andUserIdNotEqualTo("admin");
+        List<Question> questions = questionMapper.selectByExample(questionExample);
+        if (questions.size() > 0) {
+            questions = SortList.sortTime(questions);
+            returnJson.put("msg","");
+            returnJson.put("status","200");
+            returnJson.put("questions",questions);
+        } else {
+            returnJson.put("msg","没有数据");
+            returnJson.put("status","500");
+            returnJson.put("questions","");
         }
         return returnJson;
     }

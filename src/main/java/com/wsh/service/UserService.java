@@ -12,4 +12,8 @@ public interface UserService {
     JSONObject updateUser(JSONObject jsonObject);
     JSONObject selectUser(JSONObject jsonObject);
     JSONObject selectAllUser(JSONObject jsonObject);
+
+    JSONObject userLogin(JSONObject jsonObject);
+
+    JSONObject updatePass(JSONObject jsonObject);
 }

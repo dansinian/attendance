@@ -8,4 +8,10 @@ public interface QuestionService {
     JSONObject updateQuestion(JSONObject jsonObject);
     JSONObject selectQuestion(JSONObject jsonObject);
     JSONObject selectAllQuestion();
+
+    JSONObject questionDetail(JSONObject jsonObject);
+
+    JSONObject myQuestionList(JSONObject jsonObject);
+
+    JSONObject adminList(JSONObject jsonObject);
 }

@@ -51,4 +51,30 @@ public class QuestionController {
             return questionService.selectAllQuestion();
         }
     }
+
+    @RequestMapping("/questionDetail")
+    @ResponseBody
+    public JSONObject questionDetail(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return questionService.questionDetail(jsonObject);
+    }
+
+    @RequestMapping("/myQuestionList")
+    @ResponseBody
+    public JSONObject myQuestionList(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return questionService.myQuestionList(jsonObject);
+    }
+
+    @RequestMapping("/s")
+    @ResponseBody
+    public JSONObject adminList(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return questionService.adminList(jsonObject);
+    }
+
+
 }

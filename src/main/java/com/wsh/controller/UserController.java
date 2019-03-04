@@ -45,6 +45,22 @@ public class UserController {
         return userService.updateUser(jsonObject);
     }
 
+    @RequestMapping("/userLogin")
+    @ResponseBody
+    public JSONObject userLogin(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return userService.userLogin(jsonObject);
+    }
+
+    @RequestMapping("/updatePass")
+    @ResponseBody
+    public JSONObject updatePass(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return userService.updatePass(jsonObject);
+    }
+
     @RequestMapping("/selectUser")
     @ResponseBody
     public JSONObject selectUser(HttpServletRequest request){

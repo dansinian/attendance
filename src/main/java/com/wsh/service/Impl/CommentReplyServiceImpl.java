@@ -22,9 +22,9 @@ public class CommentReplyServiceImpl implements CommentReplyService {
 
     @Override
     public JSONObject deleteConmmentReply(JSONObject jsonObject) {
-        String commentId = jsonObject.getString("replyId");
+        String replyId = jsonObject.getString("replyId");
         JSONObject returnJSon = new JSONObject();
-        int returncourse= replyMapper.deleteByPrimaryKey(commentId);
+        int returncourse= replyMapper.deleteByReplyId(replyId);
         if (returncourse>0){
             returnJSon.put("msg","删除成功");
             returnJSon.put("status","200");
@@ -38,14 +38,15 @@ public class CommentReplyServiceImpl implements CommentReplyService {
     @Override
     public JSONObject createConmmentReply(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String DateString = new String();
+        String DateString = OutData.createData();
+        String repId = "";
         try {
-            DateString = DataAndNumber.dateToStamp(OutData.createData());
+            repId = DataAndNumber.dateToStamp(DateString);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         CommentReply reply = new CommentReply();
-        reply.setReplyId(DateString);
+        reply.setReplyId(repId);
         reply.setCommentId(jsonObject.getString("commentId"));
         reply.setReplyuserId(jsonObject.getString("replyUserId"));
         reply.setUserId(jsonObject.getString("userId"));

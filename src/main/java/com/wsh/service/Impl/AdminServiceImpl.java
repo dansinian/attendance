@@ -17,11 +17,10 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public JSONObject loginAdmin(JSONObject jsonObject) throws Exception{
-
         JSONObject returnmap = new JSONObject();
-        String account = jsonObject.getString("account");
+        String account = jsonObject.getString("adminId");
         String password = jsonObject.getString("password");
-        Admin admin = adminMapper.selectByPrimaryKey(1);
+        Admin admin = adminMapper.selectByPrimaryKey(account);
             if (admin != null){
                 String jdbcpassword = admin.getAdminPass();
                 if (jdbcpassword.equals(password)) {
@@ -42,28 +41,21 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public JSONObject updatePass(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String oldpassword = jsonObject.getString("old");
-        String newpassword = jsonObject.getString("new");
-        String id= jsonObject.getString("id");
-        String type= jsonObject.getString("type");
-            AdminExample adminExample = new AdminExample();
-            AdminExample.Criteria criteria = adminExample.createCriteria();
-            criteria.andAdminIdEqualTo(id);
-            List<Admin> admins = adminMapper.selectByExample(adminExample);
-            if (admins.size()>0) {
-                Admin admin = admins.get(0);
+        String oldpassword = jsonObject.getString("oldpass");
+        String newpassword = jsonObject.getString("newpass");
+        String id= jsonObject.getString("adminId");
+        Admin admin = adminMapper.selectByPrimaryKey(id);
+            if (admin != null) {
                 if (admin.getAdminPass().equals(oldpassword)){
                     admin.setAdminPass(newpassword);
-                    int success = adminMapper.updateByExampleSelective(admin,adminExample);
+                    int success = adminMapper.updateByPrimaryKey(admin);
                     if (success>0){
                         returnJson.put("msg","修改成功");
                         returnJson.put("status","200");
-                        returnJson.put("student",admin);
                     }
                 }else {
                     returnJson.put("msg","原密码错误");
                     returnJson.put("status","500");
-                    returnJson.put("student",admin);
                 }
             }
         return returnJson;
