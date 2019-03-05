@@ -10,7 +10,7 @@ public interface CourseMapper {
 
     int deleteByExample(CourseExample example);
 
-    int deleteByPrimaryKey(Integer couId);
+    int deleteByPrimaryKey(String couId);
 
     int insert(Course record);
 
@@ -18,7 +18,7 @@ public interface CourseMapper {
 
     List<Course> selectByExample(CourseExample example);
 
-    Course selectByPrimaryKey(Integer couId);
+    Course selectByPrimaryKey(String couId);
 
     int updateByExampleSelective(@Param("record") Course record, @Param("example") CourseExample example);
 

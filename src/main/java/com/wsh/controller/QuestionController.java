@@ -68,13 +68,10 @@ public class QuestionController {
         return questionService.myQuestionList(jsonObject);
     }
 
-    @RequestMapping("/s")
+    @RequestMapping("/adminList")
     @ResponseBody
     public JSONObject adminList(HttpServletRequest request){
-        String jsonData = request.getParameter("data");
-        JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        return questionService.adminList(jsonObject);
+        return questionService.adminList();
     }
-
 
 }

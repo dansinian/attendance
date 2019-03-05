@@ -52,8 +52,10 @@ public class CourseServiceImpl implements CourseService {
         course.setDepartment(department);
         course.setMajor(major);
         course.setCourse(courseName);
-         int success =courseMapper.insertSelective(course);
-        if (success > 0 ){
+        course.setCourseTeacher(jsonObject.getString("courseTeacher"));
+        course.setCourseFile(jsonObject.getString("courseFile"));
+        int success =courseMapper.insertSelective(course);
+        if (success > 0 ) {
                 returnJson.put("msg","已存在该课程");
                 returnJson.put("status","500");
                 returnJson.put("course", course);
@@ -66,7 +68,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public JSONObject selectCourse(JSONObject jsonObject) {
+    public JSONObject selectCourse() {
         JSONObject returnJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         CourseExample courseExample = new CourseExample();

@@ -124,7 +124,7 @@
  	</context:component-scan>
 	<!-- 注册事务注解驱动，明确@Transactional切入的是哪个事务管理器 -->
 	<tx:annotation-driven transaction-manager="tx"/>
-	
+
 </beans>
 
 

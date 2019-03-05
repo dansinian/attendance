@@ -1,7 +1,7 @@
 package com.wsh.entity;
 
 public class Course {
-    private Integer couId;
+    private String couId;
 
     private String department;
 
@@ -9,12 +9,16 @@ public class Course {
 
     private String course;
 
-    public Integer getCouId() {
+    private String courseFile;
+
+    private String courseTeacher;
+
+    public String getCouId() {
         return couId;
     }
 
-    public void setCouId(Integer couId) {
-        this.couId = couId;
+    public void setCouId(String couId) {
+        this.couId = couId == null ? null : couId.trim();
     }
 
     public String getDepartment() {
@@ -39,5 +43,21 @@ public class Course {
 
     public void setCourse(String course) {
         this.course = course == null ? null : course.trim();
+    }
+
+    public String getCourseFile() {
+        return courseFile;
+    }
+
+    public void setCourseFile(String courseFile) {
+        this.courseFile = courseFile == null ? null : courseFile.trim();
+    }
+
+    public String getCourseTeacher() {
+        return courseTeacher;
+    }
+
+    public void setCourseTeacher(String courseTeacher) {
+        this.courseTeacher = courseTeacher == null ? null : courseTeacher.trim();
     }
 }

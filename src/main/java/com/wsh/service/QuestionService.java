@@ -13,5 +13,5 @@ public interface QuestionService {
 
     JSONObject myQuestionList(JSONObject jsonObject);
 
-    JSONObject adminList(JSONObject jsonObject);
+    JSONObject adminList();
 }

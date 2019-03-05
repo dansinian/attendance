@@ -207,15 +207,17 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public JSONObject adminList(JSONObject jsonObject) {
-        String userDepart = jsonObject.getString("userDepartment");
+    public JSONObject adminList() {
         JSONObject returnJson = new JSONObject();
         QuestionExample questionExample = new QuestionExample();
         QuestionExample.Criteria criteria = questionExample.createCriteria();
-        criteria.andUserIdNotEqualTo("admin");
+        criteria.andUserIdEqualTo("admin");
         List<Question> questions = questionMapper.selectByExample(questionExample);
         if (questions.size() > 0) {
             questions = SortList.sortTime(questions);
+            if (questions.size() > 4) {
+                questions = questions.subList(0,4);
+            }
             returnJson.put("msg","");
             returnJson.put("status","200");
             returnJson.put("questions",questions);

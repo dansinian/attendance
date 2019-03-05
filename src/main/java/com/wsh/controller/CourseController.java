@@ -41,10 +41,9 @@ public class CourseController {
 
     @RequestMapping("/selectCourse")
     @ResponseBody
-    public JSONObject selectCourse(HttpServletRequest request) {
-        String jsonData = request.getParameter("data");
-        JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        return courseService.selectCourse(jsonObject);
+    public JSONObject selectCourse() {
+
+        return courseService.selectCourse();
 
     }
 }
