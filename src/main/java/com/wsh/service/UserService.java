@@ -2,6 +2,8 @@ package com.wsh.service;
 
 import net.sf.json.JSONObject;
 
+import java.util.List;
+
 /**
  * Created by MrDou
  * Time: 2019\3\2 0002 12:21
@@ -16,4 +18,6 @@ public interface UserService {
     JSONObject userLogin(JSONObject jsonObject);
 
     JSONObject updatePass(JSONObject jsonObject);
+
+    JSONObject addStuddents(List excelList);
 }

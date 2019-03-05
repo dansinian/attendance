@@ -17,9 +17,8 @@
 </head>
 <body>
 <form action="/file/upload" method="post"  enctype="multipart/form-data">
-    <p>选择文件:<input type="file" name="files"></p>
-    <p><input type="submit" value="提交"></p>
-    <img src="/userhead/123.jpg">
+    <p>閫夋嫨鏂囦欢:<input type="file" name="files"></p>
+    <p><input type="submit" value="鎻愪氦"></p>
 </form>
 </body>
 </html>

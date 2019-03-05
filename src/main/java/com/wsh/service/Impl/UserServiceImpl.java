@@ -4,6 +4,7 @@ import com.wsh.dao.UserMapper;
 import com.wsh.entity.User;
 import com.wsh.entity.UserExample;
 import com.wsh.service.UserService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -188,6 +189,43 @@ public class UserServiceImpl implements UserService {
             }
         }
         return returnJson;
+    }
+
+    @Override
+    public JSONObject addStuddents(List excelList) {
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        try{
+            for (int i = 0; i < excelList.size(); i++) {
+                List list = (List) excelList.get(i);
+                User user = new User();
+                user.setUserId((String) list.get(0));
+                user.setUserName((String) list.get(1));
+                user.setUserPhone((String) list.get(2));
+                user.setUserPass((String) list.get(3));
+                user.setUserDepartment((String) list.get(4));
+                user.setUserMajor((String) list.get(5));
+                user.setHeadImg((String) list.get(6));
+                user.setNickname((String) list.get(7));
+                user.setAutograph((String) list.get(8));
+                user.setUserType((String) list.get(9));
+                User user1 =  userMapper.selectByPrimaryKey((String) list.get(0));
+                if (user1 != null) {
+                    if (userMapper.insert(user) > 0) {
+                        jsonArray.add(user);
+                    }
+                }
+            }
+            if (jsonArray.size() > 0) {
+                jsonObject.put("msg","");
+                jsonObject.put("status","200");
+                jsonObject.put("users",jsonArray);
+            }
+        } catch (Exception e) {
+            jsonObject.put("msg","录入失败");
+            jsonObject.put("status","500");
+        }
+        return jsonObject;
     }
 
 

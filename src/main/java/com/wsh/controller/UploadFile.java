@@ -1,6 +1,8 @@
 package com.wsh.controller;
 
+import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.FileUpAndDown;
+import com.wsh.servlet.OutData;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/file")
@@ -28,12 +32,18 @@ public class UploadFile {
      */
     @RequestMapping(value = "/upload",method = RequestMethod.POST)
     @ResponseBody
-    public String upload(@RequestParam("files") MultipartFile[] files, ModelMap map){
-        List<String> results = FileUpAndDown.uploadFile(files,"","");
+    public Map upload(@RequestParam("files") MultipartFile[] files, ModelMap map){
+        String fileName = "";
+        try {
+            fileName = DataAndNumber.dateToStamp(OutData.createData());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        List<String> results = FileUpAndDown.uploadFile(files,"",fileName);
         if(results!=null && results.size()>0){
             map.addAttribute("urls", results.get(0));
         }
-        return "success";
+        return map;
     }
 
     /**

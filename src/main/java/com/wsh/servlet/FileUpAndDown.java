@@ -34,7 +34,7 @@ public class FileUpAndDown {
         /**
          * 存储的路径，默认的为c盘符
          */
-        public static String directory = "D:/IDEAWorkspance/forum/src/main/webapp/userhead";
+        public static String directory = "./webapp/userhead";
 
         /**
          * 图片的大小配置，默认为2048000
@@ -213,7 +213,7 @@ public class FileUpAndDown {
                         try {
                             if (!file.isEmpty()) {
                                 // 判断sotrageName是否为空,如果不为空就以存储的命名,为空就以原来的名称命名
-                                storagePath = path + "/" + ((storageFileName != null) ? (storageFileName + laString)
+                                storagePath = path + ((storageFileName != null) ? (storageFileName + laString)
                                         : file.getOriginalFilename());
                                 logger.info("保存的路径为：" + storagePath);
                                 Streams.copy(file.getInputStream(), new FileOutputStream(storagePath), true);
