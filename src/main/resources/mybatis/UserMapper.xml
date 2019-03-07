@@ -76,11 +76,6 @@
     id, user_id, user_name, user_phone, user_pass, user_department, user_major, head_img, 
     nickname, autograph, user_type
   </sql>
-  <select id="selectByUserId" resultMap="BaseResultMap" resultType="String">
-    select *
-    from user
-    where user_id = #{userId}
-  </select>
   <select id="selectByExample" parameterType="com.wsh.entity.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -101,10 +96,6 @@
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByUserId" parameterType="java.lang.Integer">
-    delete from user
-    where user_id = #{userId}
-  </delete>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user
     where id = #{id,jdbcType=INTEGER}

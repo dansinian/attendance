@@ -28,7 +28,5 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    int deleteByUserId(String userId);
 
-    User selectByUserId(String userId);
 }

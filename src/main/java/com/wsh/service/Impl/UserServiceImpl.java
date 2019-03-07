@@ -33,14 +33,17 @@ public class UserServiceImpl implements UserService {
     public JSONObject deleteUser(JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
         JSONObject returnJSon = new JSONObject();
-            int returncourse= userMapper.deleteByUserId(userId);
-            if (returncourse>0){
-                returnJSon.put("msg","删除成功");
-                returnJSon.put("status","200");
-            } else {
-                returnJSon.put("msg","删除失败");
-                returnJSon.put("status","500");
-            }
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andUserIdEqualTo(userId);
+        int returncourse= userMapper.deleteByExample(userExample);
+        if (returncourse>0){
+            returnJSon.put("msg","删除成功");
+            returnJSon.put("status","200");
+        } else {
+            returnJSon.put("msg","删除失败");
+            returnJSon.put("status","500");
+        }
         return returnJSon;
     }
 
@@ -48,22 +51,26 @@ public class UserServiceImpl implements UserService {
     public JSONObject createUser(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String userId = jsonObject.getString("userId");
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andUserIdEqualTo(userId);
         User user =new User();
-        User user1 = userMapper.selectByUserId(userId);
-        if (user1 != null){
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users.size() > 0){
             returnJson.put("msg","已存在该用户信息");
             returnJson.put("status","500");
-            returnJson.put("user", user1 );
+            returnJson.put("user",users);
         } else {
             user.setUserId(userId);
             user.setUserName(jsonObject.getString("userName"));
             user.setUserPhone(jsonObject.getString("userPhone"));
-            user.setUserPass(jsonObject.getString("userPass"));
+            user.setUserPass(userId);
             user.setUserDepartment(jsonObject.getString("userDepartment"));
             user.setUserMajor(jsonObject.getString("userMajor"));
-            user.setHeadImg(jsonObject.getString("HeadImg"));
-            user.setNickname(jsonObject.getString("nickName"));
-            user.setAutograph(jsonObject.getString("antugraph"));
+            user.setHeadImg("./webapp/userhead/123.jpg");
+            user.setNickname(jsonObject.getString("userName"));
+            user.setAutograph(null);
+            user.setUserType(jsonObject.getString("type"));
             int success = userMapper.insertSelective(user);
             if (success > 0){
                 returnJson.put("user", user);
@@ -82,8 +89,12 @@ public class UserServiceImpl implements UserService {
     public JSONObject updateUser(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String userId = jsonObject.getString("userId");
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andUserIdEqualTo(userId);
         User user =new User();
-        if (userMapper.selectByUserId(userId) != null){
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users.size() == 1){
             user.setUserId(userId);
             user.setUserName(jsonObject.getString("serName"));
             user.setUserPhone(jsonObject.getString("userPhone"));
@@ -114,10 +125,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public JSONObject selectUser (JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String stuId = jsonObject.getString("userId");
-        User user = userMapper.selectByUserId(stuId);
-        if (user!=null){
-            returnJson.put("users",user);
+        String userId = jsonObject.getString("userId");
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andUserIdEqualTo(userId);
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users!=null){
+            returnJson.put("users",users);
             returnJson.put("status","200");
             returnJson.put("msg","");
         }else{
@@ -145,7 +159,7 @@ public class UserServiceImpl implements UserService {
             returnJson.put("status","500");
             returnJson.put("msg","没有查到学生信息");
         }
-        return jsonObject;
+        return returnJson;
     }
 
     @Override
@@ -153,13 +167,16 @@ public class UserServiceImpl implements UserService {
         JSONObject returnmap = new JSONObject();
         String account = jsonObject.getString("userId");
         String password = jsonObject.getString("password");
-        User user = userMapper.selectByUserId(account);
-        if (user != null){
-            String jdbcpassword = user.getUserPass();
+        UserExample userExample =new UserExample();
+        UserExample.Criteria criteria= userExample.createCriteria();
+        criteria.andUserTypeEqualTo(account);
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users != null){
+            String jdbcpassword = users.get(0).getUserPass();
             if (jdbcpassword.equals(password)) {
                 returnmap.put("msg","");
                 returnmap.put("status","200");
-                returnmap.put("admin", user);
+                returnmap.put("admin", users.get(0));
             } else {
                 returnmap.put("msg","密码错误");
                 returnmap.put("status","500");
@@ -176,12 +193,15 @@ public class UserServiceImpl implements UserService {
         JSONObject returnJson = new JSONObject();
         String oldpassword = jsonObject.getString("oldpass");
         String newpassword = jsonObject.getString("newpass");
-        String id= jsonObject.getString("adminId");
-        User user = userMapper.selectByUserId(id);
-        if (user != null) {
-            if (user.getUserPass().equals(oldpassword)){
-                user.setUserPass(newpassword);
-                int success = userMapper.updateByPrimaryKey(user);
+        String id= jsonObject.getString("userId");
+        UserExample userExample =new UserExample();
+        UserExample.Criteria criteria= userExample.createCriteria();
+        criteria.andUserTypeEqualTo(id);
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users != null) {
+            if (users.get(0).getUserPass().equals(oldpassword)){
+                users.get(0).setUserPass(newpassword);
+                int success = userMapper.updateByPrimaryKey(users.get(0));
                 if (success>0){
                     returnJson.put("msg","修改成功");
                     returnJson.put("status","200");
@@ -198,7 +218,6 @@ public class UserServiceImpl implements UserService {
     public JSONObject addStuddents(List excelList) {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        User user1 = new User();
         try{
             for (int i = 1; i < excelList.size(); i++) {
                 List list = (List) excelList.get(i);
@@ -226,8 +245,11 @@ public class UserServiceImpl implements UserService {
                     user.setAutograph(null);
                 }
                 user.setUserType((String) list.get(9));
-                user1 = userMapper.selectByUserId(userId);
-                if (user1 ==null) {
+                UserExample userExample =new UserExample();
+                UserExample.Criteria criteria= userExample.createCriteria();
+                criteria.andUserTypeEqualTo(userId);
+                List<User> users = userMapper.selectByExample(userExample);
+                if (users ==null) {
                     int success = userMapper.insertSelective(user);
                     if (success > 0) {
                         jsonArray.add(user);
