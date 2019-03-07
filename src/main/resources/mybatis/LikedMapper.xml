@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wsh.dao.LikedMapper" >
+  <resultMap id="BaseResultMap" type="com.wsh.entity.Liked" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="like_user" property="likeUser" jdbcType="VARCHAR" />
+    <result column="liked_question" property="likedQuestion" jdbcType="VARCHAR" />
+    <result column="liked_comment" property="likedComment" jdbcType="VARCHAR" />
+    <result column="liked_reply" property="likedReply" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, like_user, liked_question, liked_comment, liked_reply
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.LikedExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from liked
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from liked
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from liked
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wsh.entity.LikedExample" >
+    delete from liked
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wsh.entity.Liked" >
+    insert into liked (id, like_user, liked_question, 
+      liked_comment, liked_reply)
+    values (#{id,jdbcType=INTEGER}, #{likeUser,jdbcType=VARCHAR}, #{likedQuestion,jdbcType=VARCHAR}, 
+      #{likedComment,jdbcType=VARCHAR}, #{likedReply,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wsh.entity.Liked" >
+    insert into liked
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="likeUser != null" >
+        like_user,
+      </if>
+      <if test="likedQuestion != null" >
+        liked_question,
+      </if>
+      <if test="likedComment != null" >
+        liked_comment,
+      </if>
+      <if test="likedReply != null" >
+        liked_reply,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="likeUser != null" >
+        #{likeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="likedQuestion != null" >
+        #{likedQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="likedComment != null" >
+        #{likedComment,jdbcType=VARCHAR},
+      </if>
+      <if test="likedReply != null" >
+        #{likedReply,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wsh.entity.LikedExample" resultType="java.lang.Integer" >
+    select count(*) from liked
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update liked
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.likeUser != null" >
+        like_user = #{record.likeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.likedQuestion != null" >
+        liked_question = #{record.likedQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.likedComment != null" >
+        liked_comment = #{record.likedComment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.likedReply != null" >
+        liked_reply = #{record.likedReply,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update liked
+    set id = #{record.id,jdbcType=INTEGER},
+      like_user = #{record.likeUser,jdbcType=VARCHAR},
+      liked_question = #{record.likedQuestion,jdbcType=VARCHAR},
+      liked_comment = #{record.likedComment,jdbcType=VARCHAR},
+      liked_reply = #{record.likedReply,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wsh.entity.Liked" >
+    update liked
+    <set >
+      <if test="likeUser != null" >
+        like_user = #{likeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="likedQuestion != null" >
+        liked_question = #{likedQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="likedComment != null" >
+        liked_comment = #{likedComment,jdbcType=VARCHAR},
+      </if>
+      <if test="likedReply != null" >
+        liked_reply = #{likedReply,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wsh.entity.Liked" >
+    update liked
+    set like_user = #{likeUser,jdbcType=VARCHAR},
+      liked_question = #{likedQuestion,jdbcType=VARCHAR},
+      liked_comment = #{likedComment,jdbcType=VARCHAR},
+      liked_reply = #{likedReply,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

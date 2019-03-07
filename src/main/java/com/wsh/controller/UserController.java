@@ -75,4 +75,42 @@ public class UserController {
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
         return userService.selectAllUser(jsonObject);
     }
+
+    /*
+    * 点赞
+    * */
+    @RequestMapping("/likes")
+    @ResponseBody
+    public JSONObject likes(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return userService.likes(jsonObject);
+    }
+
+    @RequestMapping("/unlikes")
+    @ResponseBody
+    public JSONObject unlikes(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return userService.unlikes(jsonObject);
+    }
+
+    /*
+    * 关注
+    * */
+    @RequestMapping("/follow")
+    @ResponseBody
+    public JSONObject follow(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return userService.follow(jsonObject);
+    }
+
+    @RequestMapping("/unfollow")
+    @ResponseBody
+    public JSONObject unfollow(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return userService.unfollow(jsonObject);
+    }
 }

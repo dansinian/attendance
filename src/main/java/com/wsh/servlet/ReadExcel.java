@@ -9,7 +9,7 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 public class ReadExcel {
-   /* public static void main(String[] args) {
+    public static void main(String[] args) {
         ReadExcel obj = new ReadExcel();
         // 此处为我创建Excel路径：E:/zhanhj/studysrc/jxl下
         File file = new File("D:\\IDEAWorkspance\\forum\\src\\main\\webapp\\userhead\\user.xls");
@@ -17,13 +17,13 @@ public class ReadExcel {
         System.out.println("list中的数据打印出来");
         for (int i = 0; i < excelList.size(); i++) {
             List list = (List) excelList.get(i);
-            for (int j = 0; j < list.size(); j++) {
+           /* for (int j = 0; j < list.size(); j++) {
                 System.out.print(list.get(j));
-            }
-            System.out.println();
+            }*/
+            System.out.println(list);
         }
 
-    }*/
+    }
     // 去读Excel的方法readExcel，该方法的入口参数为一个File对象
     public static List readExcel(File file) {
         try {
@@ -55,7 +55,9 @@ public class ReadExcel {
                 return outerList;
             }
         } catch (BiffException | IOException e) {
-            e.printStackTrace();
+            List innerList=new ArrayList();
+            innerList.add("导入失败");
+            return innerList;
         }
         return null;
     }

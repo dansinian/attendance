@@ -19,7 +19,7 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject loginAdmin(JSONObject jsonObject) throws Exception{
         JSONObject returnmap = new JSONObject();
         String account = jsonObject.getString("adminId");
-        String password = jsonObject.getString("password");
+        String password = jsonObject.getString("passWord");
         Admin admin = adminMapper.selectByPrimaryKey(account);
             if (admin != null){
                 String jdbcpassword = admin.getAdminPass();

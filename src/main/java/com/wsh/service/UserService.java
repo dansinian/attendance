@@ -20,4 +20,12 @@ public interface UserService {
     JSONObject updatePass(JSONObject jsonObject);
 
     JSONObject addStuddents(List excelList);
+
+    JSONObject unfollow(JSONObject jsonObject);
+
+    JSONObject follow(JSONObject jsonObject);
+
+    JSONObject unlikes(JSONObject jsonObject);
+
+    JSONObject likes(JSONObject jsonObject);
 }

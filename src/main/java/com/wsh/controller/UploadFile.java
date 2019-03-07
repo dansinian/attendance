@@ -59,10 +59,5 @@ public class UploadFile {
         return FileUpAndDown.downloadFile(url,"下载的文件"+ url.substring(url.lastIndexOf(".")));
     }
 
-    @RequestMapping("/hello")
-    @ResponseBody
-    public String hello() throws IOException {
-        return "Hello";
-    }
 
 }

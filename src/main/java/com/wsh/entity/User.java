@@ -1,6 +1,8 @@
 package com.wsh.entity;
 
 public class User {
+    private Integer id;
+
     private String userId;
 
     private String userName;
@@ -20,6 +22,14 @@ public class User {
     private String autograph;
 
     private String userType;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getUserId() {
         return userId;

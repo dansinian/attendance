@@ -21,4 +21,6 @@ public interface CommentReplyMapper {
     int updateByExample(@Param("record") CommentReply record, @Param("example") CommentReplyExample example);
 
     int deleteByReplyId(String replyId);
+
+    CommentReply selectByRepId(String replyId);
 }

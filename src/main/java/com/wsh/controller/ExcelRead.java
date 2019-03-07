@@ -7,12 +7,10 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -23,13 +21,17 @@ public class ExcelRead {
 
     @RequestMapping("/readExcel")
     @ResponseBody
-    public JSONObject readExcel1(@RequestParam("file") File file){
+    public JSONObject readExcel1(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
         JSONObject returnJson = new JSONObject();
+        String fileUrl = jsonObject.optString("fileUrl");
+        File file = new File(fileUrl);
         List excelList = ReadExcel.readExcel(file);
-        if (excelList.size() > 0) {
+        if (excelList.size() > 0 && !"导入失败".equals(excelList.get(0))) {
             returnJson =  userService.addStuddents(excelList);
         } else {
-            returnJson.put("msg","ExcelΪ��");
+            returnJson.put("msg","导入失败");
             returnJson.put("status","500");
         }
         return returnJson;

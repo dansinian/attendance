@@ -42,10 +42,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public JSONObject createQuestion(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String DateString = new String();
+        String DateString = OutData.createData();
         String queID = "";
         try {
-            queID = DataAndNumber.dateToStamp(OutData.createData());
+            queID = DataAndNumber.dateToStamp(DateString);
         } catch (ParseException e) {
             e.printStackTrace();
         }
