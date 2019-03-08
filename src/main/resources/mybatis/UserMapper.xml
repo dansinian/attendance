@@ -76,6 +76,18 @@
     id, user_id, user_name, user_phone, user_pass, user_department, user_major, head_img, 
     nickname, autograph, user_type
   </sql>
+  <select id="selectByNameLike" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from forum.user
+    where
+    user_name LIKE CONCAT(CONCAT('%', #{content}), '%');
+  </select>
+  <select id="selectByIdLike" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from forum.user
+    where
+    user_id LIKE CONCAT(CONCAT('%', #{content}), '%');
+  </select>
   <select id="selectByExample" parameterType="com.wsh.entity.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

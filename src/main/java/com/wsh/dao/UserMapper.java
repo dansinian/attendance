@@ -28,5 +28,8 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
+    List<User> selectByNameLike(String content);
+
+    List<User> selectByIdLike(String content);
 
 }

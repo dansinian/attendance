@@ -9,6 +9,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -129,16 +130,16 @@ public class UserServiceImpl implements UserService {
     public JSONObject selectUser (JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String content = jsonObject.getString("content");
-        String type = IsChOrEnOrNum.IsChOrNum(content);
+        List<User> users = new ArrayList<>();
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
+        String type = IsChOrEnOrNum.IsChOrNum(content);
         if ("number".equals(type)) {
-            criteria.andUserIdLike(content);
+            users = userMapper.selectByIdLike(content);
         } else {
-            criteria.andUserNameEqualTo(content);
+            users = userMapper.selectByNameLike(content);
         }
-        List<User> users = userMapper.selectByExample(userExample);
-        if (users!=null){
+        if (users.size() > 0){
             returnJson.put("users",users);
             returnJson.put("status","200");
             returnJson.put("msg","");
