@@ -113,27 +113,37 @@ public class CourseServiceImpl implements CourseService {
         String department = jsonObject.getString("department");
         String major= jsonObject.getString("major");
         String courseName= jsonObject.getString("course");
-        Course course = new Course();
-        try {
-            course.setCouId(DataAndNumber.dateToStamp(OutData.createData()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        course.setDepartment(department);
-        course.setMajor(major);
-        course.setCourse(courseName);
-        course.setCourseTeacher(jsonObject.getString("courseTeacher"));
-        course.setCourseFile(jsonObject.optString("courseFile"));
-        int success =courseMapper.insert(course);
-        if (success > 0 ) {
-                returnJson.put("msg","已存在该课程");
-                returnJson.put("status","500");
+        CourseExample courseExample = new CourseExample();
+        CourseExample.Criteria criteria = courseExample.createCriteria();
+        criteria.andDepartmentEqualTo(department).andMajorEqualTo(major).andCourseEqualTo(courseName);
+        List<Course> courses1 =  courseMapper.selectByExample(courseExample);
+        if (courses1.size()>0) {
+            returnJson.put("msg","已存在该课程");
+            returnJson.put("status","500");
+            returnJson.put("course", courses1.get(0));
+        } else {
+            Course course = new Course();
+            try {
+                course.setCouId(DataAndNumber.dateToStamp(OutData.createData()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            course.setDepartment(department);
+            course.setMajor(major);
+            course.setCourse(courseName);
+            course.setCourseTeacher(jsonObject.getString("courseTeacher"));
+            course.setCourseFile(jsonObject.optString("courseFile"));
+            int success =courseMapper.insert(course);
+            if (success > 0 ) {
+                returnJson.put("msg","");
+                returnJson.put("status","00");
                 returnJson.put("course", course);
             } else {
-                    returnJson.put("course", "");
-                    returnJson.put("msg","添加课程失败");
-                    returnJson.put("status","500");
+                returnJson.put("course", "");
+                returnJson.put("msg","添加课程失败");
+                returnJson.put("status","500");
             }
+        }
         return returnJson;
     }
 
