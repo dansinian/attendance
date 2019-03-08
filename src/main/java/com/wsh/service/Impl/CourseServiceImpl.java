@@ -136,7 +136,7 @@ public class CourseServiceImpl implements CourseService {
             int success =courseMapper.insert(course);
             if (success > 0 ) {
                 returnJson.put("msg","");
-                returnJson.put("status","00");
+                returnJson.put("status","200");
                 returnJson.put("course", course);
             } else {
                 returnJson.put("course", "");

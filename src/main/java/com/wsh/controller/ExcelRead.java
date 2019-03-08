@@ -22,18 +22,24 @@ public class ExcelRead {
     @RequestMapping("/readExcel")
     @ResponseBody
     public JSONObject readExcel1(HttpServletRequest request){
-        String jsonData = request.getParameter("data");
+        String jsonData = "{\"fileUrl\":\"D:\\\\IDEAWorkspance\\\\forum\\\\src\\\\main\\\\webapp\\\\userhead\\\\user.xls\"}"/*request.getParameter("data")*/;
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
         JSONObject returnJson = new JSONObject();
         String fileUrl = jsonObject.optString("fileUrl");
         File file = new File(fileUrl);
-        List excelList = ReadExcel.readExcel(file);
-        if (excelList.size() > 0 && !"导入失败".equals(excelList.get(0))) {
-            returnJson =  userService.addStuddents(excelList);
-        } else {
+        try{
+            List excelList = ReadExcel.readExcel(file);
+            if (excelList.size() > 0 && !"导入失败".equals(excelList.get(0))) {
+                returnJson =  userService.addStuddents(excelList);
+            } else {
+                returnJson.put("msg","导入失败");
+                returnJson.put("status","500");
+            }
+        }catch (Exception e) {
             returnJson.put("msg","导入失败");
             returnJson.put("status","500");
         }
+
         return returnJson;
 
     }

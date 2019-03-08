@@ -231,6 +231,8 @@ public class UserServiceImpl implements UserService {
     public JSONObject addStuddents(List excelList) {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
+        int update = 0;
+        int add = 0;
         try{
             for (int i = 1; i < excelList.size(); i++) {
                 List list = (List) excelList.get(i);
@@ -238,44 +240,56 @@ public class UserServiceImpl implements UserService {
                 User user = new User();
                 user.setUserId((String) list.get(0));
                 user.setUserName((String) list.get(1));
-                user.setUserPhone((String) list.get(2));
-                user.setUserPass((String) list.get(3));
+                if ((String) list.get(2) != null && !"".equals((String) list.get(2))) {
+                    user.setUserPhone((String) list.get(2));
+                } else {
+                    user.setUserPhone("");
+                }
+                if ((String) list.get(3) != null && !"".equals((String) list.get(3))) {
+                    user.setUserPass((String) list.get(3));
+                } else {
+                    user.setUserPass((String) list.get(0));
+                }
                 user.setUserDepartment((String) list.get(4));
                 user.setUserMajor((String) list.get(5));
                 if ((String) list.get(6) != null && !"".equals((String) list.get(6))) {
                     user.setHeadImg((String) list.get(6));
                 } else {
-                    user.setHeadImg(null);
+                    user.setHeadImg("./webapp/userhead/123.jpg");
                 }
                 if ((String) list.get(7) != null && !"".equals((String) list.get(7))) {
                     user.setNickname((String) list.get(7));
                 } else {
-                    user.setNickname(null);
+                    user.setNickname((String) list.get(1));
                 }
                 if ((String) list.get(8) != null && !"".equals((String) list.get(8))) {
                     user.setAutograph((String) list.get(8));
                 } else {
-                    user.setAutograph(null);
+                    user.setAutograph("");
                 }
                 user.setUserType((String) list.get(9));
                 UserExample userExample =new UserExample();
                 UserExample.Criteria criteria= userExample.createCriteria();
-                criteria.andUserTypeEqualTo(userId);
+                criteria.andUserIdEqualTo(userId);
                 List<User> users = userMapper.selectByExample(userExample);
-                if (users ==null) {
+                if (users.size() == 0) {
                     int success = userMapper.insertSelective(user);
                     if (success > 0) {
-                        jsonArray.add(user);
+                        add += 1;
+                    }
+                } else {
+                    user.setId(users.get(0).getId());
+                    int success = userMapper.updateByExample(user,userExample);
+                    if (success > 0) {
+                        update += 1;
                     }
                 }
+                jsonArray.add(user);
             }
             if (jsonArray.size() > 0) {
-                jsonObject.put("msg","录入信息" + jsonArray.size() + "条");
+                jsonObject.put("msg","录入信息" + add + "条,更新信息" + update + "条");
                 jsonObject.put("status","200");
                 jsonObject.put("users",jsonArray);
-            } else {
-                jsonObject.put("msg","请确认数据是否重复");
-                jsonObject.put("status","500");
             }
         } catch (Exception e) {
             jsonObject.put("msg","录入失败");
