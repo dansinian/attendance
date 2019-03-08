@@ -3,6 +3,7 @@ package com.wsh.service.Impl;
 import com.wsh.dao.*;
 import com.wsh.entity.*;
 import com.wsh.service.UserService;
+import com.wsh.servlet.IsChOrEnOrNum;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,19 +93,21 @@ public class UserServiceImpl implements UserService {
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         criteria.andUserIdEqualTo(userId);
-        User user =new User();
         List<User> users = userMapper.selectByExample(userExample);
         if (users.size() == 1){
+            User olduser = users.get(0);
+            User user = new User();
             user.setUserId(userId);
-            user.setUserName(jsonObject.getString("serName"));
-            user.setUserPhone(jsonObject.getString("userPhone"));
-            user.setUserPass(jsonObject.getString("userPass"));
-            user.setUserDepartment(jsonObject.getString("userDepartment"));
-            user.setUserMajor(jsonObject.getString("userMajor"));
-            user.setHeadImg(jsonObject.getString("HeadImg"));
-            user.setNickname(jsonObject.getString("nickName"));
-            user.setAutograph(jsonObject.getString("antugraph"));
-            int returnint =userMapper.updateByPrimaryKeySelective(user);
+            user.setUserName(jsonObject.optString("userName",olduser.getUserName()));
+            user.setUserPhone(jsonObject.optString("userPhone",olduser.getUserPhone()));
+            user.setUserPass(jsonObject.optString("userPass",olduser.getUserPass()));
+            user.setUserDepartment(jsonObject.optString("userDepartment",olduser.getUserDepartment()));
+            user.setUserMajor(jsonObject.optString("userMajor",olduser.getUserMajor()));
+            user.setHeadImg(jsonObject.optString("HeadImg",olduser.getHeadImg()));
+            user.setNickname(jsonObject.optString("nickName",olduser.getNickname()));
+            user.setAutograph(jsonObject.optString("antugraph",olduser.getAutograph()));
+            user.setUserType(jsonObject.optString("type",olduser.getUserType()));
+            int returnint =userMapper.updateByExampleSelective(user,userExample);
             if(returnint>0){
                 returnJson.put("user",user);
                 returnJson.put("msg","修改成功");
@@ -125,10 +128,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public JSONObject selectUser (JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String userId = jsonObject.getString("userId");
+        String content = jsonObject.getString("content");
+        String type = IsChOrEnOrNum.IsChOrNum(content);
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
-        criteria.andUserIdEqualTo(userId);
+        if ("number".equals(type)) {
+            criteria.andUserIdLike(content);
+        } else {
+            criteria.andUserNameEqualTo(content);
+        }
         List<User> users = userMapper.selectByExample(userExample);
         if (users!=null){
             returnJson.put("users",users);
@@ -214,6 +222,9 @@ public class UserServiceImpl implements UserService {
         return returnJson;
     }
 
+    /*
+    *Excel导入专用
+    * */
     @Override
     public JSONObject addStuddents(List excelList) {
         JSONObject jsonObject = new JSONObject();
