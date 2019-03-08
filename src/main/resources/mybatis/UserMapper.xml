@@ -78,13 +78,13 @@
   </sql>
   <select id="selectByNameLike" resultMap="BaseResultMap" parameterType="String">
     select *
-    from forum.user
+    from user
     where
     user_name LIKE CONCAT(CONCAT('%', #{0}), '%') AND user_type = #{1};
   </select>
   <select id="selectByIdLike" resultMap="BaseResultMap" parameterType="String">
     select *
-    from forum.user
+    from user
     where
     user_id LIKE CONCAT(CONCAT('%', #{0}), '%') AND user_type = #{1};
   </select>

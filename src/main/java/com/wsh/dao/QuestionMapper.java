@@ -29,4 +29,8 @@ public interface QuestionMapper {
     int updateByPrimaryKey(Question record);
 
     List<Question> selectByTitleLike(String title);
+
+    List<Question> selectByCourseLike(String courseName);
+
+    List<Question> selectByContentLike(String content);
 }

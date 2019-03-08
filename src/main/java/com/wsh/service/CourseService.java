@@ -10,4 +10,6 @@ public interface CourseService {
     String deleteCourse(JSONObject jsonObject);
 
     JSONObject selectCourse(JSONObject jsonObject);
+
+    JSONObject updateCourse(JSONObject jsonObject);
 }

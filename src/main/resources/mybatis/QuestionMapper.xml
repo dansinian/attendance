@@ -82,6 +82,16 @@
     from question
     where que_title LIKE CONCAT(CONCAT('%', #{title}), '%');
   </select>
+  <select id="selectByCourseLike" resultMap="BaseResultMap" resultType="String">
+    select *
+    from question
+    where que_course LIKE CONCAT(CONCAT('%', #{courseName}), '%');
+  </select>
+  <select id="selectByContentLike" resultMap="BaseResultMap" resultType="String">
+    select *
+    from question
+    where que_detail LIKE CONCAT(CONCAT('%', #{content}), '%');
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.QuestionExample" >
     select
     <if test="distinct" >

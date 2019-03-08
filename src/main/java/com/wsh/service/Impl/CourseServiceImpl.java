@@ -67,19 +67,64 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public JSONObject updateCourse(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        String courseId = jsonObject.getString("courseId");
+        String department = jsonObject.getString("department");
+        String major= jsonObject.getString("major");
+        String courseName= jsonObject.getString("course");
+        CourseExample courseExample = new CourseExample();
+        CourseExample.Criteria criteria = courseExample.createCriteria();
+        criteria.andDepartmentEqualTo(department).andMajorEqualTo(major).andCourseEqualTo(courseName);
+        List<Course> courses1 =  courseMapper.selectByExample(courseExample);
+        if (courses1.size() == 0) {
+            Course courses = courseMapper.selectByPrimaryKey(courseId);
+            if (courses != null) {
+                Course course = new Course();
+                course.setCouId(courseId);
+                course.setDepartment(jsonObject.optString("department",courses.getDepartment()));
+                course.setMajor(jsonObject.optString("major",courses.getMajor()));
+                course.setCourse(jsonObject.optString("course",courses.getCourse()));
+                course.setCourseTeacher(jsonObject.optString("courseTeacher",courses.getCourseTeacher()));
+                course.setCourseFile(jsonObject.optString("courseFile",courses.getCourseFile()));
+                int success =  courseMapper.updateByPrimaryKey(course);
+                if (success >0) {
+                    returnJson.put("msg","");
+                    returnJson.put("status","200");
+                    returnJson.put("course",course);
+                } else {
+                    returnJson.put("msg","更新失败");
+                    returnJson.put("status","500");
+                }
+            } else {
+                returnJson.put("msg","不存在该课程信息");
+                returnJson.put("status","500");
+            }
+        } else {
+            returnJson.put("msg","已有该课程信息，无需修改");
+            returnJson.put("status","500");
+        }
+        return returnJson;
+    }
 
+    @Override
     public JSONObject createCourse(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String department = jsonObject.getString("department");
         String major= jsonObject.getString("major");
         String courseName= jsonObject.getString("course");
         Course course = new Course();
+        try {
+            course.setCouId(DataAndNumber.dateToStamp(OutData.createData()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         course.setDepartment(department);
         course.setMajor(major);
         course.setCourse(courseName);
         course.setCourseTeacher(jsonObject.getString("courseTeacher"));
         course.setCourseFile(jsonObject.optString("courseFile"));
-        int success =courseMapper.insertSelective(course);
+        int success =courseMapper.insert(course);
         if (success > 0 ) {
                 returnJson.put("msg","已存在该课程");
                 returnJson.put("status","500");
@@ -135,7 +180,8 @@ public class CourseServiceImpl implements CourseService {
                 jsonObject.put("department",Depart);
                 jsonArray.add(jsonObject);
             }
-            returnJson.put("courses",jsonArray);
+            returnJson.put("course",jsonArray);
+            returnJson.put("AllCourse",course);
             returnJson.put("status","200");
             returnJson.put("msg","");
         } else {

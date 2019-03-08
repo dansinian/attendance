@@ -39,6 +39,14 @@ public class CourseController {
         return courseService.createCourse(jsonObject);
     }
 
+    @RequestMapping("/updateCourse")
+    @ResponseBody
+    public JSONObject updateCourse(HttpServletRequest request) {
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return courseService.updateCourse(jsonObject);
+    }
+
     @RequestMapping("/getCourse")
     @ResponseBody
     public JSONObject selectCourse() {

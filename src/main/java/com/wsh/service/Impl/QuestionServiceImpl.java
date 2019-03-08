@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -115,8 +116,15 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public JSONObject selectQuestion(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String title = jsonObject.getString("title");
-        List<Question>questions = questionMapper.selectByTitleLike(title);
+        List<Question>questions = new ArrayList<>();
+        String content = jsonObject.getString("content");
+        questions = questionMapper.selectByCourseLike(content);
+        if (questions.size() ==0) {
+            questions = questionMapper.selectByTitleLike(content);
+            if (questions.size() == 0) {
+                questions = questionMapper.selectByContentLike(content);
+            }
+        }
         if (questions.size() > 0){
             returnJson.put("questions",questions);
             returnJson.put("status","200");
@@ -134,7 +142,7 @@ public class QuestionServiceImpl implements QuestionService {
         JSONObject returnJson = new JSONObject();
         QuestionExample questionExample = new QuestionExample();
         QuestionExample.Criteria criteria = questionExample.createCriteria();
-        criteria.andQueIdIsNotNull().andUserIdNotEqualTo("admin");
+        criteria.andQueIdIsNotNull();
         List<Question> questions = questionMapper.selectByExample(questionExample);
         questions =  SortList.sort(questions);
         if (questions.size() > 0){
