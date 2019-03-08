@@ -90,13 +90,14 @@ public class CourseServiceImpl implements CourseService {
                 for (int j = 0; j < course.size(); j++) {
                     if (depart.get(i).equals(course.get(j).getDepartment())){
                         String major = course.get(j).getMajor();
-
+                        JSONObject jsonObject = new JSONObject();
                         JSONArray jsonArray1 = new JSONArray();
                         for (int k = 0; k < course.size(); k++) {
                             if (major.equals(course.get(k).getMajor())) {
                                 jsonArray1.add(course.get(k).getCourse());
                             }
-                            jsonObject1.put(major,jsonArray1);
+                            jsonObject.put(major,jsonArray1);
+                            jsonObject1.put("major",jsonObject);
                         }
                     }
                 }
