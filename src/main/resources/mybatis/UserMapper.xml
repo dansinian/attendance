@@ -80,13 +80,13 @@
     select *
     from forum.user
     where
-    user_name LIKE CONCAT(CONCAT('%', #{content}), '%');
+    user_name LIKE CONCAT(CONCAT('%', #{0}), '%') AND user_type = #{1};
   </select>
   <select id="selectByIdLike" resultMap="BaseResultMap" parameterType="String">
     select *
     from forum.user
     where
-    user_id LIKE CONCAT(CONCAT('%', #{content}), '%');
+    user_id LIKE CONCAT(CONCAT('%', #{0}), '%') AND user_type = #{1};
   </select>
   <select id="selectByExample" parameterType="com.wsh.entity.UserExample" resultMap="BaseResultMap">
     select

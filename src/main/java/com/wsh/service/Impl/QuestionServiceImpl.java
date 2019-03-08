@@ -79,20 +79,21 @@ public class QuestionServiceImpl implements QuestionService {
     public JSONObject updateQuestion(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String questionId = jsonObject.getString("questionId");
-        Question question =questionMapper.selectByPrimaryKey(questionId);
-        if (question!= null){
+        Question question1 =questionMapper.selectByPrimaryKey(questionId);
+        if (question1!= null){
+            Question question = new Question();
             question.setQueId(questionId);
-            question.setQueTitle(jsonObject.optString("title"));
-            question.setQueSummary(jsonObject.optString("summary"));
-            question.setQueDetail(jsonObject.optString("detail"));
-            question.setUserId(jsonObject.optString("userId"));
-            question.setCreateTime(jsonObject.optString("createTime"));
-            question.setClickCount(jsonObject.optInt("clickCount"));
-            question.setPraiseCount(jsonObject.optInt("praiseCount"));
-            question.setReplyCount(jsonObject.optInt("replyCount"));
-            question.setQueCourse(jsonObject.optString("queCourse"));
+            question.setQueTitle(jsonObject.optString("title",question1.getQueTitle()));
+            question.setQueSummary(jsonObject.optString("summary",question1.getQueSummary()));
+            question.setQueDetail(jsonObject.optString("detail",question1.getQueDetail()));
+            question.setUserId(jsonObject.optString("userId",question1.getUserId()));
+            question.setCreateTime(jsonObject.optString("createTime",question1.getCreateTime()));
+            question.setClickCount(jsonObject.optInt("clickCount",question1.getClickCount()));
+            question.setPraiseCount(jsonObject.optInt("praiseCount",question1.getPraiseCount()));
+            question.setReplyCount(jsonObject.optInt("replyCount",question1.getReplyCount()));
+            question.setQueCourse(jsonObject.optString("queCourse",question1.getQueCourse()));
             question.setUnread(0);
-            question.setQueImg(jsonObject.optString("queImg"));
+            question.setQueImg(jsonObject.optString("queImg",question1.getQueImg()));
             int returnint =questionMapper.updateByPrimaryKeySelective(question);
             if(returnint>0){
                 returnJson.put("question",question);

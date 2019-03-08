@@ -9,6 +9,15 @@
     <result column="course_file" jdbcType="VARCHAR" property="courseFile" />
     <result column="course_teacher" jdbcType="VARCHAR" property="courseTeacher" />
   </resultMap>
+  <resultMap id="BaseMajor" type="String">
+    <result column="major" jdbcType="VARCHAR" property="major" />
+  </resultMap>
+  <resultMap id="BaseCourse" type="String">
+    <result column="course" jdbcType="VARCHAR" property="course" />
+  </resultMap>
+  <resultMap id="BaseTeacher" type="String">
+    <result column="course_teacher" jdbcType="VARCHAR" property="courseTeacher" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -70,6 +79,31 @@
   <sql id="Base_Column_List">
     cou_id, department, major, course, course_file, course_teacher
   </sql>
+  <select id="selectMajorByDepart" parameterType="String" resultMap="BaseMajor">
+    select major
+    from forum.course
+    WHERE department = #{department}
+  </select>
+  <select id="selectCourseByDepartAndMajor" parameterType="String" resultMap="BaseCourse">
+    select course.course
+    from forum.course
+    WHERE department = #{0} AND major = #{1}
+  </select>
+  <select id="selectCourseTeacher" parameterType="String" resultMap="BaseTeacher">
+    select course.course_teacher
+    from forum.course
+    WHERE  department = #{0} AND major = #{1} AND course.course = #{2}
+  </select>
+  <select id="selectByTeacherLike" parameterType="String" resultMap="BaseResultMap">
+    select *
+    from forum.course
+    WHERE course_teacher like CONCAT(CONCAT('%', #{teacher}), '%')
+  </select>
+  <select id="selectByMajorLike" parameterType="String" resultMap="BaseResultMap">
+    select *
+    from forum.course
+    WHERE major like CONCAT(CONCAT('%', #{major}), '%')
+  </select>
   <select id="selectByExample" parameterType="com.wsh.entity.CourseExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

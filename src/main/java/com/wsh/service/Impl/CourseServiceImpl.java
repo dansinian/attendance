@@ -6,6 +6,7 @@ import com.wsh.entity.CourseExample;
 import com.wsh.service.CourseService;
 import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.OutData;
+import com.wsh.servlet.SortList;
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -43,6 +44,30 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public JSONObject selectCourse(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        String content = jsonObject.getString("content");
+        CourseExample courseExample = new CourseExample();
+        CourseExample.Criteria criteria = courseExample.createCriteria();
+        criteria.andMajorEqualTo(content);
+        List<Course> courses = new ArrayList<>();
+        courses = courseMapper.selectByMajorLike(content);
+        if (courses.size() == 0 ) {
+            courses = courseMapper.selectByTeacherLike(content);
+        }
+        if (courses.size() > 0){
+            returnJson.put("msg","");
+            returnJson.put("status","200");
+            returnJson.put("course",courses);
+        } else {
+            returnJson.put("msg","没有数据");
+            returnJson.put("status","500");
+        }
+        return returnJson;
+    }
+
+    @Override
+
     public JSONObject createCourse(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String department = jsonObject.getString("department");
@@ -53,7 +78,7 @@ public class CourseServiceImpl implements CourseService {
         course.setMajor(major);
         course.setCourse(courseName);
         course.setCourseTeacher(jsonObject.getString("courseTeacher"));
-        course.setCourseFile(jsonObject.getString("courseFile"));
+        course.setCourseFile(jsonObject.optString("courseFile"));
         int success =courseMapper.insertSelective(course);
         if (success > 0 ) {
                 returnJson.put("msg","已存在该课程");
@@ -68,13 +93,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public JSONObject selectCourse() {
+    public JSONObject getCourse() {
         JSONObject returnJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         CourseExample courseExample = new CourseExample();
         CourseExample.Criteria criteria = courseExample.createCriteria();
         criteria.andCouIdIsNotNull();
-        List<Course>course = courseMapper.selectByExample(courseExample);
+        List<Course> course = courseMapper.selectByExample(courseExample);
         if (course.size() > 0){
             List depart = new ArrayList();
             /*得到所有不同的院系*/
@@ -85,23 +110,30 @@ public class CourseServiceImpl implements CourseService {
                 }
             }
             for (int i = 0; i < depart.size(); i++) {
-                JSONObject jsonObject1 = new JSONObject();
-                jsonObject1.put("department",depart.get(i));
-                for (int j = 0; j < course.size(); j++) {
-                    if (depart.get(i).equals(course.get(j).getDepartment())){
-                        String major = course.get(j).getMajor();
-                        JSONObject jsonObject = new JSONObject();
-                        JSONArray jsonArray1 = new JSONArray();
-                        for (int k = 0; k < course.size(); k++) {
-                            if (major.equals(course.get(k).getMajor())) {
-                                jsonArray1.add(course.get(k).getCourse());
-                            }
-                            jsonObject.put(major,jsonArray1);
-                            jsonObject1.put("major",jsonObject);
-                        }
+                JSONObject jsonObject = new JSONObject();
+                JSONArray jsonArray1 = new JSONArray();
+                String Depart = depart.get(i).toString();
+                List major = courseMapper.selectMajorByDepart(Depart);
+                SortList.removeDuplicate(major);
+                for (int j = 0; j < major.size(); j++) {
+                    JSONObject jsonObject1 = new JSONObject();
+                    String majorName = major.get(j).toString();
+                    List courses = courseMapper.selectCourseByDepartAndMajor(Depart,majorName);
+                    SortList.removeDuplicate(courses);
+                    JSONArray jsonArray2 = new JSONArray();
+                    for (int k = 0; k < courses.size(); k++) {
+                        JSONObject jsonObject2 = new JSONObject();
+                        String coursename = courses.get(k).toString();
+                        String teacher = courseMapper.selectCourseTeacher(Depart,majorName,coursename);
+                        jsonObject2.put(coursename,teacher);
+                        jsonArray2.add(jsonObject2);
                     }
+                    jsonObject1.put(majorName,jsonArray2);
+                    jsonArray1.add(jsonObject1);
                 }
-                jsonArray.add(jsonObject1);
+                jsonObject.put("major",jsonArray1);
+                jsonObject.put("department",Depart);
+                jsonArray.add(jsonObject);
             }
             returnJson.put("courses",jsonArray);
             returnJson.put("status","200");
