@@ -93,6 +93,18 @@
     delete from liked
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteQuestionLike" parameterType="String" >
+    delete from liked
+    where liked_question = #{0} and like_user = #{1}
+  </delete>
+  <delete id="deleteCommentLike" parameterType="String" >
+   delete from liked
+    where liked_comment = #{0} and like_user = #{1}
+  </delete>
+  <delete id="deleteReplyLike" parameterType="String" >
+    delete from liked
+    where liked_reply = #{0} and like_user = #{1}
+  </delete>
   <delete id="deleteByExample" parameterType="com.wsh.entity.LikedExample" >
     delete from liked
     <if test="_parameter != null" >

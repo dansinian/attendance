@@ -10,21 +10,19 @@ public interface FollowMapper {
 
     int deleteByExample(FollowExample example);
 
-    int deleteByPrimaryKey(String followId);
-
     int insert(Follow record);
 
     int insertSelective(Follow record);
 
     List<Follow> selectByExample(FollowExample example);
 
-    Follow selectByPrimaryKey(String followId);
-
     int updateByExampleSelective(@Param("record") Follow record, @Param("example") FollowExample example);
 
     int updateByExample(@Param("record") Follow record, @Param("example") FollowExample example);
 
-    int updateByPrimaryKeySelective(Follow record);
+    Follow selectFollw(String userId, String followed);
 
-    int updateByPrimaryKey(Follow record);
+    List selectMyFollow(String content);
+
+    List selectMyFans(String content);
 }

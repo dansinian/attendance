@@ -29,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private CommentReplyMapper replyMapper;
     @Autowired
     private LikedMapper likedMapper;
+    @Autowired
+    private FollowMapper followMapper;
 
 
     @Override
@@ -132,8 +134,6 @@ public class UserServiceImpl implements UserService {
         String content = jsonObject.getString("content");
         String userType = jsonObject.getString("type");
         List<User> users = new ArrayList<>();
-        UserExample userExample = new UserExample();
-        UserExample.Criteria criteria = userExample.createCriteria();
         String type = IsChOrEnOrNum.IsChOrNum(content);
         if ("number".equals(type)) {
             users = userMapper.selectByIdLike(content,userType);
@@ -141,9 +141,64 @@ public class UserServiceImpl implements UserService {
             users = userMapper.selectByNameLike(content,userType);
         }
         if (users.size() > 0){
-            returnJson.put("users",users);
-            returnJson.put("status","200");
-            returnJson.put("msg","");
+            if (users.size() == 1) {
+                JSONArray followArray = new JSONArray();
+                JSONArray fansArray = new JSONArray();
+                JSONArray questionArray = new JSONArray();
+                FollowExample followExample = new FollowExample();
+                FollowExample.Criteria criteria = followExample.createCriteria();
+                criteria.andFollowIdEqualTo(content);
+                List<Follow> follow = followMapper.selectByExample(followExample);
+                criteria.andFollowedIdEqualTo(content);
+                List<Follow> followed = followMapper.selectMyFans(content);
+                if (follow.size() > 0) {
+                    for (int i = 0; i < follow.size(); i++) {
+                        String followId = follow.get(i).getFollowedId();
+                        User user = userMapper.selectByUserId(followId);
+                        JSONObject jsonObject1 = new JSONObject();
+                        jsonObject1.put("userId",followId);
+                        jsonObject1.put("nickName",user.getNickname());
+                        jsonObject1.put("headImg",user.getHeadImg());
+                        followArray.add(jsonObject1);
+                    }
+                }
+                if (followed.size() > 0) {
+                    for (int i = 0; i < followed.size(); i++) {
+                        String followedId = followed.get(i).getFollowId();
+                        User user = userMapper.selectByUserId(followedId);
+                        JSONObject jsonObject1 = new JSONObject();
+                        jsonObject1.put("userId",followedId);
+                        jsonObject1.put("nickName",user.getNickname());
+                        jsonObject1.put("headImg",user.getHeadImg());
+                        fansArray.add(jsonObject1);
+                    }
+                }
+                QuestionExample questionExample = new QuestionExample();
+                QuestionExample.Criteria criteria1 = questionExample.createCriteria();
+                criteria1.andUserIdEqualTo(content);
+                List<Question> questions = questionMapper.selectByExample(questionExample);
+                if (questions.size() > 0) {
+                    for (int i = 0; i < questions.size(); i++) {
+                        Question question = questions.get(i);
+                        JSONObject jsonObject1 = new JSONObject();
+                        jsonObject1.put("questionId",question.getQueId());
+                        jsonObject1.put("title",question.getQueTitle());
+                        jsonObject1.put("detail",question.getQueDetail());
+                        jsonObject1.put("createTime",question.getCreateTime());
+                        questionArray.add(jsonObject1);
+                    }
+                }
+                returnJson.put("follow",followArray);
+                returnJson.put("followed",fansArray);
+                returnJson.put("questions",questionArray);
+                returnJson.put("user",users.get(0));
+                returnJson.put("status","200");
+                returnJson.put("msg","");
+            } else {
+                returnJson.put("users",users);
+                returnJson.put("status","200");
+                returnJson.put("msg","");
+            }
         }else{
             returnJson.put("users","");
             returnJson.put("status","500");
@@ -179,7 +234,7 @@ public class UserServiceImpl implements UserService {
         String password = jsonObject.getString("password");
         UserExample userExample =new UserExample();
         UserExample.Criteria criteria= userExample.createCriteria();
-        criteria.andUserTypeEqualTo(account);
+        criteria.andUserIdEqualTo(account);
         List<User> users = userMapper.selectByExample(userExample);
         if (users != null){
             String jdbcpassword = users.get(0).getUserPass();
@@ -206,7 +261,7 @@ public class UserServiceImpl implements UserService {
         String id= jsonObject.getString("userId");
         UserExample userExample =new UserExample();
         UserExample.Criteria criteria= userExample.createCriteria();
-        criteria.andUserTypeEqualTo(id);
+        criteria.andUserIdEqualTo(id);
         List<User> users = userMapper.selectByExample(userExample);
         if (users != null) {
             if (users.get(0).getUserPass().equals(oldpassword)){
@@ -298,6 +353,10 @@ public class UserServiceImpl implements UserService {
         return jsonObject;
     }
 
+    /*
+     *点赞和取消点赞
+     * */
+
     @Override
     public JSONObject likes(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
@@ -313,6 +372,9 @@ public class UserServiceImpl implements UserService {
                 liked.setLikeUser(userId);
                 liked.setLikedQuestion(id);
                 likedMapper.insert(liked);
+                returnJson.put("status","200");
+            } else {
+                returnJson.put("status","500");
             }
         } else if ("comment".equals(type)) {
             CommentExample commentExample = new CommentExample();
@@ -326,6 +388,9 @@ public class UserServiceImpl implements UserService {
                 liked.setLikeUser(userId);
                 liked.setLikedComment(id);
                 likedMapper.insert(liked);
+                returnJson.put("status","200");
+            } else {
+                returnJson.put("status","500");
             }
         } else if ("commentReply".equals(type)) {
             CommentReplyExample replyExample = new CommentReplyExample();
@@ -339,26 +404,97 @@ public class UserServiceImpl implements UserService {
                 liked.setLikeUser(userId);
                 liked.setLikedComment(id);
                 likedMapper.insert(liked);
+                returnJson.put("status","200");
+            } else {
+                returnJson.put("status","500");
+            }
+        }
+        return returnJson;
+    }
+
+
+    @Override
+    public JSONObject unlikes(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        String id = jsonObject.getString("ID");
+        String type = jsonObject.getString("type");
+        String userId = jsonObject.getString("userId");
+        if ("question".equals(type)) {
+            Question question = questionMapper.selectByPrimaryKey(id);
+            question.setPraiseCount(question.getPraiseCount()-1);
+            int success = questionMapper.updateByPrimaryKeySelective(question);
+            if (success >0) {
+                likedMapper.deleteQuestionLike(id,userId);
+            }
+        } else if ("comment".equals(type)) {
+            CommentExample commentExample = new CommentExample();
+            CommentExample.Criteria criteria = commentExample.createCriteria();
+            criteria.andCommentIdEqualTo(id);
+            Comment comment = commentMapper.selectBycommentId(id);
+            comment.setPraseCount(comment.getPraseCount()+1);
+            int success = commentMapper.updateByExampleSelective(comment,commentExample);
+            if (success > 0) {
+                likedMapper.deleteCommentLike(id,userId);
+            }
+        } else if ("commentReply".equals(type)) {
+            CommentReplyExample replyExample = new CommentReplyExample();
+            CommentReplyExample.Criteria criteria = replyExample.createCriteria();
+            criteria.andReplyIdEqualTo(id);
+            CommentReply reply = replyMapper.selectByRepId(id);
+            reply.setPraseCount(reply.getPraseCount()+1);
+            int success = replyMapper.updateByExampleSelective(reply,replyExample);
+            if (success > 0) {
+                likedMapper.deleteReplyLike(id,userId);
+            }
+        }
+        return returnJson;
+    }
+
+    /*
+    * 关注和取消关注
+    * */
+    @Override
+    public JSONObject follow(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        String userId = jsonObject.getString("userId");
+        String followed = jsonObject.getString("followedId");
+        Follow follow = new Follow();
+        Follow follow1 = followMapper.selectFollw(userId,followed);
+        if (follow1 != null) {
+            returnJson.put("msg","不要重复关注");
+            returnJson.put("status","500");
+        } else {
+            follow.setFollowId(userId);
+            follow.setFollowedId(followed);
+            int success = followMapper.insert(follow);
+            if (success > 0) {
+                returnJson.put("msg","关注成功");
+                returnJson.put("status","200");
             }
         }
         return returnJson;
     }
 
     @Override
-    public JSONObject unlikes(JSONObject jsonObject) {
-        JSONObject returnJson = new JSONObject();
-        return null;
-    }
-
-    @Override
-    public JSONObject follow(JSONObject jsonObject) {
-        return null;
-    }
-
-    @Override
     public JSONObject unfollow(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        return null;
+        String userId = jsonObject.getString("userId");
+        String followed = jsonObject.getString("followedId");
+        Follow follow1 = followMapper.selectFollw(userId,followed);
+        if (follow1 != null) {
+            FollowExample followExample = new FollowExample();
+            FollowExample.Criteria criteria = followExample.createCriteria();
+            criteria.andFollowedIdEqualTo(followed).andFollowIdEqualTo(userId);
+            int success = followMapper.deleteByExample(followExample);
+            if (success > 0) {
+                returnJson.put("msg","取消关注成功");
+                returnJson.put("status","200");
+            }
+        } else {
+            returnJson.put("msg","请先关注");
+            returnJson.put("status","200");
+        }
+        return returnJson;
     }
 
 }

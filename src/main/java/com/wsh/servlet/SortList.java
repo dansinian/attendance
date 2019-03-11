@@ -1,5 +1,6 @@
 package com.wsh.servlet;
 
+import com.wsh.entity.CommentReply;
 import com.wsh.entity.Question;
 
 import java.util.List;
@@ -25,6 +26,16 @@ public class SortList {
             @Override
             public int compare(Question Q1, Question Q2) {
                 return Q2.getQueId().compareTo(Q1.getQueId());
+            }
+        });
+        return list;
+    }
+
+    public static List sortReplyTime(List<CommentReply> list){
+        Collections.sort( list,new Comparator<CommentReply>() {
+            @Override
+            public int compare(CommentReply Q1, CommentReply Q2) {
+                return Q2.getReplyId().compareTo(Q1.getReplyId());
             }
         });
         return list;

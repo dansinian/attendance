@@ -60,7 +60,7 @@ public class QuestionController {
         return questionService.questionDetail(jsonObject);
     }
 
-    @RequestMapping("/myQuestionList")
+    @RequestMapping("/homePage")
     @ResponseBody
     public JSONObject myQuestionList(HttpServletRequest request){
         String jsonData = request.getParameter("data");
@@ -70,7 +70,7 @@ public class QuestionController {
 
     @RequestMapping("/adminList")
     @ResponseBody
-    public JSONObject adminList(HttpServletRequest request){
+    public JSONObject adminList(){
         return questionService.adminList();
     }
 

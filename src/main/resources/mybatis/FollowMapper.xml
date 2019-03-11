@@ -2,8 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wsh.dao.FollowMapper" >
   <resultMap id="BaseResultMap" type="com.wsh.entity.Follow" >
-    <id column="follow_id" property="followId" jdbcType="VARCHAR" />
+    <result column="follow_id" property="followId" jdbcType="VARCHAR" />
     <result column="followed_id" property="followedId" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseMyFollow" type="com.wsh.entity.Follow" >
+    <result column="followed_id" property="followedId" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseMyFans" type="com.wsh.entity.Follow" >
+    <result column="follow_id" property="followId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -80,16 +86,19 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from follow
-    where follow_id = #{followId,jdbcType=VARCHAR}
+  <select id="selectMyFollow" resultMap="BaseMyFollow" parameterType="String">
+    select followed_id from follow
+    where follow_id = #{content}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from follow
-    where follow_id = #{followId,jdbcType=VARCHAR}
-  </delete>
+  <select id="selectMyFans" resultMap="BaseMyFans" parameterType="String">
+   select follow_id from follow
+    where followed_id = #{content}
+  </select>
+  <select id="selectFollw" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from follow
+    WHERE follow_id = #{0} AND followed_id = #{1}
+  </select>
   <delete id="deleteByExample" parameterType="com.wsh.entity.FollowExample" >
     delete from follow
     <if test="_parameter != null" >
@@ -146,19 +155,5 @@
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wsh.entity.Follow" >
-    update follow
-    <set >
-      <if test="followedId != null" >
-        followed_id = #{followedId,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where follow_id = #{followId,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.wsh.entity.Follow" >
-    update follow
-    set followed_id = #{followedId,jdbcType=VARCHAR}
-    where follow_id = #{followId,jdbcType=VARCHAR}
   </update>
 </mapper>

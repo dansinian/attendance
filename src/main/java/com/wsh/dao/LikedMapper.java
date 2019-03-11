@@ -27,4 +27,11 @@ public interface LikedMapper {
     int updateByPrimaryKeySelective(Liked record);
 
     int updateByPrimaryKey(Liked record);
+
+    int deleteQuestionLike(String questionId, String userId);
+
+    int deleteCommentLike(String commentId, String userId);
+
+    int deleteReplyLike(String replyId, String userId);
+
 }

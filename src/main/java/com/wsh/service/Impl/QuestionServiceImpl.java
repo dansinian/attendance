@@ -3,17 +3,20 @@ package com.wsh.service.Impl;
 import com.wsh.dao.CommentMapper;
 import com.wsh.dao.CommentReplyMapper;
 import com.wsh.dao.QuestionMapper;
+import com.wsh.dao.UserMapper;
 import com.wsh.entity.*;
 import com.wsh.service.QuestionService;
 import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.OutData;
 import com.wsh.servlet.SortList;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -24,6 +27,8 @@ public class QuestionServiceImpl implements QuestionService {
     private CommentMapper commentMapper;
     @Autowired
     private CommentReplyMapper replyMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public JSONObject deleteQuestion(JSONObject jsonObject) {
@@ -85,15 +90,7 @@ public class QuestionServiceImpl implements QuestionService {
             Question question = new Question();
             question.setQueId(questionId);
             question.setQueTitle(jsonObject.optString("title",question1.getQueTitle()));
-            question.setQueSummary(jsonObject.optString("summary",question1.getQueSummary()));
             question.setQueDetail(jsonObject.optString("detail",question1.getQueDetail()));
-            question.setUserId(jsonObject.optString("userId",question1.getUserId()));
-            question.setCreateTime(jsonObject.optString("createTime",question1.getCreateTime()));
-            question.setClickCount(jsonObject.optInt("clickCount",question1.getClickCount()));
-            question.setPraiseCount(jsonObject.optInt("praiseCount",question1.getPraiseCount()));
-            question.setReplyCount(jsonObject.optInt("replyCount",question1.getReplyCount()));
-            question.setQueCourse(jsonObject.optString("queCourse",question1.getQueCourse()));
-            question.setUnread(0);
             question.setQueImg(jsonObject.optString("queImg",question1.getQueImg()));
             int returnint =questionMapper.updateByPrimaryKeySelective(question);
             if(returnint>0){
@@ -169,23 +166,55 @@ public class QuestionServiceImpl implements QuestionService {
             criteria.andQueIdEqualTo(quesId);
             List<Comment> comments =  commentMapper.selectByExample(commentExample); // 查到该问题下所有的一级评论
             if (comments.size() > 0 ) {
-                for (int i = 0; i < comments.size(); i++) {  // 进入每一个一级评论 对二级回复进行组装
+                JSONArray jsonArray = new JSONArray();
+                for (int i = 0; i < comments.size(); i++) { // 进入每一个一级评论 对二级回复进行组装
+                    JSONObject commJson = new JSONObject();
+                    String userID = comments.get(i).getUserId();
+                    User user2 = userMapper.selectByUserId(userID);
+                    JSONObject jsonObject1 = new JSONObject();
+                    jsonObject1.put(user2.getNickname() + "发表了评论",comments.get(i).getContent());
+                    JSONArray replyArray = new JSONArray();
                     String commentID = comments.get(i).getCommentId();
                     String userId = comments.get(i).getUserId();
                     CommentReplyExample replyExample = new CommentReplyExample();
                     CommentReplyExample.Criteria criteria1 = replyExample.createCriteria();
-                    criteria1.andCommentIdEqualTo(commentID).andReplyuserIdEqualTo(userId);
+                    criteria1.andCommentIdEqualTo(commentID);
                     List<CommentReply> replies = replyMapper.selectByExample(replyExample); // 查到所有回复一级留言,并且回复的是该问题的评论
-                    while(true) {
-                        CommentReplyExample replyExample1 = new CommentReplyExample();
-                        CommentReplyExample.Criteria criteria2 = replyExample.createCriteria();
-                        criteria2.andCommentIdEqualTo(commentID).andReplyuserIdEqualTo(userId);
-                        List<CommentReply> replyList =  replyMapper.selectByExample(replyExample1);
+                    if (replies.size() > 0) {
+                        SortList.sortReplyTime(replies);
+                        Collections.reverse(replies);
+                        for (int j = 0; j < replies.size(); j++) {
+                            CommentReply reply = replies.get(j);
+                            JSONObject jsonObject2 = new JSONObject();
+                            User user = userMapper.selectByUserId(reply.getUserId());
+                            User user1 = userMapper.selectByUserId(reply.getReplyuserId());
+                            jsonObject2.put(user.getNickname() + "回复了" + user1.getNickname(),reply.getContent());
+                            jsonObject2.put("createTime",reply.getCreateTime());
+                            jsonObject2.put("prase",String.valueOf(reply.getPraseCount()));
+                            replyArray.add(jsonObject2);
+                        }
+                    }
+                    commJson.put("comment",jsonObject1);
+                    commJson.put("reply",replyArray);
+                    jsonArray.add(commJson);
+                    if (jsonArray.size() > 0) {
+                        returnJson.put("comments",jsonArray);
+                        returnJson.put("status","200");
+                        returnJson.put("msg","");
+                    } else{
+                        returnJson.put("comments","");
+                        returnJson.put("status","500");
+                        returnJson.put("msg","暂无评论");
                     }
                 }
             }
+            else {
+                returnJson.put("comments","");
+                returnJson.put("status","500");
+                returnJson.put("msg","暂无评论");
+            }
         }
-        return null;
+        return returnJson;
     }
 
     @Override

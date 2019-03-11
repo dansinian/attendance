@@ -87,6 +87,10 @@
     from question
     where que_course LIKE CONCAT(CONCAT('%', #{courseName}), '%');
   </select>
+  <select id="selectCountByUser" resultType="java.lang.Integer" parameterType="String">
+    select count(*) from question
+    WHERE user_id = #{content}
+  </select>
   <select id="selectByContentLike" resultMap="BaseResultMap" resultType="String">
     select *
     from question
