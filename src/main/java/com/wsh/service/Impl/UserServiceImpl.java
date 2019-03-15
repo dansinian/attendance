@@ -132,13 +132,22 @@ public class UserServiceImpl implements UserService {
     public JSONObject selectUser (JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String content = jsonObject.getString("content");
-        String userType = jsonObject.getString("type");
+        String userType = jsonObject.optString("type");
         List<User> users = new ArrayList<>();
         String type = IsChOrEnOrNum.IsChOrNum(content);
         if ("number".equals(type)) {
-            users = userMapper.selectByIdLike(content,userType);
+            if (!"".equals(userType) && userType != null) {
+                users = userMapper.selectByIdLike(content,userType);
+            } else {
+                users = (List<User>) userMapper.selectByUserId(content);
+            }
+
         } else {
-            users = userMapper.selectByNameLike(content,userType);
+            if (!"".equals(userType) && userType != null) {
+                users = userMapper.selectByNameLike(content, userType);
+            } else {
+                users = userMapper.selectByUserName(content);
+            }
         }
         if (users.size() > 0){
             if (users.size() == 1) {

@@ -86,7 +86,13 @@
     select *
     from forum.user
     where
-    user_id = #{userId};
+    user_id  LIKE CONCAT(CONCAT('%', #{content}), '%')
+  </select>
+  <select id="selectByUserName" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from forum.user
+    where
+    user_name  LIKE CONCAT(CONCAT('%', #{content}), '%')
   </select>
   <select id="selectByIdLike" resultMap="BaseResultMap" parameterType="String">
     select *

@@ -33,4 +33,6 @@ public interface UserMapper {
     List<User> selectByIdLike(String content,String userType);
 
     User selectByUserId(String userId);
+
+    List<User> selectByUserName(String content);
 }
