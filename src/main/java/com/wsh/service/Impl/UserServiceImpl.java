@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
             if (!"".equals(userType) && userType != null) {
                 users = userMapper.selectByIdLike(content,userType);
             } else {
-                users = (List<User>) userMapper.selectByUserId(content);
+                users = userMapper.selectByUserIdList(content);
             }
 
         } else {

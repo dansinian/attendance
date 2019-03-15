@@ -100,6 +100,12 @@
     where
     user_id LIKE CONCAT(CONCAT('%', #{0}), '%') AND user_type = #{1};
   </select>
+  <select id="selectByUserIdList" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from forum.user
+    where
+    user_id LIKE CONCAT(CONCAT('%', #{content}), '%')
+  </select>
   <select id="selectByExample" parameterType="com.wsh.entity.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
