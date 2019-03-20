@@ -141,7 +141,7 @@ public class QuestionServiceImpl implements QuestionService {
         QuestionExample.Criteria criteria = questionExample.createCriteria();
         criteria.andQueIdIsNotNull();
         List<Question> questions = questionMapper.selectByExample(questionExample);
-        questions =  SortList.sort(questions);
+        questions =  SortList.sortTime(questions);
         if (questions.size() > 0){
             returnJson.put("questions",questions);
             returnJson.put("status","200");
@@ -160,6 +160,8 @@ public class QuestionServiceImpl implements QuestionService {
         JSONObject returnJson = new JSONObject();
         Question question = questionMapper.selectByPrimaryKey(quesId);
         if (question != null) {
+            question.setClickCount(question.getClickCount() +1 );
+            questionMapper.updateByPrimaryKey(question); // 每次查看question详情的时候,点击数+1
             returnJson.put("question",question);
             CommentExample commentExample = new CommentExample();
             CommentExample.Criteria criteria = commentExample.createCriteria();
@@ -218,8 +220,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public JSONObject myQuestionList(JSONObject jsonObject) {
-        String userDepart = jsonObject.getString("userDepartment");
+    public JSONObject recommendQuestion() {
         String newDate = "";
         JSONObject returnJson = new JSONObject();
         try {
@@ -229,13 +230,18 @@ public class QuestionServiceImpl implements QuestionService {
         }
         QuestionExample questionExample = new QuestionExample();
         QuestionExample.Criteria criteria = questionExample.createCriteria();
-        criteria.andQueIdLessThanOrEqualTo(newDate).andUserIdNotEqualTo("admin");
+        criteria.andUserIdNotEqualTo("admin");
         List<Question> questions = questionMapper.selectByExample(questionExample);
         if (questions.size() > 0 ) {
-            questions = SortList.sortTime(questions);
+            questions = SortList.sort(questions);
+            if (questions.size() >= 10) {
+                returnJson.put("questions",questions.subList(0,10));
+            } else {
+                returnJson.put("questions",questions);
+            }
             returnJson.put("msg","");
             returnJson.put("status","200");
-            returnJson.put("questions",questions);
+
         } else {
             returnJson.put("msg","没有数据");
             returnJson.put("status","500");

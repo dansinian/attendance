@@ -11,7 +11,7 @@ public interface QuestionService {
 
     JSONObject questionDetail(JSONObject jsonObject);
 
-    JSONObject myQuestionList(JSONObject jsonObject);
+    JSONObject recommendQuestion();
 
     JSONObject adminList();
 }

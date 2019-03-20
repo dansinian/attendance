@@ -60,12 +60,10 @@ public class QuestionController {
         return questionService.questionDetail(jsonObject);
     }
 
-    @RequestMapping("/homePage")
+    @RequestMapping("/recommendQuestion")
     @ResponseBody
-    public JSONObject myQuestionList(HttpServletRequest request){
-        String jsonData = request.getParameter("data");
-        JSONObject jsonObject = JSONObject.fromObject(jsonData);
-        return questionService.myQuestionList(jsonObject);
+    public JSONObject recommendQuestion(HttpServletRequest request){
+        return questionService.recommendQuestion();
     }
 
     @RequestMapping("/adminList")
