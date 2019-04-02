@@ -54,7 +54,12 @@ public class CourseServiceimpl implements CourseService {
     @Override
     public JSONObject createCourse(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        String courseID = OutData.createData();
+        String courseID = null;
+        try {
+            courseID = DataAndNumber.dateToStamp(OutData.createData());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         Course course =new Course();
         CourseExample courseExample =new CourseExample();
         CourseExample.Criteria criteria= courseExample.createCriteria();
