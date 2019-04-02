@@ -190,7 +190,11 @@ public class QuestionServiceImpl implements QuestionService {
                             JSONObject jsonObject2 = new JSONObject();
                             User user = userMapper.selectByUserId(reply.getUserId());
                             User user1 = userMapper.selectByUserId(reply.getReplyuserId());
-                            jsonObject2.put(user.getNickname() + "回复了" + user1.getNickname(),reply.getContent());
+                            jsonObject2.put("replyUser",user.getNickname());
+                            jsonObject2.put("replyedUser",user1.getNickname());
+                            jsonObject2.put("replyContent",reply.getContent());
+                            jsonObject2.put("replyId",reply.getReplyId());
+//                            jsonObject2.put(user.getNickname() + "回复了" + user1.getNickname(),reply.getContent());
                             jsonObject2.put("createTime",reply.getCreateTime());
                             jsonObject2.put("prase",String.valueOf(reply.getPraseCount()));
                             replyArray.add(jsonObject2);

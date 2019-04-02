@@ -71,11 +71,16 @@
   <sql id="Base_Column_List">
     comment_id, que_id, user_id, content, prase_count, create_time, comment_img
   </sql>
-<select id="selectBycommentId">
+  <select id="selectBycommentId">
   select *
   from comment
   where comment_id = #{commentId}
 </select>
+  <select id="selectByContent" resultMap="BaseResultMap" resultType="String">
+    select *
+    from comment
+    where content LIKE CONCAT(CONCAT('%', #{content}), '%');
+  </select>
   <select id="selectByExample" parameterType="com.wsh.entity.CommentExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

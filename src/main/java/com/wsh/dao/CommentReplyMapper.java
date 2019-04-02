@@ -23,4 +23,6 @@ public interface CommentReplyMapper {
     int deleteByReplyId(String replyId);
 
     CommentReply selectByRepId(String replyId);
+
+    List<CommentReply> selectByContent(String content);
 }

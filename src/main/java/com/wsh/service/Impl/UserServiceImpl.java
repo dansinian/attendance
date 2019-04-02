@@ -194,6 +194,9 @@ public class UserServiceImpl implements UserService {
                         jsonObject1.put("title",question.getQueTitle());
                         jsonObject1.put("detail",question.getQueDetail());
                         jsonObject1.put("createTime",question.getCreateTime());
+                        jsonObject1.put("Praise",question.getPraiseCount());
+                        jsonObject1.put("click",question.getClickCount());
+                        jsonObject1.put("reply",question.getReplyCount());
                         questionArray.add(jsonObject1);
                     }
                 }

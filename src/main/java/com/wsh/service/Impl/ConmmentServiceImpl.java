@@ -1,18 +1,20 @@
 package com.wsh.service.Impl;
 
+import com.sun.script.javascript.JSAdapter;
 import com.wsh.dao.CommentMapper;
+import com.wsh.dao.CommentReplyMapper;
 import com.wsh.dao.QuestionMapper;
 import com.wsh.dao.UserMapper;
-import com.wsh.entity.Comment;
-import com.wsh.entity.CommentExample;
-import com.wsh.entity.Question;
+import com.wsh.entity.*;
 import com.wsh.service.CommentService;
 import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.OutData;
 import com.wsh.servlet.SortList;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.ls.LSException;
 
 import java.text.ParseException;
 import java.util.List;
@@ -23,7 +25,7 @@ public class ConmmentServiceImpl implements CommentService {
     @Autowired
     private QuestionMapper questionMapper;
     @Autowired
-    private UserMapper userMapper;
+    private CommentReplyMapper replyMapper;
 
     @Override
     public JSONObject deleteConmment(JSONObject jsonObject) {
@@ -31,6 +33,10 @@ public class ConmmentServiceImpl implements CommentService {
         JSONObject returnJSon = new JSONObject();
         int returncourse= commentMapper.deleteByCommentId(commentId);
         if (returncourse>0){
+            CommentReplyExample replyExample = new CommentReplyExample();
+            CommentReplyExample.Criteria criteria = replyExample.createCriteria();
+            criteria.andCommentIdEqualTo(commentId);
+            replyMapper.deleteByExample(replyExample);
             returnJSon.put("msg","删除成功");
             returnJSon.put("status","200");
         } else {
@@ -111,6 +117,17 @@ public class ConmmentServiceImpl implements CommentService {
             returnJson.put("status","500");
             returnJson.put("msg","没有评论信息");
         }
+        return returnJson;
+    }
+
+    @Override
+    public JSONObject selectCommentByContent(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        String content = jsonObject.getString("content");
+        List<Comment> comments = commentMapper.selectByContent(content);
+        List<CommentReply> replies = replyMapper.selectByContent(content);
+        returnJson.put("comment",comments);
+        returnJson.put("reply",replies);
         return returnJson;
     }
 }

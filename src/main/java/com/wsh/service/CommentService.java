@@ -7,4 +7,5 @@ public interface CommentService {
     JSONObject createConmment(JSONObject jsonObject);
     JSONObject selectConmment(JSONObject jsonObject);
     JSONObject selectAllConmment();
+    JSONObject selectCommentByContent(JSONObject jsonObject);
 }

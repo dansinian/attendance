@@ -42,4 +42,12 @@ public class CommentController {
             return commentService.selectAllConmment();
         }
     }
+
+    @RequestMapping("/selectCommentByContent")
+    @ResponseBody
+    public JSONObject selectCommentByContent(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return commentService.selectCommentByContent(jsonObject);
+    }
 }
