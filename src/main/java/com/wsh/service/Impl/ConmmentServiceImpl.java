@@ -126,8 +126,17 @@ public class ConmmentServiceImpl implements CommentService {
         String content = jsonObject.getString("content");
         List<Comment> comments = commentMapper.selectByContent(content);
         List<CommentReply> replies = replyMapper.selectByContent(content);
-        returnJson.put("comment",comments);
-        returnJson.put("reply",replies);
+        if (comments.size() > 0) {
+            returnJson.put("comment",comments);
+        }
+        if (replies.size() > 0) {
+            returnJson.put("reply",replies);
+        }
+        if (replies.size() > 0 || comments.size() > 0) {
+            returnJson.put("status","200");
+        } else {
+            returnJson.put("status","500");
+        }
         return returnJson;
     }
 }
