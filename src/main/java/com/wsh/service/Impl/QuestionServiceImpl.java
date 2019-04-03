@@ -174,7 +174,12 @@ public class QuestionServiceImpl implements QuestionService {
                     String userID = comments.get(i).getUserId();
                     User user2 = userMapper.selectByUserId(userID);
                     JSONObject jsonObject1 = new JSONObject();
-                    jsonObject1.put(user2.getNickname() + "发表了评论",comments.get(i).getContent());
+//                    jsonObject1.put(user2.getNickname() + "发表了评论",comments.get(i).getContent());
+                    jsonObject1.put("commentId",comments.get(i).getCommentId());
+                    jsonObject1.put("commentConent",comments.get(i).getContent());
+                    jsonObject1.put("userNickname",user2.getNickname());
+                    jsonObject1.put("userId",user2.getUserId());
+                    jsonObject1.put("parseCount",comments.get(i).getPraseCount());
                     JSONArray replyArray = new JSONArray();
                     String commentID = comments.get(i).getCommentId();
                     String userId = comments.get(i).getUserId();
@@ -196,7 +201,7 @@ public class QuestionServiceImpl implements QuestionService {
                             jsonObject2.put("replyId",reply.getReplyId());
 //                            jsonObject2.put(user.getNickname() + "回复了" + user1.getNickname(),reply.getContent());
                             jsonObject2.put("createTime",reply.getCreateTime());
-                            jsonObject2.put("prase",String.valueOf(reply.getPraseCount()));
+                            jsonObject2.put("praseCount",String.valueOf(reply.getPraseCount()));
                             replyArray.add(jsonObject2);
                         }
                     }
