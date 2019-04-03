@@ -7,11 +7,14 @@ import com.wsh.dao.StudentMapper;
 import com.wsh.dao.TeacherMapper;
 import com.wsh.entity.*;
 import com.wsh.service.CourseService;
+import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.OutData;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,14 +55,9 @@ public class CourseServiceimpl implements CourseService {
     }
 
     @Override
-    public JSONObject createCourse(JSONObject jsonObject) {
+    public JSONObject createCourse(JSONObject jsonObject) throws ParseException {
         JSONObject returnJson = new JSONObject();
-        String courseID = null;
-        try {
-            courseID = DataAndNumber.dateToStamp(OutData.createData());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        String courseID = DataAndNumber.dateToStamp(OutData.createData());
         Course course =new Course();
         CourseExample courseExample =new CourseExample();
         CourseExample.Criteria criteria= courseExample.createCriteria();
