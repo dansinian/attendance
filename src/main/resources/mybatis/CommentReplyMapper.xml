@@ -90,6 +90,11 @@
     from comment_reply
     where content LIKE CONCAT(CONCAT('%', #{content}), '%');
   </select>
+  <select id="selectByRepId" resultMap="BaseResultMap" resultType="String">
+    select *
+    from comment_reply
+    where reply_id = #{content};
+  </select>
   <delete id="deleteByReplyId" parameterType="java.lang.String">
     delete from comment_reply
     where reply_id = #{replyId,jdbcType=VARCHAR}

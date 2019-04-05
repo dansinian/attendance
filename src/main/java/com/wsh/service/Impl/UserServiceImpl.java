@@ -414,7 +414,7 @@ public class UserServiceImpl implements UserService {
             if (success > 0) {
                 Liked liked = new Liked();
                 liked.setLikeUser(userId);
-                liked.setLikedComment(id);
+                liked.setLikedReply(id);
                 likedMapper.insert(liked);
                 returnJson.put("status","200");
             } else {

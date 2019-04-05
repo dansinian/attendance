@@ -71,7 +71,7 @@
   <sql id="Base_Column_List">
     comment_id, que_id, user_id, content, prase_count, create_time, comment_img
   </sql>
-  <select id="selectBycommentId">
+  <select id="selectBycommentId" resultMap="BaseResultMap" resultType="String">
   select *
   from comment
   where comment_id = #{commentId}
