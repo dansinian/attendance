@@ -6,6 +6,7 @@ import com.wsh.service.UserService;
 import com.wsh.servlet.IsChOrEnOrNum;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -154,6 +155,31 @@ public class UserServiceImpl implements UserService {
                 JSONArray followArray = new JSONArray();
                 JSONArray fansArray = new JSONArray();
                 JSONArray questionArray = new JSONArray();
+                JSONArray likeArray = new JSONArray();
+                JSONArray likeCommentArray = new JSONArray();
+                JSONArray likeQuestionArray = new JSONArray();
+                JSONArray likeReplyArray = new JSONArray();
+                JSONObject likedObject = new JSONObject();
+                String userID = users.get(0).getUserId();
+                LikedExample likedExample = new LikedExample();
+                LikedExample.Criteria Likecriteria = likedExample.createCriteria();
+                Likecriteria.andLikeUserEqualTo(userID);
+                List<Liked> likeds = likedMapper.selectByExample(likedExample);
+                for (int i = 0; i < likeds.size(); i++) {
+                    Liked liked = likeds.get(i);
+                    if (liked.getLikedComment() !=null) {
+                        likeCommentArray.add(liked.getLikedComment());
+                    }
+                    if (liked.getLikedQuestion() !=null) {
+                        likeQuestionArray.add(liked.getLikedQuestion());
+                    }
+                    if (liked.getLikedReply() !=null) {
+                        likeReplyArray.add(liked.getLikedReply());
+                    }
+                }
+                likedObject.put("comment",likeCommentArray);
+                likedObject.put("question",likeQuestionArray);
+                likedObject.put("reply",likeReplyArray);
                 FollowExample followExample = new FollowExample();
                 FollowExample.Criteria criteria = followExample.createCriteria();
                 criteria.andFollowIdEqualTo(content);
@@ -202,6 +228,7 @@ public class UserServiceImpl implements UserService {
                 }
                 returnJson.put("follow",followArray);
                 returnJson.put("followed",fansArray);
+                returnJson.put("likes",likedObject);
                 returnJson.put("questions",questionArray);
                 returnJson.put("user",users.get(0));
                 returnJson.put("status","200");
