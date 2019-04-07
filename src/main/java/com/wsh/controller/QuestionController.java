@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 
 @Controller
 @RequestMapping("/question")
@@ -62,7 +63,7 @@ public class QuestionController {
 
     @RequestMapping("/recommendQuestion")
     @ResponseBody
-    public JSONObject recommendQuestion(HttpServletRequest request){
+    public JSONObject recommendQuestion(HttpServletRequest request) throws ParseException {
         return questionService.recommendQuestion();
     }
 
