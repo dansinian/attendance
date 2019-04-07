@@ -2,6 +2,8 @@ package com.wsh.service;
 
 import net.sf.json.JSONObject;
 
+import java.text.ParseException;
+
 public interface QuestionService {
     JSONObject deleteQuestion(JSONObject jsonObject);
     JSONObject createQuestion(JSONObject jsonObject);
@@ -11,7 +13,7 @@ public interface QuestionService {
 
     JSONObject questionDetail(JSONObject jsonObject);
 
-    JSONObject recommendQuestion();
+    JSONObject recommendQuestion() throws ParseException;
 
     JSONObject adminList();
 }

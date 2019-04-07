@@ -234,14 +234,9 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public JSONObject recommendQuestion() {
-        String newDate = "";
+    public JSONObject recommendQuestion() throws ParseException {
         JSONObject returnJson = new JSONObject();
-        try {
-            newDate = DataAndNumber.dateToStamp(OutData.createData());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        String newDate = DataAndNumber.dateToStamp(OutData.createData());
         QuestionExample questionExample = new QuestionExample();
         QuestionExample.Criteria criteria = questionExample.createCriteria();
         criteria.andUserIdNotEqualTo("admin");
