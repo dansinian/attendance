@@ -69,7 +69,7 @@ public class ConmmentServiceImpl implements CommentService {
         int success = commentMapper.insert( comment);
         if (success > 0) {
             Question question = questionMapper.selectByPrimaryKey(questionId);
-            question.setUnread(question.getUnread()+1);
+            question.setReplyCount(question.getReplyCount()+1);
             questionMapper.updateByPrimaryKeySelective(question);
             returnJson.put("comment", comment);
             returnJson.put("msg", "评论成功");

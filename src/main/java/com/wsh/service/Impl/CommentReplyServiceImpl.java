@@ -1,6 +1,8 @@
 package com.wsh.service.Impl;
 
+import com.wsh.dao.CommentMapper;
 import com.wsh.dao.CommentReplyMapper;
+import com.wsh.dao.QuestionMapper;
 import com.wsh.dao.UserMapper;
 import com.wsh.entity.*;
 import com.wsh.service.CommentReplyService;
@@ -22,6 +24,11 @@ public class CommentReplyServiceImpl implements CommentReplyService {
     private CommentReplyMapper replyMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private QuestionMapper questionMapper;
+    @Autowired
+    private CommentMapper commentMapper;
+
     @Override
     public JSONObject deleteConmmentReply(JSONObject jsonObject) {
         String replyId = jsonObject.getString("replyId");
@@ -42,6 +49,7 @@ public class CommentReplyServiceImpl implements CommentReplyService {
         JSONObject returnJson = new JSONObject();
         String DateString = OutData.createData();
         String repId = "";
+        String commentId = jsonObject.getString("commentId");
         try {
             repId = DataAndNumber.dateToStamp(DateString);
         } catch (ParseException e) {
@@ -49,7 +57,7 @@ public class CommentReplyServiceImpl implements CommentReplyService {
         }
         CommentReply reply = new CommentReply();
         reply.setReplyId(repId);
-        reply.setCommentId(jsonObject.getString("commentId"));
+        reply.setCommentId(commentId);
         reply.setReplyuserId(jsonObject.getString("replyUserId"));
         reply.setUserId(jsonObject.getString("userId"));
         reply.setContent(jsonObject.getString("content"));
@@ -57,6 +65,11 @@ public class CommentReplyServiceImpl implements CommentReplyService {
         reply.setCreateTime(DateString);
         int success = replyMapper.insert( reply);
         if (success > 0){
+            Comment comment = commentMapper.selectBycommentId(commentId);
+            String questionId = comment.getQueId();
+            Question question = questionMapper.selectByPrimaryKey(questionId);
+            question.setReplyCount(question.getReplyCount()+1);
+            questionMapper.updateByPrimaryKeySelective(question);
 
             returnJson.put("user", reply);
             returnJson.put("msg", "评论成功");
