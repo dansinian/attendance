@@ -1,6 +1,5 @@
 package com.wsh.service.Impl;
 
-import com.sun.script.javascript.JSAdapter;
 import com.wsh.dao.CommentMapper;
 import com.wsh.dao.CommentReplyMapper;
 import com.wsh.dao.QuestionMapper;

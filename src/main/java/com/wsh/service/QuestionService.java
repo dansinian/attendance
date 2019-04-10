@@ -16,4 +16,6 @@ public interface QuestionService {
     JSONObject recommendQuestion() throws ParseException;
 
     JSONObject adminList();
+
+    JSONObject navigationList(JSONObject jsonObject);
 }

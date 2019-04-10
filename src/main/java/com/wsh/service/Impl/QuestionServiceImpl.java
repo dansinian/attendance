@@ -1,9 +1,6 @@
 package com.wsh.service.Impl;
 
-import com.wsh.dao.CommentMapper;
-import com.wsh.dao.CommentReplyMapper;
-import com.wsh.dao.QuestionMapper;
-import com.wsh.dao.UserMapper;
+import com.wsh.dao.*;
 import com.wsh.entity.*;
 import com.wsh.service.QuestionService;
 import com.wsh.servlet.DataAndNumber;
@@ -29,6 +26,8 @@ public class QuestionServiceImpl implements QuestionService {
     private CommentReplyMapper replyMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private CourseMapper courseMapper;
 
     @Override
     public JSONObject deleteQuestion(JSONObject jsonObject) {
@@ -278,6 +277,35 @@ public class QuestionServiceImpl implements QuestionService {
             returnJson.put("msg","没有数据");
             returnJson.put("status","500");
             returnJson.put("questions","");
+        }
+        return returnJson;
+    }
+
+    @Override
+    public JSONObject navigationList(JSONObject jsonObject) {
+        JSONObject returnJson = new JSONObject();
+        String department = jsonObject.optString("department");
+        String major = jsonObject.optString("major");
+        JSONArray jsonArray = new JSONArray();
+        List courses = courseMapper.selectCourseByDepartAndMajor(department,major);
+        for (int i = 0; i < courses.size(); i++) {
+            String course = courses.get(i).toString();
+            QuestionExample questionExample = new QuestionExample();
+            QuestionExample.Criteria criteria = questionExample.createCriteria();
+            criteria.andQueCourseEqualTo(course);
+            List<Question> questions =  questionMapper.selectByExample(questionExample);
+            if (questions.size() > 0 ) {
+                jsonArray.add(questions);
+            }
+        }
+        if (jsonArray.size() > 0) {
+            returnJson.put("questions",jsonArray);
+            returnJson.put("msg","");
+            returnJson.put("status","200");
+        } else {
+            returnJson.put("questions","");
+            returnJson.put("msg","没有数据");
+            returnJson.put("status","500");
         }
         return returnJson;
     }

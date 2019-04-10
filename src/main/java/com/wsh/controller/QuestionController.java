@@ -73,4 +73,12 @@ public class QuestionController {
         return questionService.adminList();
     }
 
+    @RequestMapping("/navigation")
+    @ResponseBody
+    public JSONObject navigationList(HttpServletRequest request){
+        String jsonData = request.getParameter("data");
+        JSONObject jsonObject = JSONObject.fromObject(jsonData);
+        return questionService.navigationList(jsonObject);
+    }
+
 }
