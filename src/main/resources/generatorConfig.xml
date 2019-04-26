@@ -42,7 +42,7 @@
                 </javaClientGenerator>
                 <!-- 指定数据库表 -->
                 <!-- enableCountByExample....false去掉Example文件  -->
-                <table tableName="course">
+                <table tableName="user">
                         <!--<columnOverride column="comment" jdbcType="VARCHAR" />-->
                         <!--<columnOverride column="content" jdbcType="VARCHAR" />-->
                 </table>

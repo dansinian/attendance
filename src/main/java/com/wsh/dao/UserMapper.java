@@ -2,6 +2,7 @@ package com.wsh.dao;
 
 import com.wsh.entity.User;
 import com.wsh.entity.UserExample;
+import com.wsh.entity.UserWithBLOBs;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,29 +13,35 @@ public interface UserMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(User record);
+    int insert(UserWithBLOBs record);
 
-    int insertSelective(User record);
+    int insertSelective(UserWithBLOBs record);
+
+    List<UserWithBLOBs> selectByExampleWithBLOBs(UserExample example);
 
     List<User> selectByExample(UserExample example);
 
-    User selectByPrimaryKey(Integer id);
+    UserWithBLOBs selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
+    int updateByExampleSelective(@Param("record") UserWithBLOBs record, @Param("example") UserExample example);
+
+    int updateByExampleWithBLOBs(@Param("record") UserWithBLOBs record, @Param("example") UserExample example);
 
     int updateByExample(@Param("record") User record, @Param("example") UserExample example);
 
-    int updateByPrimaryKeySelective(User record);
+    int updateByPrimaryKeySelective(UserWithBLOBs record);
+
+    int updateByPrimaryKeyWithBLOBs(UserWithBLOBs record);
 
     int updateByPrimaryKey(User record);
 
-    List<User> selectByNameLike(String content,String userType);
+    List<UserWithBLOBs> selectByNameLike(String content,String userType);
 
-    List<User> selectByIdLike(String content,String userType);
+    List<UserWithBLOBs> selectByIdLike(String content,String userType);
 
-    User selectByUserId(String userId);
+    UserWithBLOBs selectByUserId(String userId);
 
-    List<User> selectByUserName(String content);
+    List<UserWithBLOBs> selectByUserName(String content);
 
-    List<User> selectByUserIdList(String content);
+    List<UserWithBLOBs> selectByUserIdList(String content);
 }

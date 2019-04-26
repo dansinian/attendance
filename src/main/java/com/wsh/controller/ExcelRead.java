@@ -22,7 +22,7 @@ public class ExcelRead {
     @RequestMapping("/readExcel")
     @ResponseBody
     public JSONObject readExcel1(HttpServletRequest request){
-        String jsonData = "{\"fileUrl\":\"D:\\\\IDEAWorkspance\\\\forum\\\\src\\\\main\\\\webapp\\\\userhead\\\\user.xls\"}"/*request.getParameter("data")*/;
+        String jsonData = "{\"fileUrl\":\"D:\\\\IDEAworkspance\\\\forum\\\\src\\\\main\\\\webapp\\\\userhead\\\\user.xls\"}"/*request.getParameter("data")*/;
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
         JSONObject returnJson = new JSONObject();
         String fileUrl = jsonObject.optString("fileUrl");

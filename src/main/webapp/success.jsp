@@ -14,6 +14,6 @@
 <body>
 <h1>success!</h1>
 <br>
-<a href="/file/download?url=${urls}">下载上传的文件</a>
+<a href="/forum/file/download?url=${urls}">下载上传的文件</a>
 </body>
 </html>

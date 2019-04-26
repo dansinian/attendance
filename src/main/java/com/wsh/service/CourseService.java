@@ -12,4 +12,6 @@ public interface CourseService {
     JSONObject selectCourse(JSONObject jsonObject);
 
     JSONObject updateCourse(JSONObject jsonObject);
+
+    JSONObject linkage();
 }

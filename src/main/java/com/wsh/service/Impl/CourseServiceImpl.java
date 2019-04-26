@@ -7,13 +7,11 @@ import com.wsh.service.CourseService;
 import com.wsh.servlet.DataAndNumber;
 import com.wsh.servlet.OutData;
 import com.wsh.servlet.SortList;
-import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +105,7 @@ public class CourseServiceImpl implements CourseService {
         return returnJson;
     }
 
+
     @Override
     public JSONObject createCourse(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
@@ -145,6 +144,76 @@ public class CourseServiceImpl implements CourseService {
             }
         }
         return returnJson;
+    }
+
+    @Override
+    public JSONObject linkage() {
+        JSONObject returnJson = new JSONObject();
+        CourseExample courseExample = new CourseExample();
+        CourseExample.Criteria criteria = courseExample.createCriteria();
+        criteria.andCouIdIsNotNull();
+        List<Course> course = courseMapper.selectByExample(courseExample);
+        if (course.size() > 0){
+            List depart = new ArrayList();
+            List major = new ArrayList();
+            List courses = new ArrayList();
+            for (int i = 0; i < course.size(); i++) {
+                String courseName = course.get(i).getCourse();
+                String Department = course.get(i).getDepartment();
+                String Major = course.get(i).getMajor();
+                if (!depart.contains(Department)) {
+                    depart.add(Department);
+                }
+                if (!major.contains(Major)) {
+                    major.add(Major);
+                }
+                if (!courses.contains(courseName)) {
+                    courses.add(courseName);
+                }
+            }
+            returnJson.put("course",courses);
+            returnJson.put("major",major);
+            returnJson.put("department",depart);
+            return returnJson;
+/*
+            List depart = new ArrayList();
+            for (int i = 0; i < course.size(); i++) {
+                String courseDep = course.get(i).getDepartment();
+                if (!depart.contains(courseDep)) {
+                    depart.add(courseDep);
+                }
+            }
+
+            for (int i = 0; i < depart.size(); i++) {
+                String Depart = depart.get(i).toString();
+                List major = courseMapper.selectMajorByDepart(Depart);
+                JSONArray jsonArray1 = new JSONArray();
+                for (int j = 0; j < major.size(); j++) {
+                    JSONObject jsonObject1 = new JSONObject();
+                    String majorName = major.get(j).toString();
+                    List courses = courseMapper.selectCourseByDepartAndMajor(Depart,majorName);
+                    SortList.removeDuplicate(courses);
+                    JSONArray jsonArray2 = new JSONArray();
+                    for (int k = 0; k < courses.size(); k++) {
+                        JSONObject jsonObject2 = new JSONObject();
+                        String coursename = courses.get(k).toString();
+                        jsonObject2.put(majorName,coursename);
+                        jsonArray2.add(jsonObject2);
+                    }
+                    jsonObject1.put(Depart,majorName);
+                    jsonArray1.add(jsonObject1);
+                }
+
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put(Depart,jsonArray1);
+                departArray.add(Depart);
+                departmentJson.put("department",departArray);
+                departmentJson.put(Depart,jsonArray1);
+            }
+            return departmentJson;*/
+        } else {
+            return null;
+        }
     }
 
     @Override

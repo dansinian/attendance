@@ -3,9 +3,7 @@ package com.wsh.service.Impl;
 import com.wsh.dao.*;
 import com.wsh.entity.*;
 import com.wsh.service.QuestionService;
-import com.wsh.servlet.DataAndNumber;
-import com.wsh.servlet.OutData;
-import com.wsh.servlet.SortList;
+import com.wsh.servlet.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,12 +47,13 @@ public class QuestionServiceImpl implements QuestionService {
         JSONObject returnJson = new JSONObject();
         String DateString = OutData.createData();
         String queID = "";
+        String img = jsonObject.optString("queImg");
         try {
             queID = DataAndNumber.dateToStamp(DateString);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Question question = new Question();
+        QuestionWithBLOBs question = new QuestionWithBLOBs();
        question.setQueId(queID);
        question.setQueTitle(jsonObject.optString("title"));
        question.setQueSummary(jsonObject.optString("summary"));
@@ -66,10 +65,13 @@ public class QuestionServiceImpl implements QuestionService {
        question.setReplyCount(0);
        question.setQueCourse(jsonObject.optString("queCourse"));
        question.setUnread(0);
-       question.setQueImg(jsonObject.optString("queImg"));
+        if (img != null) {
+            question.setQueImg(BaseToString.base64String2ByteFun(img));
+        }
         int success = questionMapper.insert( question);
         if (success > 0){
-            returnJson.put("question", question);
+            JSONObject jsonObject1 =  ByteEntityToStringEntity.questionDate(question);
+            returnJson.put("question", jsonObject1);
             returnJson.put("msg", "添加帖子成功");
             returnJson.put("status", "200");
         } else {
@@ -84,16 +86,23 @@ public class QuestionServiceImpl implements QuestionService {
     public JSONObject updateQuestion(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
         String questionId = jsonObject.getString("questionId");
-        Question question1 =questionMapper.selectByPrimaryKey(questionId);
+        QuestionWithBLOBs question1 =questionMapper.selectByPrimaryKey(questionId);
         if (question1!= null){
-            Question question = new Question();
+            String ques1Img =BaseToString.byte2Base64StringFun(question1.getQueImg());
+            String quesImg = jsonObject.optString("queImg");
+            QuestionWithBLOBs question = new QuestionWithBLOBs();
             question.setQueId(questionId);
             question.setQueTitle(jsonObject.optString("title",question1.getQueTitle()));
             question.setQueDetail(jsonObject.optString("detail",question1.getQueDetail()));
-            question.setQueImg(jsonObject.optString("queImg",question1.getQueImg()));
+            if (quesImg != null && ques1Img.length() > 0) {
+                question.setQueImg(BaseToString.base64String2ByteFun(quesImg));
+            } else {
+                question.setQueImg(BaseToString.base64String2ByteFun(ques1Img));
+            }
             int returnint =questionMapper.updateByPrimaryKeySelective(question);
             if(returnint>0){
-                returnJson.put("question",question);
+                JSONObject jsonObject1 =  ByteEntityToStringEntity.questionDate(question);
+                returnJson.put("question",jsonObject1);
                 returnJson.put("msg","修改成功");
                 returnJson.put("status","200");
             }else {
@@ -112,13 +121,18 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public JSONObject selectQuestion(JSONObject jsonObject) {
         JSONObject returnJson = new JSONObject();
-        List<Question>questions = new ArrayList<>();
+        List<QuestionWithBLOBs>questions = new ArrayList<>();
         String content = jsonObject.getString("content");
         questions = questionMapper.selectByCourseLike(content);
         if (questions.size() ==0) {
             questions = questionMapper.selectByTitleLike(content);
             if (questions.size() == 0) {
                 questions = questionMapper.selectByContentLike(content);
+            } else if (questions.size() == 0){
+                QuestionExample questionExample = new QuestionExample();
+                QuestionExample.Criteria criteria = questionExample.createCriteria();
+                criteria.andUserIdEqualTo(content);
+                questions = questionMapper.selectByExampleWithBLOBs(questionExample);
             }
         }
         if (questions.size() > 0){
@@ -139,10 +153,16 @@ public class QuestionServiceImpl implements QuestionService {
         QuestionExample questionExample = new QuestionExample();
         QuestionExample.Criteria criteria = questionExample.createCriteria();
         criteria.andQueIdIsNotNull();
-        List<Question> questions = questionMapper.selectByExample(questionExample);
+        List<QuestionWithBLOBs> questions = questionMapper.selectByExampleWithBLOBs(questionExample);
         questions =  SortList.sortTime(questions);
         if (questions.size() > 0){
-            returnJson.put("questions",questions);
+            JSONArray jsonArray = new JSONArray();
+            for (int i = 0; i < questions.size(); i++) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject = ByteEntityToStringEntity.questionDate(questions.get(i));
+                jsonArray.add(jsonObject);
+            }
+            returnJson.put("questions",jsonArray);
             returnJson.put("status","200");
             returnJson.put("msg","");
         }else{
@@ -157,10 +177,16 @@ public class QuestionServiceImpl implements QuestionService {
     public JSONObject questionDetail(JSONObject jsonObject) {
         String quesId = jsonObject.getString("questionId");
         JSONObject returnJson = new JSONObject();
-        Question question = questionMapper.selectByPrimaryKey(quesId);
+        QuestionWithBLOBs question = questionMapper.selectByPrimaryKey(quesId);
         if (question != null) {
             question.setClickCount(question.getClickCount() +1 );
             questionMapper.updateByPrimaryKey(question); // 每次查看question详情的时候,点击数+1
+            if (question.getQueImg().length > 0) {
+                String img = BaseToString.byte2Base64StringFun(question.getQueImg());
+                returnJson.put("quesImg",img);
+            } else {
+                returnJson.put("quesImg","");
+            }
             returnJson.put("question",question);
             CommentExample commentExample = new CommentExample();
             CommentExample.Criteria criteria = commentExample.createCriteria();
@@ -239,7 +265,7 @@ public class QuestionServiceImpl implements QuestionService {
         QuestionExample questionExample = new QuestionExample();
         QuestionExample.Criteria criteria = questionExample.createCriteria();
         criteria.andUserIdNotEqualTo("admin");
-        List<Question> questions = questionMapper.selectByExample(questionExample);
+        List<QuestionWithBLOBs> questions = questionMapper.selectByExampleWithBLOBs(questionExample);
         if (questions.size() > 0 ) {
             questions = SortList.sort(questions);
             if (questions.size() >= 10) {
@@ -264,7 +290,7 @@ public class QuestionServiceImpl implements QuestionService {
         QuestionExample questionExample = new QuestionExample();
         QuestionExample.Criteria criteria = questionExample.createCriteria();
         criteria.andUserIdEqualTo("admin");
-        List<Question> questions = questionMapper.selectByExample(questionExample);
+        List<QuestionWithBLOBs> questions = questionMapper.selectByExampleWithBLOBs(questionExample);
         if (questions.size() > 0) {
             questions = SortList.sortTime(questions);
             if (questions.size() > 4) {

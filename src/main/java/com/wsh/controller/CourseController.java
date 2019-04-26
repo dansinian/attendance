@@ -61,4 +61,9 @@ public class CourseController {
         JSONObject jsonObject = JSONObject.fromObject(jsonData);
         return courseService.selectCourse(jsonObject);
     }
+    @RequestMapping("/linkage")
+    @ResponseBody
+    public JSONObject linkage(HttpServletRequest request) {
+        return courseService.linkage();
+    }
 }

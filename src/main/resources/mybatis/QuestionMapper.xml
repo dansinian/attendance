@@ -4,8 +4,6 @@
   <resultMap id="BaseResultMap" type="com.wsh.entity.Question" >
     <id column="que_id" property="queId" jdbcType="VARCHAR" />
     <result column="que_title" property="queTitle" jdbcType="VARCHAR" />
-    <result column="que_summary" property="queSummary" jdbcType="VARCHAR" />
-    <result column="que_detail" property="queDetail" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="click_count" property="clickCount" jdbcType="INTEGER" />
@@ -13,7 +11,11 @@
     <result column="reply_count" property="replyCount" jdbcType="INTEGER" />
     <result column="que_course" property="queCourse" jdbcType="VARCHAR" />
     <result column="unread" property="unread" jdbcType="INTEGER" />
-    <result column="que_img" property="queImg" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.wsh.entity.QuestionWithBLOBs" extends="BaseResultMap" >
+    <result column="que_summary" property="queSummary" jdbcType="LONGVARCHAR" />
+    <result column="que_detail" property="queDetail" jdbcType="LONGVARCHAR" />
+    <result column="que_img" property="queImg" jdbcType="LONGVARBINARY" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -74,27 +76,46 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    que_id, que_title, que_summary, que_detail, user_id, create_time, click_count, praise_count, 
-    reply_count, que_course, unread, que_img
+    que_id, que_title, user_id, create_time, click_count, praise_count, reply_count, 
+    que_course, unread
   </sql>
-  <select id="selectByTitleLike" resultMap="BaseResultMap" resultType="String">
+  <sql id="Blob_Column_List" >
+    que_summary, que_detail, que_img
+  </sql>
+  <select id="selectByTitleLike" resultMap="ResultMapWithBLOBs" resultType="String">
     select *
     from question
-    where que_title LIKE CONCAT(CONCAT('%', #{title}), '%');
+    where que_title LIKE CONCAT(CONCAT('%', #{content}), '%');
   </select>
-  <select id="selectByCourseLike" resultMap="BaseResultMap" resultType="String">
+  <select id="selectByCourseLike" resultMap="ResultMapWithBLOBs" resultType="String">
     select *
     from question
-    where que_course LIKE CONCAT(CONCAT('%', #{courseName}), '%');
+    where que_course LIKE CONCAT(CONCAT('%', #{content}), '%');
   </select>
   <select id="selectCountByUser" resultType="java.lang.Integer" parameterType="String">
     select count(*) from question
     WHERE user_id = #{content}
   </select>
-  <select id="selectByContentLike" resultMap="BaseResultMap" resultType="String">
+  <select id="selectByContentLike" resultMap="ResultMapWithBLOBs" resultType="String">
     select *
     from question
     where que_detail LIKE CONCAT(CONCAT('%', #{content}), '%');
+  </select>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.wsh.entity.QuestionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from question
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
   </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wsh.entity.QuestionExample" >
     select
@@ -110,9 +131,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from question
     where que_id = #{queId,jdbcType=VARCHAR}
   </select>
@@ -126,19 +149,19 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wsh.entity.Question" >
-    insert into question (que_id, que_title, que_summary, 
-      que_detail, user_id, create_time, 
-      click_count, praise_count, reply_count, 
-      que_course, unread, que_img
+  <insert id="insert" parameterType="com.wsh.entity.QuestionWithBLOBs" >
+    insert into question (que_id, que_title, user_id, 
+      create_time, click_count, praise_count, 
+      reply_count, que_course, unread, 
+      que_summary, que_detail, que_img
       )
-    values (#{queId,jdbcType=VARCHAR}, #{queTitle,jdbcType=VARCHAR}, #{queSummary,jdbcType=VARCHAR}, 
-      #{queDetail,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
-      #{clickCount,jdbcType=INTEGER}, #{praiseCount,jdbcType=INTEGER}, #{replyCount,jdbcType=INTEGER}, 
-      #{queCourse,jdbcType=VARCHAR}, #{unread,jdbcType=INTEGER}, #{queImg,jdbcType=VARCHAR}
+    values (#{queId,jdbcType=VARCHAR}, #{queTitle,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{clickCount,jdbcType=INTEGER}, #{praiseCount,jdbcType=INTEGER}, 
+      #{replyCount,jdbcType=INTEGER}, #{queCourse,jdbcType=VARCHAR}, #{unread,jdbcType=INTEGER}, 
+      #{queSummary,jdbcType=LONGVARCHAR}, #{queDetail,jdbcType=LONGVARCHAR}, #{queImg,jdbcType=LONGVARBINARY}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.wsh.entity.Question" >
+  <insert id="insertSelective" parameterType="com.wsh.entity.QuestionWithBLOBs" >
     insert into question
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="queId != null" >
@@ -146,12 +169,6 @@
       </if>
       <if test="queTitle != null" >
         que_title,
-      </if>
-      <if test="queSummary != null" >
-        que_summary,
-      </if>
-      <if test="queDetail != null" >
-        que_detail,
       </if>
       <if test="userId != null" >
         user_id,
@@ -174,6 +191,12 @@
       <if test="unread != null" >
         unread,
       </if>
+      <if test="queSummary != null" >
+        que_summary,
+      </if>
+      <if test="queDetail != null" >
+        que_detail,
+      </if>
       <if test="queImg != null" >
         que_img,
       </if>
@@ -184,12 +207,6 @@
       </if>
       <if test="queTitle != null" >
         #{queTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="queSummary != null" >
-        #{queSummary,jdbcType=VARCHAR},
-      </if>
-      <if test="queDetail != null" >
-        #{queDetail,jdbcType=VARCHAR},
       </if>
       <if test="userId != null" >
         #{userId,jdbcType=VARCHAR},
@@ -212,8 +229,14 @@
       <if test="unread != null" >
         #{unread,jdbcType=INTEGER},
       </if>
+      <if test="queSummary != null" >
+        #{queSummary,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="queDetail != null" >
+        #{queDetail,jdbcType=LONGVARCHAR},
+      </if>
       <if test="queImg != null" >
-        #{queImg,jdbcType=VARCHAR},
+        #{queImg,jdbcType=LONGVARBINARY},
       </if>
     </trim>
   </insert>
@@ -231,12 +254,6 @@
       </if>
       <if test="record.queTitle != null" >
         que_title = #{record.queTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="record.queSummary != null" >
-        que_summary = #{record.queSummary,jdbcType=VARCHAR},
-      </if>
-      <if test="record.queDetail != null" >
-        que_detail = #{record.queDetail,jdbcType=VARCHAR},
       </if>
       <if test="record.userId != null" >
         user_id = #{record.userId,jdbcType=VARCHAR},
@@ -259,10 +276,34 @@
       <if test="record.unread != null" >
         unread = #{record.unread,jdbcType=INTEGER},
       </if>
+      <if test="record.queSummary != null" >
+        que_summary = #{record.queSummary,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.queDetail != null" >
+        que_detail = #{record.queDetail,jdbcType=LONGVARCHAR},
+      </if>
       <if test="record.queImg != null" >
-        que_img = #{record.queImg,jdbcType=VARCHAR},
+        que_img = #{record.queImg,jdbcType=LONGVARBINARY},
       </if>
     </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update question
+    set que_id = #{record.queId,jdbcType=VARCHAR},
+      que_title = #{record.queTitle,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=VARCHAR},
+      click_count = #{record.clickCount,jdbcType=INTEGER},
+      praise_count = #{record.praiseCount,jdbcType=INTEGER},
+      reply_count = #{record.replyCount,jdbcType=INTEGER},
+      que_course = #{record.queCourse,jdbcType=VARCHAR},
+      unread = #{record.unread,jdbcType=INTEGER},
+      que_summary = #{record.queSummary,jdbcType=LONGVARCHAR},
+      que_detail = #{record.queDetail,jdbcType=LONGVARCHAR},
+      que_img = #{record.queImg,jdbcType=LONGVARBINARY}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -271,31 +312,22 @@
     update question
     set que_id = #{record.queId,jdbcType=VARCHAR},
       que_title = #{record.queTitle,jdbcType=VARCHAR},
-      que_summary = #{record.queSummary,jdbcType=VARCHAR},
-      que_detail = #{record.queDetail,jdbcType=VARCHAR},
       user_id = #{record.userId,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=VARCHAR},
       click_count = #{record.clickCount,jdbcType=INTEGER},
       praise_count = #{record.praiseCount,jdbcType=INTEGER},
       reply_count = #{record.replyCount,jdbcType=INTEGER},
       que_course = #{record.queCourse,jdbcType=VARCHAR},
-      unread = #{record.unread,jdbcType=INTEGER},
-      que_img = #{record.queImg,jdbcType=VARCHAR}
+      unread = #{record.unread,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wsh.entity.Question" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.wsh.entity.QuestionWithBLOBs" >
     update question
     <set >
       <if test="queTitle != null" >
         que_title = #{queTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="queSummary != null" >
-        que_summary = #{queSummary,jdbcType=VARCHAR},
-      </if>
-      <if test="queDetail != null" >
-        que_detail = #{queDetail,jdbcType=VARCHAR},
       </if>
       <if test="userId != null" >
         user_id = #{userId,jdbcType=VARCHAR},
@@ -318,17 +350,21 @@
       <if test="unread != null" >
         unread = #{unread,jdbcType=INTEGER},
       </if>
+      <if test="queSummary != null" >
+        que_summary = #{queSummary,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="queDetail != null" >
+        que_detail = #{queDetail,jdbcType=LONGVARCHAR},
+      </if>
       <if test="queImg != null" >
-        que_img = #{queImg,jdbcType=VARCHAR},
+        que_img = #{queImg,jdbcType=LONGVARBINARY},
       </if>
     </set>
     where que_id = #{queId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wsh.entity.Question" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wsh.entity.QuestionWithBLOBs" >
     update question
     set que_title = #{queTitle,jdbcType=VARCHAR},
-      que_summary = #{queSummary,jdbcType=VARCHAR},
-      que_detail = #{queDetail,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=VARCHAR},
       click_count = #{clickCount,jdbcType=INTEGER},
@@ -336,7 +372,21 @@
       reply_count = #{replyCount,jdbcType=INTEGER},
       que_course = #{queCourse,jdbcType=VARCHAR},
       unread = #{unread,jdbcType=INTEGER},
-      que_img = #{queImg,jdbcType=VARCHAR}
+      que_summary = #{queSummary,jdbcType=LONGVARCHAR},
+      que_detail = #{queDetail,jdbcType=LONGVARCHAR},
+      que_img = #{queImg,jdbcType=LONGVARBINARY}
+    where que_id = #{queId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wsh.entity.Question" >
+    update question
+    set que_title = #{queTitle,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      click_count = #{clickCount,jdbcType=INTEGER},
+      praise_count = #{praiseCount,jdbcType=INTEGER},
+      reply_count = #{replyCount,jdbcType=INTEGER},
+      que_course = #{queCourse,jdbcType=VARCHAR},
+      unread = #{unread,jdbcType=INTEGER}
     where que_id = #{queId,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -2,6 +2,7 @@ package com.wsh.dao;
 
 import com.wsh.entity.Question;
 import com.wsh.entity.QuestionExample;
+import com.wsh.entity.QuestionWithBLOBs;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,25 +13,31 @@ public interface QuestionMapper {
 
     int deleteByPrimaryKey(String queId);
 
-    int insert(Question record);
+    int insert(QuestionWithBLOBs record);
 
-    int insertSelective(Question record);
+    int insertSelective(QuestionWithBLOBs record);
+
+    List<QuestionWithBLOBs> selectByExampleWithBLOBs(QuestionExample example);
 
     List<Question> selectByExample(QuestionExample example);
 
-    Question selectByPrimaryKey(String queId);
+    QuestionWithBLOBs selectByPrimaryKey(String queId);
 
-    int updateByExampleSelective(@Param("record") Question record, @Param("example") QuestionExample example);
+    int updateByExampleSelective(@Param("record") QuestionWithBLOBs record, @Param("example") QuestionExample example);
+
+    int updateByExampleWithBLOBs(@Param("record") QuestionWithBLOBs record, @Param("example") QuestionExample example);
 
     int updateByExample(@Param("record") Question record, @Param("example") QuestionExample example);
 
-    int updateByPrimaryKeySelective(Question record);
+    int updateByPrimaryKeySelective(QuestionWithBLOBs record);
+
+    int updateByPrimaryKeyWithBLOBs(QuestionWithBLOBs record);
 
     int updateByPrimaryKey(Question record);
 
-    List<Question> selectByTitleLike(String title);
+    List<QuestionWithBLOBs> selectByCourseLike(String content);
 
-    List<Question> selectByCourseLike(String courseName);
+    List<QuestionWithBLOBs> selectByTitleLike(String content);
 
-    List<Question> selectByContentLike(String content);
+    List<QuestionWithBLOBs> selectByContentLike(String content);
 }

@@ -2,6 +2,7 @@ package com.wsh.servlet;
 
 import com.wsh.entity.CommentReply;
 import com.wsh.entity.Question;
+import com.wsh.entity.QuestionWithBLOBs;
 
 import java.util.List;
 import java.util.Collections;
@@ -11,7 +12,7 @@ public class SortList {
     /*
     * 降序排序
     * */
-    public static List sort(List<Question> list){
+    public static List sort(List<QuestionWithBLOBs> list){
         Collections.sort( list,new Comparator<Question>() {
             @Override
             public int compare(Question Q1, Question Q2) {
@@ -21,7 +22,7 @@ public class SortList {
         return list;
     }
 
-    public static List sortTime(List<Question> list){
+    public static List sortTime(List<QuestionWithBLOBs> list){
         Collections.sort( list,new Comparator<Question>() {
             @Override
             public int compare(Question Q1, Question Q2) {

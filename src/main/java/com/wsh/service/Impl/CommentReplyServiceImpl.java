@@ -33,14 +33,26 @@ public class CommentReplyServiceImpl implements CommentReplyService {
     public JSONObject deleteConmmentReply(JSONObject jsonObject) {
         String replyId = jsonObject.getString("replyId");
         JSONObject returnJSon = new JSONObject();
-        int returncourse= replyMapper.deleteByReplyId(replyId);
-        if (returncourse>0){
-            returnJSon.put("msg","删除成功");
-            returnJSon.put("status","200");
-        } else {
-            returnJSon.put("msg","删除失败");
-            returnJSon.put("status","500");
+        CommentReply reply = replyMapper.selectByRepId(replyId);
+        if (reply != null) {
+            String commentId = reply.getCommentId();
+            int returncourse= replyMapper.deleteByReplyId(replyId);
+            if (returncourse>0){
+
+                Comment comment = commentMapper.selectBycommentId(commentId);
+                String questionId = comment.getQueId();
+                QuestionWithBLOBs question = questionMapper.selectByPrimaryKey(questionId);
+                question.setReplyCount(question.getReplyCount()-1);
+                questionMapper.updateByPrimaryKeySelective(question);
+
+                returnJSon.put("msg","删除成功");
+                returnJSon.put("status","200");
+            } else {
+                returnJSon.put("msg","删除失败");
+                returnJSon.put("status","500");
+            }
         }
+
         return returnJSon;
     }
 
@@ -67,7 +79,7 @@ public class CommentReplyServiceImpl implements CommentReplyService {
         if (success > 0){
             Comment comment = commentMapper.selectBycommentId(commentId);
             String questionId = comment.getQueId();
-            Question question = questionMapper.selectByPrimaryKey(questionId);
+            QuestionWithBLOBs question = questionMapper.selectByPrimaryKey(questionId);
             question.setReplyCount(question.getReplyCount()+1);
             questionMapper.updateByPrimaryKeySelective(question);
 

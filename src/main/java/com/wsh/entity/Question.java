@@ -5,10 +5,6 @@ public class Question {
 
     private String queTitle;
 
-    private String queSummary;
-
-    private String queDetail;
-
     private String userId;
 
     private String createTime;
@@ -22,8 +18,6 @@ public class Question {
     private String queCourse;
 
     private Integer unread;
-
-    private String queImg;
 
     public String getQueId() {
         return queId;
@@ -39,22 +33,6 @@ public class Question {
 
     public void setQueTitle(String queTitle) {
         this.queTitle = queTitle == null ? null : queTitle.trim();
-    }
-
-    public String getQueSummary() {
-        return queSummary;
-    }
-
-    public void setQueSummary(String queSummary) {
-        this.queSummary = queSummary == null ? null : queSummary.trim();
-    }
-
-    public String getQueDetail() {
-        return queDetail;
-    }
-
-    public void setQueDetail(String queDetail) {
-        this.queDetail = queDetail == null ? null : queDetail.trim();
     }
 
     public String getUserId() {
@@ -111,13 +89,5 @@ public class Question {
 
     public void setUnread(Integer unread) {
         this.unread = unread;
-    }
-
-    public String getQueImg() {
-        return queImg;
-    }
-
-    public void setQueImg(String queImg) {
-        this.queImg = queImg == null ? null : queImg.trim();
     }
 }

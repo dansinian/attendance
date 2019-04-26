@@ -15,11 +15,7 @@ public class User {
 
     private String userMajor;
 
-    private String headImg;
-
     private String nickname;
-
-    private String autograph;
 
     private String userType;
 
@@ -79,28 +75,12 @@ public class User {
         this.userMajor = userMajor == null ? null : userMajor.trim();
     }
 
-    public String getHeadImg() {
-        return headImg;
-    }
-
-    public void setHeadImg(String headImg) {
-        this.headImg = headImg == null ? null : headImg.trim();
-    }
-
     public String getNickname() {
         return nickname;
     }
 
     public void setNickname(String nickname) {
         this.nickname = nickname == null ? null : nickname.trim();
-    }
-
-    public String getAutograph() {
-        return autograph;
-    }
-
-    public void setAutograph(String autograph) {
-        this.autograph = autograph == null ? null : autograph.trim();
     }
 
     public String getUserType() {
